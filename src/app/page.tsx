@@ -49,8 +49,7 @@ export default function CustomerHome() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
             <Link href="/" className="text-indigo-600">Trang chủ</Link>
-            <Link href="/(customer)/saved">Đã lưu</Link>
-            <Link href="/(ctv)/dashboard" className="px-4 py-2 bg-slate-100 rounded-md hover:bg-slate-200 transition">Dành cho CTV</Link>
+            <Link href="/login" className="px-5 py-2 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition">Đăng nhập</Link>
           </nav>
         </div>
       </header>
