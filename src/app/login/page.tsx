@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, ShieldCheck } from 'lucide-react';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,13 +28,14 @@ export default function LoginPage() {
         setError(res.error);
         setLoading(false);
       } else {
-        // middleware will handle redirection, but we can force a reload to let it take over
+        // Fetch session to check role
+        const session = await getSession();
         router.refresh();
-        router.push('/ctv'); // It will redirect to correct place or just redirect based on role in the future, for now push and let middleware handle or we can decode token.
-        // Actually, best to just let middleware handle it after we push somewhere protected.
-        // Let's just push to /ctv, if admin it'll kick to /admin or we can fetch session.
-        // Let's use router.replace
-        router.replace('/ctv'); // Assuming CTV is default, Admin will need a separate redirect if we want it perfect, but let's keep it simple.
+        if (session?.user?.role === 'Admin') {
+          router.replace('/admin');
+        } else {
+          router.replace('/ctv');
+        }
       }
     } catch (err) {
       setError('Đã xảy ra lỗi, vui lòng thử lại');
