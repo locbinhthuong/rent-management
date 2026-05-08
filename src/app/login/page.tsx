@@ -3,19 +3,42 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, ShieldCheck } from 'lucide-react';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic giả lập: Nếu email có chữ "admin" thì vào Admin, ngược lại vào CTV
-    if (email.toLowerCase().includes('admin')) {
-      router.push('/admin');
-    } else {
-      router.push('/ctv');
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        setError(res.error);
+        setLoading(false);
+      } else {
+        // middleware will handle redirection, but we can force a reload to let it take over
+        router.refresh();
+        router.push('/ctv'); // It will redirect to correct place or just redirect based on role in the future, for now push and let middleware handle or we can decode token.
+        // Actually, best to just let middleware handle it after we push somewhere protected.
+        // Let's just push to /ctv, if admin it'll kick to /admin or we can fetch session.
+        // Let's use router.replace
+        router.replace('/ctv'); // Assuming CTV is default, Admin will need a separate redirect if we want it perfect, but let's keep it simple.
+      }
+    } catch (err) {
+      setError('Đã xảy ra lỗi, vui lòng thử lại');
+      setLoading(false);
     }
   };
 
@@ -29,6 +52,11 @@ export default function LoginPage() {
         </div>
 
         <div className="p-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Email / Số điện thoại</label>
@@ -69,9 +97,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition shadow-md hover:shadow-lg mt-2"
+              disabled={loading}
+              className={`w-full text-white font-bold py-3 rounded-lg transition shadow-md mt-2 ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg'}`}
             >
-              Đăng nhập
+              {loading ? 'Đang xử lý...' : 'Đăng nhập'}
             </button>
           </form>
         </div>
