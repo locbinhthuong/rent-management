@@ -50,7 +50,7 @@ export default async function CTVDashboard() {
       <main className="flex-1 flex flex-col h-screen overflow-y-auto">
         <header className="bg-white p-4 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
           <h2 className="text-xl font-bold text-slate-800">
-            Xin chào, {user?.name || session.user.name}
+            Xin chào, Cộng tác viên {session?.user?.name?.split(' ').pop() || ''}
           </h2>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100">

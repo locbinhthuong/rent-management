@@ -63,7 +63,7 @@ export default async function AdminDashboard() {
         {/* Header */}
         <header className="bg-white p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
           <h2 className="text-xl font-bold text-slate-800">
-            Xin chào, Quản trị viên {session.user.name.split(' ')[session.user.name.split(' ').length - 1]}
+            Xin chào, Quản trị viên {session?.user?.name?.split(' ').pop() || ''}
           </h2>
           <div className="flex gap-4">
             <Link href="/" target="_blank" className="text-sm font-bold text-indigo-600 border-2 border-indigo-100 bg-indigo-50 px-4 py-2 rounded-lg hover:bg-indigo-100 transition">
