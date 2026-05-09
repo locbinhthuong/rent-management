@@ -2,19 +2,27 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, ShieldCheck, User, Phone } from 'lucide-react';
 import { signIn, getSession } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
+  const [isLogin, setIsLogin] = useState(true); // Toggle giữa Đăng nhập và Đăng ký
+  
+  // States cho form
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setLoading(true);
 
     try {
@@ -43,13 +51,60 @@ export default function LoginPage() {
     }
   };
 
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, password }),
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        setError(data.message || 'Lỗi đăng ký');
+        setLoading(false);
+      } else {
+        setSuccess('Đăng ký tài khoản CTV thành công! Vui lòng Đăng nhập.');
+        setIsLogin(true); // Switch to login
+        setPassword(''); // Clear password for security
+        setLoading(false);
+      }
+    } catch(err) {
+      setError('Đã xảy ra lỗi hệ thống, vui lòng thử lại sau');
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
         <div className="bg-indigo-600 p-6 text-center text-white">
           <ShieldCheck className="w-12 h-12 mx-auto mb-3 text-indigo-200" />
-          <h1 className="text-2xl font-bold">Đăng nhập Hệ thống</h1>
+          <h1 className="text-2xl font-bold">{isLogin ? 'Đăng nhập Hệ thống' : 'Đăng ký Cộng tác viên'}</h1>
           <p className="text-indigo-200 text-sm mt-1">Dành cho Quản trị viên và Cộng tác viên</p>
+        </div>
+
+        {/* Tab Toggle */}
+        <div className="flex border-b border-slate-200">
+          <button 
+            className={`flex-1 py-3 text-sm font-bold text-center ${isLogin ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+            onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
+            type="button"
+          >
+            ĐĂNG NHẬP
+          </button>
+          <button 
+            className={`flex-1 py-3 text-sm font-bold text-center ${!isLogin ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+            onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}
+            type="button"
+          >
+            ĐĂNG KÝ
+          </button>
         </div>
 
         <div className="p-8">
@@ -58,15 +113,61 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-          <form onSubmit={handleLogin} className="space-y-5">
+          {success && (
+            <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm rounded-lg font-medium">
+              {success}
+            </div>
+          )}
+
+          <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
+            
+            {/* Registration Fields */}
+            {!isLogin && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Họ và Tên</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
+                      placeholder="Nguyễn Văn A"
+                      required={!isLogin}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Số điện thoại</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
+                      placeholder="0912345678"
+                      required={!isLogin}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Common Fields */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Email / Số điện thoại</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email / Tài khoản</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Mail className="w-5 h-5" />
                 </div>
                 <input
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
@@ -91,17 +192,19 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              <div className="flex justify-end mt-2">
-                <a href="#" className="text-sm font-medium text-indigo-600 hover:underline">Quên mật khẩu?</a>
-              </div>
+              {isLogin && (
+                <div className="flex justify-end mt-2">
+                  <a href="#" className="text-sm font-medium text-indigo-600 hover:underline">Quên mật khẩu?</a>
+                </div>
+              )}
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className={`w-full text-white font-bold py-3 rounded-lg transition shadow-md mt-2 ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg'}`}
+              className={`w-full text-white font-bold py-3 rounded-lg transition shadow-md mt-4 ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg'}`}
             >
-              {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+              {loading ? 'Đang xử lý...' : (isLogin ? 'Đăng nhập' : 'Đăng ký ngay')}
             </button>
           </form>
         </div>
