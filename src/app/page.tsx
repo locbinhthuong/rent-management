@@ -1,29 +1,17 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { MapPin, Phone, Home, Filter, Search } from 'lucide-react';
+import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users } from 'lucide-react';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
-import Room from '@/models/Room';
-import Property from '@/models/Property';
 import User from '@/models/User';
+import ContactButton from '@/components/ContactButton';
 
 export const dynamic = 'force-dynamic';
 
 async function getActivePosts() {
   await connectDB();
-  // Ensure models are registered
-  Room.init();
-  Property.init();
-  User.init();
+  User.init(); // Ensure user model is registered
 
   const posts = await Post.find({ status: 'Active' })
-    .populate({
-      path: 'room_id',
-      populate: {
-        path: 'property_id',
-        model: 'Property'
-      }
-    })
     .populate('ctv_id', 'name phone')
     .sort({ createdAt: -1 })
     .lean() as any[];
@@ -58,7 +46,7 @@ export default async function CustomerHome() {
           <div className="bg-white rounded-2xl p-2 flex items-center shadow-2xl">
             <div className="flex-1 flex items-center px-4 border-r border-slate-200 gap-3 text-slate-500">
               <Search className="w-5 h-5 text-indigo-500" />
-              <input type="text" placeholder="Tìm theo khu vực, tên đường..." className="w-full bg-transparent outline-none text-slate-800 font-medium placeholder:font-normal" />
+              <input type="text" placeholder="Tìm theo khu vực, loại phòng..." className="w-full bg-transparent outline-none text-slate-800 font-medium placeholder:font-normal" />
             </div>
             <button className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition flex items-center gap-2">
               <Filter className="w-4 h-4" />
@@ -80,15 +68,15 @@ export default async function CustomerHome() {
             <p className="text-slate-500">Hiện tại chưa có phòng trống nào được đăng.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {posts.map((post) => {
-              const price = post.room_id?.price || 0;
-              const address = post.room_id?.property_id?.address || 'Chưa cập nhật địa chỉ';
+              const price = post.price || 0;
+              const address = post.address || 'Chưa cập nhật địa chỉ';
               const imageUrl = post.images && post.images.length > 0 ? post.images[0] : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop';
               const ctvPhone = post.ctv_id?.phone || '';
 
               return (
-                <div key={post._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-100 flex flex-col">
+                <div key={post._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-200 flex flex-col">
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
                     <Image
                       src={imageUrl}
@@ -99,42 +87,68 @@ export default async function CustomerHome() {
                     <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm font-extrabold text-indigo-600 shadow-md">
                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
                     </div>
+                    {post.property_type && (
+                      <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg text-xs font-medium">
+                        {post.property_type}
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="p-5 space-y-4 flex-1 flex flex-col">
-                    <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition">
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-3 text-lg">
                       {post.title}
                     </h3>
                     
-                    <div className="flex items-start gap-2 text-slate-500 text-sm flex-1">
-                      <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-slate-400" />
-                      <span className="line-clamp-2">{address}</span>
+                    <div className="space-y-2 mb-4 flex-1">
+                      <div className="flex items-start gap-2 text-slate-600 text-sm">
+                        <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-slate-400" />
+                        <span className="line-clamp-2">{address}</span>
+                      </div>
+                      
+                      {post.utility_costs && (
+                        <div className="flex items-start gap-2 text-slate-600 text-sm">
+                          <Bolt className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
+                          <span className="line-clamp-1" title={post.utility_costs}>{post.utility_costs}</span>
+                        </div>
+                      )}
+                      
+                      {post.contract_terms && (
+                        <div className="flex items-start gap-2 text-slate-600 text-sm">
+                          <FileText className="w-4 h-4 mt-0.5 shrink-0 text-blue-500" />
+                          <span className="line-clamp-1" title={post.contract_terms}>{post.contract_terms}</span>
+                        </div>
+                      )}
+                      
+                      {post.target_audience && (
+                        <div className="flex items-start gap-2 text-slate-600 text-sm">
+                          <Users className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" />
+                          <span className="line-clamp-1" title={post.target_audience}>Phù hợp: {post.target_audience}</span>
+                        </div>
+                      )}
                     </div>
                     
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-                      <div className="text-xs text-slate-500 font-medium">
-                        CTV: <span className="text-slate-800">{post.ctv_id?.name?.split(' ')[0] || 'Ẩn danh'}</span>
-                      </div>
+                    <div className="pt-4 border-t border-slate-100 mt-auto">
                       <div className="flex items-center gap-2">
+                        <ContactButton 
+                          postId={post._id.toString()} 
+                          ctvId={post.ctv_id?._id?.toString() || ''}
+                          postTitle={post.title}
+                        />
+                        
                         {ctvPhone && (
-                          <>
-                            <a 
-                              href={`tel:${ctvPhone}`}
-                              className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition tooltip"
-                              title="Gọi điện"
-                            >
-                              <Phone className="w-4 h-4" />
-                            </a>
-                            <a 
-                              href={`https://zalo.me/${ctvPhone}`} 
-                              target="_blank" 
-                              rel="noreferrer"
-                              className="flex items-center gap-1.5 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-bold hover:bg-blue-600 hover:text-white transition"
-                            >
-                              Zalo
-                            </a>
-                          </>
+                          <a 
+                            href={`https://zalo.me/${ctvPhone}`} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="flex items-center justify-center px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition shadow-sm border border-blue-100 hover:border-blue-600"
+                            title="Nhắn Zalo"
+                          >
+                            Zalo
+                          </a>
                         )}
+                      </div>
+                      <div className="text-center mt-3 text-xs text-slate-400 font-medium">
+                        CTV: {post.ctv_id?.name || 'Ẩn danh'}
                       </div>
                     </div>
                   </div>
