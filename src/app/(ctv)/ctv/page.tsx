@@ -7,6 +7,8 @@ import Post from '@/models/Post';
 import User from '@/models/User';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CTVDashboard() {
   const session = await getServerSession(authOptions);
   
