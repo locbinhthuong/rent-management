@@ -44,10 +44,7 @@ export default async function CustomerHome() {
             <span className="font-bold text-xl text-slate-800">RentHome</span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-            <Link href="/" className="text-indigo-600 font-bold">Trang chủ</Link>
-            <Link href="/login" className="px-5 py-2 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition shadow-md hover:shadow-lg">
-              Đăng nhập / Quản lý
-            </Link>
+            {/* Không hiển thị nút Đăng nhập trên trang của Khách */}
           </nav>
         </div>
       </header>
