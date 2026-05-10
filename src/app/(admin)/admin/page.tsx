@@ -7,7 +7,9 @@ import Post from '@/models/Post';
 import Room from '@/models/Room';
 import User from '@/models/User';
 import Transaction from '@/models/Transaction';
+import Lead from '@/models/Lead';
 import { redirect } from 'next/navigation';
+import AdminCharts from './AdminCharts';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +34,11 @@ export default async function AdminDashboard() {
     { $group: { _id: null, total: { $sum: '$amount' } } }
   ]);
   const totalRevenue = revenueTransactions.length > 0 ? revenueTransactions[0].total : 0;
+  
+  // Thống kê Leads
+  const leadStats = await Lead.aggregate([
+    { $group: { _id: '$status', count: { $sum: 1 } } }
+  ]);
   
   const occupancyRate = totalRoomsCount > 0 ? Math.round((rentedRoomsCount / totalRoomsCount) * 100) : 0;
 
@@ -118,11 +125,14 @@ export default async function AdminDashboard() {
           </div>
           
           <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="text-xl font-bold text-slate-800 mb-2">Thống kê chung</h3>
-            <p className="text-slate-500 mb-6">Hệ thống đang hoạt động ổn định. Các dữ liệu được cập nhật theo thời gian thực từ Database.</p>
-            <div className="bg-slate-50 border border-slate-100 rounded-xl p-8 text-center">
-              <p className="text-slate-400">Khu vực hiển thị biểu đồ chi tiết đang được xây dựng thêm.</p>
-            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-6">Thống kê chung</h3>
+            {leadStats.length > 0 ? (
+              <AdminCharts leadStats={leadStats} />
+            ) : (
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-8 text-center">
+                <p className="text-slate-400">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
+              </div>
+            )}
           </div>
         </div>
       </main>

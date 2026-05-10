@@ -1,24 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, XCircle, Trash2, Eye } from 'lucide-react';
+import { CheckCircle, XCircle, Trash2, Eye, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
   const [posts, setPosts] = useState(initialPosts);
   const router = useRouter();
 
-  const handleUpdateStatus = async (id: string, status: string) => {
-    if (!confirm(`Bạn có chắc muốn chuyển sang trạng thái ${status}?`)) return;
+  const handleUpdateStatus = async (id: string, status?: string, is_verified?: boolean) => {
+    let confirmMsg = status ? `Bạn có chắc muốn chuyển sang trạng thái ${status}?` : `Bạn có chắc muốn thay đổi trạng thái xác thực?`;
+    if (!confirm(confirmMsg)) return;
 
     try {
+      const bodyData: any = {};
+      if (status) bodyData.status = status;
+      if (is_verified !== undefined) bodyData.is_verified = is_verified;
+
       const res = await fetch(`/api/ctv/posts/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify(bodyData),
       });
       if (res.ok) {
-        setPosts(posts.map(p => p._id === id ? { ...p, status } : p));
+        setPosts(posts.map(p => p._id === id ? { ...p, ...bodyData } : p));
         router.refresh();
       } else {
         alert('Có lỗi xảy ra');
@@ -92,8 +97,22 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                   }`}>
                     {post.status}
                   </span>
+                  {post.is_verified && (
+                    <span className="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold">
+                      <ShieldCheck className="w-3 h-3" /> Uy tín
+                    </span>
+                  )}
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
+                  {post.status === 'Active' && (
+                    <button 
+                      onClick={() => handleUpdateStatus(post._id, undefined, !post.is_verified)} 
+                      className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-600 hover:bg-blue-50' : 'text-slate-400 hover:text-blue-600 hover:bg-slate-100'}`} 
+                      title={post.is_verified ? "Bỏ xác thực" : "Cấp tích xanh xác thực"}
+                    >
+                      {post.is_verified ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
+                    </button>
+                  )}
                   {post.status !== 'Active' && (
                     <button onClick={() => handleUpdateStatus(post._id, 'Active')} className="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition" title="Duyệt bài">
                       <CheckCircle className="w-5 h-5" />

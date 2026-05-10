@@ -50,13 +50,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     await connectDB();
     const resolvedParams = await params;
     const postId = resolvedParams.id;
-    const { status } = await req.json();
-
-    if (!['Active', 'Rejected', 'Pending'].includes(status)) {
-      return NextResponse.json({ message: 'Trạng thái không hợp lệ' }, { status: 400 });
+    const { status, is_verified } = await req.json();
+    
+    const updateData: any = {};
+    if (status && ['Active', 'Rejected', 'Pending'].includes(status)) {
+      updateData.status = status;
+    }
+    if (typeof is_verified === 'boolean') {
+      updateData.is_verified = is_verified;
     }
 
-    const post = await Post.findByIdAndUpdate(postId, { status }, { new: true });
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json({ message: 'Không có dữ liệu cập nhật hợp lệ' }, { status: 400 });
+    }
+
+    const post = await Post.findByIdAndUpdate(postId, updateData, { new: true });
     return NextResponse.json({ message: 'Cập nhật thành công', post }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });

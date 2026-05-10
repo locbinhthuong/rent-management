@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users, Heart } from 'lucide-react';
+import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users, Heart, ShieldCheck } from 'lucide-react';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
@@ -125,7 +125,8 @@ export default async function CustomerHome(props: Props) {
                     </div>
                     
                     <div className="p-5 flex-1 flex flex-col">
-                      <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-3 text-lg">
+                      <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-3 text-lg flex items-start gap-1">
+                        {post.is_verified && <ShieldCheck className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" title="Đã xác thực" />}
                         {post.title}
                       </h3>
                       
