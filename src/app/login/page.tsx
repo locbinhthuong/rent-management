@@ -38,11 +38,10 @@ export default function LoginPage() {
       } else {
         // Fetch session to check role
         const session = await getSession();
-        router.refresh();
         if (session?.user?.role === 'Admin') {
-          router.replace('/admin');
+          window.location.href = '/admin';
         } else {
-          router.replace('/ctv');
+          window.location.href = '/ctv';
         }
       }
     } catch (err) {

@@ -5,7 +5,7 @@ import Post from '@/models/Post';
 import User from '@/models/User';
 import ContactButton from '@/components/ContactButton';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // Cache for 60 seconds to improve load times
 
 async function getActivePosts() {
   await connectDB();

@@ -1,12 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PhoneCall, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
   const [leads, setLeads] = useState(initialLeads);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchLeads = async () => {
+      try {
+        const res = await fetch('/api/leads');
+        if (res.ok) {
+          const data = await res.json();
+          setLeads(data.leads);
+        }
+      } catch (err) {
+        console.error('Error fetching leads:', err);
+      }
+    };
+
+    const interval = setInterval(fetchLeads, 3000); // Poll every 3 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {

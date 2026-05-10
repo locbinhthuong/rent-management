@@ -26,3 +26,26 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });
   }
 }
+
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+
+export async function GET(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || session.user.role !== 'CTV') {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+    
+    await connectDB();
+    const leads = await Lead.find({ ctv_id: session.user.id })
+      .populate('post_id', 'title')
+      .sort({ createdAt: -1 })
+      .lean();
+      
+    return NextResponse.json({ leads }, { status: 200 });
+  } catch (error: any) {
+    console.error('Get leads error:', error);
+    return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });
+  }
+}
