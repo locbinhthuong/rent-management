@@ -1,10 +1,12 @@
 import Image from 'next/image';
-import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users } from 'lucide-react';
+import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users, Heart } from 'lucide-react';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import ContactButton from '@/components/ContactButton';
 import FilterSearch from '@/components/FilterSearch';
+import WishlistButton from '@/components/WishlistButton';
+import Link from 'next/link';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
@@ -62,8 +64,11 @@ export default async function CustomerHome(props: Props) {
             <Home className="w-6 h-6 text-indigo-600" />
             <span className="font-bold text-xl text-slate-800">RentHome</span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-            {/* Không hiển thị nút Đăng nhập trên trang của Khách */}
+          <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
+            <Link href="/saved" className="flex items-center gap-2 hover:text-indigo-600 transition">
+              <Heart className="w-5 h-5" />
+              <span className="hidden sm:inline">Phòng đã lưu</span>
+            </Link>
           </nav>
         </div>
       </header>
@@ -98,58 +103,64 @@ export default async function CustomerHome(props: Props) {
               const ctvPhone = post.ctv_id?.phone || '';
 
               return (
-                <div key={post._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-200 flex flex-col">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                    <Image
-                      src={imageUrl}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition duration-500"
-                    />
-                    <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm font-extrabold text-indigo-600 shadow-md">
-                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
-                    </div>
-                    {post.property_type && (
-                      <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg text-xs font-medium">
-                        {post.property_type}
-                      </div>
-                    )}
-                  </div>
+                <div key={post._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-200 flex flex-col relative">
+                  <WishlistButton post={{ ...post, _id: post._id.toString() }} />
                   
-                  <div className="p-5 flex-1 flex flex-col">
-                    <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-3 text-lg">
-                      {post.title}
-                    </h3>
-                    
-                    <div className="space-y-2 mb-4 flex-1">
-                      <div className="flex items-start gap-2 text-slate-600 text-sm">
-                        <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-slate-400" />
-                        <span className="line-clamp-2">{address}</span>
+                  <Link href={`/p/${post._id}`} className="flex-1 flex flex-col cursor-pointer block">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                      <Image
+                        src={imageUrl}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition duration-500"
+                      />
+                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm font-extrabold text-indigo-600 shadow-md">
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
                       </div>
-                      
-                      {post.utility_costs && (
-                        <div className="flex items-start gap-2 text-slate-600 text-sm">
-                          <Bolt className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
-                          <span className="line-clamp-1" title={post.utility_costs}>{post.utility_costs}</span>
-                        </div>
-                      )}
-                      
-                      {post.contract_terms && (
-                        <div className="flex items-start gap-2 text-slate-600 text-sm">
-                          <FileText className="w-4 h-4 mt-0.5 shrink-0 text-blue-500" />
-                          <span className="line-clamp-1" title={post.contract_terms}>{post.contract_terms}</span>
-                        </div>
-                      )}
-                      
-                      {post.target_audience && (
-                        <div className="flex items-start gap-2 text-slate-600 text-sm">
-                          <Users className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" />
-                          <span className="line-clamp-1" title={post.target_audience}>Phù hợp: {post.target_audience}</span>
+                      {post.property_type && (
+                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg text-xs font-medium">
+                          {post.property_type}
                         </div>
                       )}
                     </div>
                     
-                    <div className="pt-4 border-t border-slate-100 mt-auto">
+                    <div className="p-5 flex-1 flex flex-col">
+                      <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-3 text-lg">
+                        {post.title}
+                      </h3>
+                      
+                      <div className="space-y-2 mb-4 flex-1">
+                        <div className="flex items-start gap-2 text-slate-600 text-sm">
+                          <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-slate-400" />
+                          <span className="line-clamp-2">{address}</span>
+                        </div>
+                        
+                        {post.utility_costs && (
+                          <div className="flex items-start gap-2 text-slate-600 text-sm">
+                            <Bolt className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
+                            <span className="line-clamp-1" title={post.utility_costs}>{post.utility_costs}</span>
+                          </div>
+                        )}
+                        
+                        {post.contract_terms && (
+                          <div className="flex items-start gap-2 text-slate-600 text-sm">
+                            <FileText className="w-4 h-4 mt-0.5 shrink-0 text-blue-500" />
+                            <span className="line-clamp-1" title={post.contract_terms}>{post.contract_terms}</span>
+                          </div>
+                        )}
+                        
+                        {post.target_audience && (
+                          <div className="flex items-start gap-2 text-slate-600 text-sm">
+                            <Users className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" />
+                            <span className="line-clamp-1" title={post.target_audience}>Phù hợp: {post.target_audience}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                    
+                  <div className="p-5 pt-0 mt-auto">
+                    <div className="pt-4 border-t border-slate-100">
                       <div className="flex items-center gap-2">
                         <ContactButton 
                           postId={post._id.toString()} 
