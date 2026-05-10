@@ -16,7 +16,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const leadId = resolvedParams.id;
     const { status } = await req.json();
 
-    if (!['New', 'Contacted'].includes(status)) {
+    if (!['New', 'Contacted', 'Success', 'Failed'].includes(status)) {
       return NextResponse.json({ message: 'Trạng thái không hợp lệ' }, { status: 400 });
     }
 

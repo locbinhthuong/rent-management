@@ -35,7 +35,7 @@ async function getActivePosts(filters: any) {
 
   const posts = await Post.find(query)
     .populate('ctv_id', 'name phone')
-    .sort({ createdAt: -1 })
+    .sort({ is_vip: -1, bumped_at: -1, createdAt: -1 })
     .lean() as any[];
 
   return posts;

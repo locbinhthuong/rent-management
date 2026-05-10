@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PhoneCall, CheckCircle } from 'lucide-react';
+import { PhoneCall, CheckCircle, XCircle, DollarSign } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
@@ -73,9 +73,14 @@ export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
                 </td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                    lead.status === 'Contacted' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'
+                    lead.status === 'New' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                    lead.status === 'Contacted' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                    lead.status === 'Success' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                    'bg-red-50 text-red-700 border-red-200'
                   }`}>
-                    {lead.status === 'Contacted' ? 'Đã gọi tư vấn' : 'Mới'}
+                    {lead.status === 'New' ? 'Mới' :
+                     lead.status === 'Contacted' ? 'Đã gọi tư vấn' :
+                     lead.status === 'Success' ? 'Chốt thành công' : 'Thất bại'}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
@@ -83,9 +88,19 @@ export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
                     <PhoneCall className="w-5 h-5" />
                   </a>
                   {lead.status === 'New' && (
-                    <button onClick={() => handleUpdateStatus(lead._id, 'Contacted')} className="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition" title="Đánh dấu đã gọi">
+                    <button onClick={() => handleUpdateStatus(lead._id, 'Contacted')} className="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition tooltip" title="Đánh dấu đã gọi">
                       <CheckCircle className="w-5 h-5" />
                     </button>
+                  )}
+                  {lead.status === 'Contacted' && (
+                    <>
+                      <button onClick={() => handleUpdateStatus(lead._id, 'Success')} className="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition tooltip" title="Chốt thành công">
+                        <DollarSign className="w-5 h-5" />
+                      </button>
+                      <button onClick={() => handleUpdateStatus(lead._id, 'Failed')} className="text-red-600 hover:bg-red-50 p-2 rounded-lg transition tooltip" title="Khách hủy">
+                        <XCircle className="w-5 h-5" />
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>

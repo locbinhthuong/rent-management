@@ -16,6 +16,9 @@ export interface IPost extends Document {
   utility_costs?: string;
   contract_terms?: string;
   target_audience?: string;
+  is_vip?: boolean;
+  bumped_at?: Date;
+  is_verified?: boolean;
 
   createdAt: Date;
   updatedAt: Date;
@@ -38,6 +41,9 @@ const PostSchema: Schema = new Schema(
     utility_costs: { type: String },
     contract_terms: { type: String },
     target_audience: { type: String },
+    is_vip: { type: Boolean, default: false },
+    bumped_at: { type: Date },
+    is_verified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

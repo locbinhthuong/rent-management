@@ -6,7 +6,7 @@ export interface ILead extends Document {
   name: string;
   phone: string;
   message?: string;
-  status: 'New' | 'Contacted';
+  status: 'New' | 'Contacted' | 'Success' | 'Failed';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,7 +18,7 @@ const LeadSchema: Schema = new Schema(
     name: { type: String, required: true },
     phone: { type: String, required: true },
     message: { type: String },
-    status: { type: String, enum: ['New', 'Contacted'], default: 'New' },
+    status: { type: String, enum: ['New', 'Contacted', 'Success', 'Failed'], default: 'New' },
   },
   { timestamps: true }
 );

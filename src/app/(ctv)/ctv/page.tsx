@@ -6,6 +6,7 @@ import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import { redirect } from 'next/navigation';
+import BumpButton from '@/components/BumpButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -101,14 +102,20 @@ export default async function CTVDashboard() {
                         <span>Khách liên hệ: 0</span>
                       </div>
                     </div>
-                    <div className={`px-4 py-1.5 rounded-full text-xs font-bold border ${
-                      post.status === 'Active' 
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                        : post.status === 'Rejected'
-                        ? 'bg-red-50 text-red-700 border-red-200'
-                        : 'bg-orange-50 text-orange-700 border-orange-200'
-                    }`}>
-                      {post.status === 'Active' ? 'Đang hiển thị' : post.status === 'Rejected' ? 'Bị từ chối' : 'Chờ duyệt'}
+                    <div className="flex items-center">
+                      <div className={`px-4 py-1.5 rounded-full text-xs font-bold border ${
+                        post.status === 'Active' 
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                          : post.status === 'Rejected'
+                          ? 'bg-red-50 text-red-700 border-red-200'
+                          : 'bg-orange-50 text-orange-700 border-orange-200'
+                      }`}>
+                        {post.status === 'Active' ? 'Đang hiển thị' : post.status === 'Rejected' ? 'Bị từ chối' : 'Chờ duyệt'}
+                      </div>
+                      
+                      {post.status === 'Active' && (
+                        <BumpButton postId={post._id.toString()} isVip={post.is_vip} />
+                      )}
                     </div>
                   </div>
                 ))}
