@@ -4,14 +4,34 @@ import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import ContactButton from '@/components/ContactButton';
+import FilterSearch from '@/components/FilterSearch';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
-async function getActivePosts() {
+async function getActivePosts(filters: any) {
   await connectDB();
   User.init(); // Ensure user model is registered
 
-  const posts = await Post.find({ status: 'Active' })
+  const query: any = { status: 'Active' };
+
+  if (filters.type) {
+    query.property_type = filters.type;
+  }
+
+  if (filters.priceMin || filters.priceMax) {
+    query.price = {};
+    if (filters.priceMin) query.price.$gte = filters.priceMin;
+    if (filters.priceMax) query.price.$lte = filters.priceMax;
+  }
+
+  if (filters.keyword) {
+    query.$or = [
+      { title: { $regex: filters.keyword, $options: 'i' } },
+      { address: { $regex: filters.keyword, $options: 'i' } }
+    ];
+  }
+
+  const posts = await Post.find(query)
     .populate('ctv_id', 'name phone')
     .sort({ createdAt: -1 })
     .lean() as any[];
@@ -19,8 +39,19 @@ async function getActivePosts() {
   return posts;
 }
 
-export default async function CustomerHome() {
-  const posts = await getActivePosts();
+type Props = {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function CustomerHome(props: Props) {
+  const resolvedParams = props.searchParams ? await props.searchParams : {};
+  
+  const keyword = typeof resolvedParams.keyword === 'string' ? resolvedParams.keyword : undefined;
+  const type = typeof resolvedParams.type === 'string' ? resolvedParams.type : undefined;
+  const priceMin = typeof resolvedParams.priceMin === 'string' ? parseInt(resolvedParams.priceMin) : undefined;
+  const priceMax = typeof resolvedParams.priceMax === 'string' ? parseInt(resolvedParams.priceMax) : undefined;
+
+  const posts = await getActivePosts({ keyword, type, priceMin, priceMax });
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -43,16 +74,7 @@ export default async function CustomerHome() {
           <h1 className="text-3xl md:text-5xl font-extrabold text-white text-center leading-tight">
             Tìm phòng trọ ưng ý <br className="hidden md:block" />ngay hôm nay
           </h1>
-          <div className="bg-white rounded-2xl p-2 flex items-center shadow-2xl">
-            <div className="flex-1 flex items-center px-4 border-r border-slate-200 gap-3 text-slate-500">
-              <Search className="w-5 h-5 text-indigo-500" />
-              <input type="text" placeholder="Tìm theo khu vực, loại phòng..." className="w-full bg-transparent outline-none text-slate-800 font-medium placeholder:font-normal" />
-            </div>
-            <button className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition flex items-center gap-2">
-              <Filter className="w-4 h-4" />
-              Lọc
-            </button>
-          </div>
+          <FilterSearch />
         </div>
       </section>
 
