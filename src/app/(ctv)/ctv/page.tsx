@@ -5,8 +5,10 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
+import Lead from '@/models/Lead';
 import { redirect } from 'next/navigation';
 import BumpButton from '@/components/BumpButton';
+import { Eye } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +22,14 @@ export default async function CTVDashboard() {
   await connectDB();
   const user = await User.findById(session.user.id).lean();
   const posts = await Post.find({ ctv_id: session.user.id }).sort({ createdAt: -1 }).lean() as any[];
+  
+  // Tính số lượng leads (khách liên hệ) cho mỗi bài đăng
+  const leads = await Lead.find({ ctv_id: session.user.id }).select('post_id').lean();
+  const leadsMap = leads.reduce((acc: any, lead: any) => {
+    const postId = lead.post_id.toString();
+    acc[postId] = (acc[postId] || 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -96,10 +106,17 @@ export default async function CTVDashboard() {
                 {posts.map((post) => (
                   <div key={post._id.toString()} className="p-5 flex items-center justify-between hover:bg-slate-50 transition">
                     <div>
-                      <div className="font-bold text-slate-800 text-lg mb-1">{post.title}</div>
+                      <div className="font-bold text-slate-800 text-lg mb-1 flex items-center gap-2">
+                        {post.title}
+                        {post.status === 'Active' && (
+                          <Link href={`/p/${post._id}`} target="_blank" className="text-slate-400 hover:text-indigo-600 transition" title="Xem chi tiết bài đăng trên web">
+                            <Eye className="w-4 h-4" />
+                          </Link>
+                        )}
+                      </div>
                       <div className="text-sm text-slate-500 flex gap-4">
-                        <span>Lượt xem: 0</span>
-                        <span>Khách liên hệ: 0</span>
+                        <span>Lượt xem: <strong className="text-slate-700">{post.views || 0}</strong></span>
+                        <span>Khách liên hệ: <strong className="text-emerald-600">{leadsMap[post._id.toString()] || 0}</strong></span>
                       </div>
                     </div>
                     <div className="flex items-center">

@@ -15,7 +15,12 @@ async function getPostDetail(id: string) {
     await connectDB();
     User.init();
     
-    const post = await Post.findById(id).populate('ctv_id', 'name phone').lean();
+    const post = await Post.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } },
+      { new: true }
+    ).populate('ctv_id', 'name phone').lean();
+    
     if (!post) return null;
     
     // Tìm các phòng tương tự cùng loại hoặc cùng khu vực

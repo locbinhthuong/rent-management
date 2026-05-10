@@ -19,6 +19,7 @@ export interface IPost extends Document {
   is_vip?: boolean;
   bumped_at?: Date;
   is_verified?: boolean;
+  views?: number;
 
   createdAt: Date;
   updatedAt: Date;
@@ -44,6 +45,7 @@ const PostSchema: Schema = new Schema(
     is_vip: { type: Boolean, default: false },
     bumped_at: { type: Date },
     is_verified: { type: Boolean, default: false },
+    views: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

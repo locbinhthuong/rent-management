@@ -105,13 +105,18 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
                   {post.status === 'Active' && (
-                    <button 
-                      onClick={() => handleUpdateStatus(post._id, undefined, !post.is_verified)} 
-                      className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-600 hover:bg-blue-50' : 'text-slate-400 hover:text-blue-600 hover:bg-slate-100'}`} 
-                      title={post.is_verified ? "Bỏ xác thực" : "Cấp tích xanh xác thực"}
-                    >
-                      {post.is_verified ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
-                    </button>
+                    <>
+                      <a href={`/p/${post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
+                        <Eye className="w-5 h-5" />
+                      </a>
+                      <button 
+                        onClick={() => handleUpdateStatus(post._id, undefined, !post.is_verified)} 
+                        className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-600 hover:bg-blue-50' : 'text-slate-400 hover:text-blue-600 hover:bg-slate-100'}`} 
+                        title={post.is_verified ? "Bỏ xác thực" : "Cấp tích xanh xác thực"}
+                      >
+                        {post.is_verified ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
+                      </button>
+                    </>
                   )}
                   {post.status !== 'Active' && (
                     <button onClick={() => handleUpdateStatus(post._id, 'Active')} className="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition" title="Duyệt bài">
