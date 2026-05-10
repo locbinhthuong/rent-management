@@ -40,8 +40,9 @@ async function getPostDetail(id: string) {
   }
 }
 
-export default async function PostDetailPage({ params }: { params: { id: string } }) {
-  const data = await getPostDetail(params.id);
+export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const data = await getPostDetail(resolvedParams.id);
   
   if (!data || !data.post) {
     notFound();
