@@ -7,7 +7,7 @@ import ContactButton from '@/components/ContactButton';
 import FilterSearch from '@/components/FilterSearch';
 import WishlistButton from '@/components/WishlistButton';
 import Link from 'next/link';
-import { getServerSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { LogOut } from 'lucide-react';
 
