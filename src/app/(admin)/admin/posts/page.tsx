@@ -60,11 +60,11 @@ export default async function AdminPostsPage() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-y-auto">
-        <header className="bg-white p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
-          <h2 className="text-xl font-bold text-slate-800">Duyệt bài đăng Cộng tác viên</h2>
+        <header className="bg-white p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+          <h2 className="text-lg md:text-xl font-bold text-slate-800">Duyệt bài đăng Cộng tác viên</h2>
         </header>
 
-        <div className="p-8">
+        <div className="p-4 md:p-8 pb-20 md:pb-8">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">

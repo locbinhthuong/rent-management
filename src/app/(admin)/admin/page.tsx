@@ -68,21 +68,21 @@ export default async function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-y-auto">
         {/* Header */}
-        <header className="bg-white p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-          <h2 className="text-xl font-bold text-slate-800">
+        <header className="bg-white p-4 md:p-5 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sticky top-0 z-10 shadow-sm">
+          <h2 className="text-lg md:text-xl font-bold text-slate-800">
             Xin chào, Quản trị viên {session?.user?.name?.split(' ').pop() || ''}
           </h2>
-          <div className="flex gap-4">
-            <Link href="/" target="_blank" className="text-sm font-bold text-indigo-600 border-2 border-indigo-100 bg-indigo-50 px-4 py-2 rounded-lg hover:bg-indigo-100 transition">
-              Xem trang Khách
+          <div className="flex gap-2 w-full md:w-auto">
+            <Link href="/" target="_blank" className="flex-1 md:flex-none text-center text-xs md:text-sm font-bold text-indigo-600 border-2 border-indigo-100 bg-indigo-50 px-3 py-2 rounded-lg hover:bg-indigo-100 transition">
+              Trang Khách
             </Link>
-            <Link href="/api/auth/signout" className="text-sm font-bold text-red-600 border-2 border-red-100 bg-red-50 px-4 py-2 rounded-lg hover:bg-red-100 transition flex items-center gap-2">
+            <Link href="/api/auth/signout" className="flex-1 md:flex-none justify-center text-xs md:text-sm font-bold text-red-600 border-2 border-red-100 bg-red-50 px-3 py-2 rounded-lg hover:bg-red-100 transition flex items-center gap-2">
               <LogOut className="w-4 h-4" /> Đăng xuất
             </Link>
           </div>
         </header>
 
-        <div className="p-8 space-y-8">
+        <div className="p-4 md:p-8 pb-20 md:pb-8 space-y-6 md:space-y-8">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3 hover:shadow-md transition">

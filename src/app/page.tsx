@@ -9,7 +9,7 @@ import WishlistButton from '@/components/WishlistButton';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { LogOut } from 'lucide-react';
+import { LogOut, LayoutDashboard } from 'lucide-react';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
@@ -70,18 +70,18 @@ export default async function CustomerHome(props: Props) {
             </div>
             <span className="font-extrabold text-2xl text-slate-800 tracking-tight">RentHome</span>
           </div>
-          <nav className="flex items-center gap-6 text-sm font-semibold text-slate-600">
+          <nav className="flex items-center gap-3 md:gap-6 text-sm font-semibold text-slate-600">
             <Link href="/saved" className="flex items-center gap-2 hover:text-indigo-600 transition-colors">
-              <Heart className="w-5 h-5" />
+              <Heart className="w-6 h-6 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Đã lưu</span>
             </Link>
             
-            <div className="w-px h-6 bg-slate-200 mx-2"></div>
+            <div className="w-px h-6 bg-slate-200 mx-1 md:mx-2"></div>
             
             {session ? (
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-md border-2 border-white">
+              <div className="flex items-center gap-3 md:gap-4">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 text-white flex items-center justify-center font-bold text-base md:text-lg shadow-md border-2 border-white">
                     {session.user?.name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                   <div className="hidden sm:block text-left">
@@ -93,18 +93,20 @@ export default async function CustomerHome(props: Props) {
                 </div>
                 <Link 
                   href={session.user?.role === 'Admin' ? '/admin' : session.user?.role === 'CTV' ? '/ctv' : '/'}
-                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition font-medium"
+                  className="px-3 py-2 md:px-4 md:py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition font-medium flex items-center gap-2"
+                  title="Bảng điều khiển"
                 >
-                  Bảng điều khiển
+                  <LayoutDashboard className="w-5 h-5 md:hidden" />
+                  <span className="hidden md:inline">Bảng điều khiển</span>
                 </Link>
               </div>
             ) : (
               <Link 
                 href="/login" 
-                className="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-white transition-all duration-300 bg-indigo-600 rounded-xl hover:bg-indigo-700 hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 overflow-hidden group"
+                className="relative inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-2.5 font-bold text-white transition-all duration-300 bg-indigo-600 rounded-xl hover:bg-indigo-700 hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 overflow-hidden group text-xs md:text-sm"
               >
                 <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
-                <span className="relative">Đăng Nhập / Đăng Ký</span>
+                <span className="relative">Đăng Nhập</span>
               </Link>
             )}
           </nav>

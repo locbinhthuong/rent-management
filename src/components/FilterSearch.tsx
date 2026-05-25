@@ -52,14 +52,15 @@ export default function FilterSearch() {
         <button 
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className={`px-4 py-3 font-bold rounded-xl transition flex items-center gap-2 mx-2 shrink-0 ${showFilters ? 'bg-indigo-100 text-indigo-700' : 'text-slate-600 hover:bg-slate-100'}`}
+          className={`px-3 md:px-4 py-3 font-bold rounded-xl transition flex items-center gap-2 mx-1 md:mx-2 shrink-0 ${showFilters ? 'bg-indigo-100 text-indigo-700' : 'text-slate-600 hover:bg-slate-100'}`}
         >
           <Filter className="w-4 h-4" />
-          Bộ lọc chi tiết
+          <span className="hidden sm:inline">Bộ lọc</span>
         </button>
 
-        <button type="submit" className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shrink-0 hidden md:block">
-          Tìm kiếm
+        <button type="submit" className="px-3 md:px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shrink-0 flex items-center justify-center">
+          <Search className="w-5 h-5 md:hidden" />
+          <span className="hidden md:inline">Tìm kiếm</span>
         </button>
       </form>
 
@@ -96,7 +97,7 @@ export default function FilterSearch() {
               <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-slate-400" /> Khoảng giá (VNĐ)
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-center gap-2">
                 <input 
                   type="number" 
                   value={priceMin}
@@ -104,7 +105,7 @@ export default function FilterSearch() {
                   placeholder="Từ (VD: 1000000)" 
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-700"
                 />
-                <span className="text-slate-400 font-bold">-</span>
+                <span className="text-slate-400 font-bold hidden sm:block">-</span>
                 <input 
                   type="number" 
                   value={priceMax}
