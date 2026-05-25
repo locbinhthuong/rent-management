@@ -7,10 +7,14 @@ export async function POST(req: Request) {
   try {
     await connectDB();
     
-    const { name, email, phone, password } = await req.json();
+    const { name, email, phone, password, role } = await req.json();
 
-    if (!name || !email || !password || !phone) {
+    if (!name || !email || !password || !phone || !role) {
       return NextResponse.json({ message: 'Vui lòng điền đầy đủ thông tin' }, { status: 400 });
+    }
+
+    if (role !== 'Customer' && role !== 'CTV') {
+      return NextResponse.json({ message: 'Quyền không hợp lệ' }, { status: 400 });
     }
 
     // Check if user exists
@@ -28,18 +32,18 @@ export async function POST(req: Request) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create CTV user
+    // Create user
     const newUser = await User.create({
       name,
       email,
       phone,
       password: hashedPassword,
-      role: 'CTV',
+      role: role,
       wallet_balance: 0,
     });
 
     return NextResponse.json(
-      { message: 'Đăng ký tài khoản CTV thành công' },
+      { message: `Đăng ký tài khoản ${role} thành công` },
       { status: 201 }
     );
   } catch (error: any) {

@@ -8,6 +8,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ctvInfo, setCtvInfo] = useState<{ phone: string, name: string } | null>(null);
 
   if (!isOpen) return null;
 
@@ -22,11 +23,9 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
         body: JSON.stringify({ post_id: postId, ctv_id: ctvId, name, phone })
       });
       if (res.ok) {
+        const data = await res.json();
         setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false);
-          onClose();
-        }, 2000);
+        setCtvInfo({ phone: data.ctvPhone, name: data.ctvName });
       } else {
         alert('Lỗi gửi thông tin');
       }
@@ -43,13 +42,22 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
           <X className="w-5 h-5" />
         </button>
         
-        {success ? (
-          <div className="text-center py-8">
+        {success && ctvInfo ? (
+          <div className="text-center py-6">
             <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <Send className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">Đã gửi thông tin!</h3>
-            <p className="text-slate-500">Cộng tác viên sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Kết nối thành công!</h3>
+            <p className="text-slate-500 text-sm mb-4">Bạn có thể liên hệ trực tiếp với Cộng tác viên qua số điện thoại bên dưới:</p>
+            
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6">
+              <p className="text-sm text-slate-500">Cộng tác viên: <span className="font-medium text-slate-700">{ctvInfo.name}</span></p>
+              <p className="text-2xl font-bold text-indigo-600 mt-2">{ctvInfo.phone}</p>
+            </div>
+            
+            <a href={`tel:${ctvInfo.phone}`} className="block w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md">
+              Gọi ngay
+            </a>
           </div>
         ) : (
           <>

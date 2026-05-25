@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [role, setRole] = useState<'Customer' | 'CTV'>('Customer');
   
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -40,8 +41,10 @@ export default function LoginPage() {
         const session = await getSession();
         if (session?.user?.role === 'Admin') {
           window.location.href = '/admin';
-        } else {
+        } else if (session?.user?.role === 'CTV') {
           window.location.href = '/ctv';
+        } else {
+          window.location.href = '/';
         }
       }
     } catch (err) {
@@ -60,7 +63,7 @@ export default function LoginPage() {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, password }),
+        body: JSON.stringify({ name, email, phone, password, role }),
       });
       const data = await res.json();
       
@@ -68,7 +71,7 @@ export default function LoginPage() {
         setError(data.message || 'Lỗi đăng ký');
         setLoading(false);
       } else {
-        setSuccess('Đăng ký tài khoản CTV thành công! Vui lòng Đăng nhập.');
+        setSuccess('Đăng ký tài khoản thành công! Vui lòng Đăng nhập.');
         setIsLogin(true); // Switch to login
         setPassword(''); // Clear password for security
         setLoading(false);
@@ -84,8 +87,8 @@ export default function LoginPage() {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
         <div className="bg-indigo-600 p-6 text-center text-white">
           <ShieldCheck className="w-12 h-12 mx-auto mb-3 text-indigo-200" />
-          <h1 className="text-2xl font-bold">{isLogin ? 'Đăng nhập Hệ thống' : 'Đăng ký Cộng tác viên'}</h1>
-          <p className="text-indigo-200 text-sm mt-1">Dành cho Quản trị viên và Cộng tác viên</p>
+          <h1 className="text-2xl font-bold">{isLogin ? 'Đăng nhập Hệ thống' : 'Tạo Tài khoản mới'}</h1>
+          <p className="text-indigo-200 text-sm mt-1">Dành cho Khách hàng & Cộng tác viên</p>
         </div>
 
         {/* Tab Toggle */}
@@ -123,6 +126,16 @@ export default function LoginPage() {
             {/* Registration Fields */}
             {!isLogin && (
               <>
+                <div className="flex gap-4 mb-4">
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 border rounded-xl cursor-pointer transition ${role === 'Customer' ? 'bg-indigo-50 border-indigo-600 text-indigo-700 font-semibold' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                    <input type="radio" name="role" value="Customer" checked={role === 'Customer'} onChange={() => setRole('Customer')} className="hidden" />
+                    <span>Khách Hàng</span>
+                  </label>
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 border rounded-xl cursor-pointer transition ${role === 'CTV' ? 'bg-indigo-50 border-indigo-600 text-indigo-700 font-semibold' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                    <input type="radio" name="role" value="CTV" checked={role === 'CTV'} onChange={() => setRole('CTV')} className="hidden" />
+                    <span>Cộng Tác Viên</span>
+                  </label>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Họ và Tên</label>
                   <div className="relative">
@@ -209,8 +222,7 @@ export default function LoginPage() {
         </div>
         
         <div className="bg-slate-50 p-4 border-t border-slate-100 text-center text-sm text-slate-500">
-          Khách hàng không cần đăng nhập để tìm phòng.<br/>
-          <a href="/" className="text-indigo-600 font-medium hover:underline mt-1 inline-block">Quay lại trang chủ Khách Hàng</a>
+          <a href="/" className="text-indigo-600 font-medium hover:underline inline-block">← Quay lại trang chủ</a>
         </div>
       </div>
     </div>

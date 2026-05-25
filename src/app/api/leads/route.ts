@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Lead from '@/models/Lead';
+import User from '@/models/User';
 
 export async function POST(req: Request) {
   try {
@@ -20,7 +21,14 @@ export async function POST(req: Request) {
       status: 'New',
     });
 
-    return NextResponse.json({ message: 'Gửi thành công', lead: newLead }, { status: 201 });
+    const ctv = await User.findById(data.ctv_id).select('phone name');
+
+    return NextResponse.json({ 
+      message: 'Gửi thành công', 
+      lead: newLead,
+      ctvPhone: ctv?.phone || 'Đang cập nhật',
+      ctvName: ctv?.name || 'Cộng tác viên'
+    }, { status: 201 });
   } catch (error: any) {
     console.error('Create lead error:', error);
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });

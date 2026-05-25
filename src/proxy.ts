@@ -6,12 +6,16 @@ export default withAuth(
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
     const appType = process.env.APP_TYPE || 'CUSTOMER'; // Mặc định là Khách hàng nếu không set
+    
+    // Tracking Affiliate
+    const refCode = req.nextUrl.searchParams.get('ref');
+    let response = NextResponse.next();
 
     // Xử lý luồng cho Khách Hàng (CUSTOMER)
     if (appType === 'CUSTOMER') {
-      // Chặn khách hàng không được truy cập vào admin/ctv/login
-      if (path.startsWith("/admin") || path.startsWith("/ctv") || path.startsWith("/login")) {
-        return NextResponse.redirect(new URL("/", req.url));
+      // Chặn khách hàng không được truy cập vào admin/ctv (bỏ chặn login vì đã hỗ trợ login)
+      if (path.startsWith("/admin") || path.startsWith("/ctv")) {
+        response = NextResponse.redirect(new URL("/", req.url));
       }
     }
 
@@ -28,9 +32,20 @@ export default withAuth(
       }
 
       if (path.startsWith("/ctv") && token?.role !== "CTV" && token?.role !== "Admin") {
-        return NextResponse.redirect(new URL("/login", req.url));
+        response = NextResponse.redirect(new URL("/login", req.url));
       }
     }
+
+    if (refCode) {
+      response.cookies.set({
+        name: 'affiliate_ref',
+        value: refCode,
+        path: '/',
+        maxAge: 30 * 24 * 60 * 60,
+      });
+    }
+
+    return response;
   },
   {
     callbacks: {

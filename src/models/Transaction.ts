@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ITransaction extends Document {
-  type: 'Thu tiền phòng' | 'Chi hoa hồng' | 'Chi sửa chữa';
+  type: 'DEPOSIT' | 'PAYOUT' | 'COMMISSION' | 'REFUND';
   amount: number;
-  property_id: mongoose.Types.ObjectId;
+  property_id?: mongoose.Types.ObjectId;
   ctv_id?: mongoose.Types.ObjectId;
   room_id?: mongoose.Types.ObjectId;
   status: 'Pending' | 'Completed' | 'Failed';
@@ -14,9 +14,9 @@ export interface ITransaction extends Document {
 
 const TransactionSchema: Schema = new Schema(
   {
-    type: { type: String, enum: ['Thu tiền phòng', 'Chi hoa hồng', 'Chi sửa chữa'], required: true },
+    type: { type: String, enum: ['DEPOSIT', 'PAYOUT', 'COMMISSION', 'REFUND'], required: true },
     amount: { type: Number, required: true },
-    property_id: { type: Schema.Types.ObjectId, ref: 'Property', required: true },
+    property_id: { type: Schema.Types.ObjectId, ref: 'Property' },
     ctv_id: { type: Schema.Types.ObjectId, ref: 'User' },
     room_id: { type: Schema.Types.ObjectId, ref: 'Room' },
     status: { type: String, enum: ['Pending', 'Completed', 'Failed'], default: 'Completed' },
