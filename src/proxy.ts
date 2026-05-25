@@ -11,34 +11,17 @@ export default withAuth(
     const refCode = req.nextUrl.searchParams.get('ref');
     let response = NextResponse.next();
 
-    // Xử lý luồng cho Khách Hàng (CUSTOMER)
-    if (appType === 'CUSTOMER') {
-      // Chặn khách hàng không được truy cập vào admin/ctv (bỏ chặn login vì đã hỗ trợ login)
-      if (path.startsWith("/admin") || path.startsWith("/ctv")) {
-        response = NextResponse.redirect(new URL("/", req.url));
-      }
+    // Bỏ chặn APP_TYPE khắt khe để Admin/CTV có thể vào Bảng điều khiển từ Trang chủ
+    if (path.startsWith("/admin") && token?.role !== "Admin") {
+      return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // Xử lý luồng cho Quản trị viên & CTV (ADMIN)
-    if (appType === 'ADMIN') {
-      // Chặn không cho vào trang chủ (trang tìm phòng)
-      if (path === "/") {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
-
-      // Vẫn giữ logic phân quyền NextAuth cũ
-      if (path.startsWith("/admin") && token?.role !== "Admin") {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
-
-      if (path.startsWith("/ctv")) {
-        if (token?.role !== "CTV" && token?.role !== "Admin") {
-          response = NextResponse.redirect(new URL("/login", req.url));
-        } else if (token?.status === "Pending") {
-          // Cho phép truy cập trang báo Pending, chặn các trang con khác
-          if (path !== "/ctv/pending") {
-            response = NextResponse.redirect(new URL("/ctv/pending", req.url));
-          }
+    if (path.startsWith("/ctv")) {
+      if (token?.role !== "CTV" && token?.role !== "Admin") {
+        response = NextResponse.redirect(new URL("/login", req.url));
+      } else if (token?.status === "Pending") {
+        if (path !== "/ctv/pending") {
+          response = NextResponse.redirect(new URL("/ctv/pending", req.url));
         }
       }
     }
