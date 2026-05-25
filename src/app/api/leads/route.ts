@@ -2,21 +2,34 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Lead from '@/models/Lead';
 import User from '@/models/User';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json({ message: 'Vui lòng đăng nhập để thực hiện' }, { status: 401 });
+    }
+
     await connectDB();
     const data = await req.json();
 
-    if (!data.name || !data.phone || !data.post_id || !data.ctv_id) {
+    if (!data.post_id || !data.ctv_id) {
       return NextResponse.json({ message: 'Thiếu thông tin bắt buộc' }, { status: 400 });
+    }
+
+    // Lấy thông tin khách hàng từ DB
+    const customer = await User.findById(session.user.id).select('name phone');
+    if (!customer) {
+      return NextResponse.json({ message: 'Tài khoản không tồn tại' }, { status: 404 });
     }
 
     const newLead = await Lead.create({
       post_id: data.post_id,
       ctv_id: data.ctv_id,
-      name: data.name,
-      phone: data.phone,
+      name: customer.name,
+      phone: customer.phone || 'Chưa cập nhật',
       message: data.message || '',
       status: 'New',
     });
@@ -34,9 +47,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });
   }
 }
-
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET(req: Request) {
   try {

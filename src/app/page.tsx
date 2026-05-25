@@ -7,6 +7,9 @@ import ContactButton from '@/components/ContactButton';
 import FilterSearch from '@/components/FilterSearch';
 import WishlistButton from '@/components/WishlistButton';
 import Link from 'next/link';
+import { getServerSession } from 'next-auth/react';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { LogOut } from 'lucide-react';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
@@ -54,21 +57,56 @@ export default async function CustomerHome(props: Props) {
   const priceMax = typeof resolvedParams.priceMax === 'string' ? parseInt(resolvedParams.priceMax) : undefined;
 
   const posts = await getActivePosts({ keyword, type, priceMin, priceMax });
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Header */}
-      <header className="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Home className="w-6 h-6 text-indigo-600" />
-            <span className="font-bold text-xl text-slate-800">RentHome</span>
+      <header className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-200/50 shadow-sm supports-[backdrop-filter]:bg-white/60">
+        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between transition-all">
+          <div className="flex items-center gap-2 group cursor-pointer">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
+              <Home className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-extrabold text-2xl text-slate-800 tracking-tight">RentHome</span>
           </div>
-          <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
-            <Link href="/saved" className="flex items-center gap-2 hover:text-indigo-600 transition">
+          <nav className="flex items-center gap-6 text-sm font-semibold text-slate-600">
+            <Link href="/saved" className="flex items-center gap-2 hover:text-indigo-600 transition-colors">
               <Heart className="w-5 h-5" />
-              <span className="hidden sm:inline">Phòng đã lưu</span>
+              <span className="hidden sm:inline">Đã lưu</span>
             </Link>
+            
+            <div className="w-px h-6 bg-slate-200 mx-2"></div>
+            
+            {session ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-md border-2 border-white">
+                    {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                  <div className="hidden sm:block text-left">
+                    <div className="text-sm font-bold text-slate-800">{session.user?.name}</div>
+                    <div className="text-xs text-indigo-600 font-medium">
+                      {session.user?.role === 'Admin' ? 'Quản Trị Viên' : session.user?.role === 'CTV' ? 'Cộng Tác Viên' : 'Khách Hàng'}
+                    </div>
+                  </div>
+                </div>
+                <Link 
+                  href={session.user?.role === 'Admin' ? '/admin' : session.user?.role === 'CTV' ? '/ctv' : '/'}
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition font-medium"
+                >
+                  Bảng điều khiển
+                </Link>
+              </div>
+            ) : (
+              <Link 
+                href="/login" 
+                className="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-white transition-all duration-300 bg-indigo-600 rounded-xl hover:bg-indigo-700 hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 overflow-hidden group"
+              >
+                <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                <span className="relative">Đăng Nhập / Đăng Ký</span>
+              </Link>
+            )}
           </nav>
         </div>
       </header>
@@ -112,13 +150,14 @@ export default async function CustomerHome(props: Props) {
                         src={imageUrl}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-110 transition duration-500"
+                        className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm font-extrabold text-indigo-600 shadow-md">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-sm font-extrabold text-indigo-600 shadow-lg border border-white/20 transform group-hover:-translate-y-1 transition-transform duration-300">
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
                       </div>
                       {post.property_type && (
-                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg text-xs font-medium">
+                        <div className="absolute bottom-3 left-3 bg-black/50 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-white/10">
                           {post.property_type}
                         </div>
                       )}

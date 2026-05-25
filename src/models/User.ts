@@ -13,6 +13,7 @@ export interface IUser extends Document {
     account_number: string;
     account_name: string;
   };
+  status: 'Pending' | 'Active' | 'Rejected';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,6 +32,7 @@ const UserSchema: Schema = new Schema(
       account_number: { type: String },
       account_name: { type: String },
     },
+    status: { type: String, enum: ['Pending', 'Active', 'Rejected'], default: 'Active' },
   },
   { timestamps: true }
 );

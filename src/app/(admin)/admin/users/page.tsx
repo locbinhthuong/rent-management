@@ -4,7 +4,8 @@ import connectDB from '@/lib/db';
 import User from '@/models/User';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Home, Settings, Search, Trash2, Edit, FileText } from 'lucide-react';
+import { Users, Home, Settings, Search, FileText } from 'lucide-react';
+import UserActionButtons from './UserActionButtons';
 
 export const dynamic = 'force-dynamic';
 
@@ -97,12 +98,7 @@ export default async function AdminUsersPage() {
                           {new Date(ctv.createdAt).toLocaleDateString('vi-VN')}
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <button className="text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition mr-2" title="Chỉnh sửa">
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button className="text-red-600 hover:bg-red-50 p-2 rounded-lg transition" title="Khóa tài khoản">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <UserActionButtons userId={ctv._id.toString()} currentStatus={ctv.status || 'Active'} />
                         </td>
                       </tr>
                     ))

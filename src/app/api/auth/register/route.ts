@@ -32,6 +32,9 @@ export async function POST(req: Request) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Define status based on role
+    const initialStatus = role === 'CTV' ? 'Pending' : 'Active';
+
     // Create user
     const newUser = await User.create({
       name,
@@ -39,6 +42,7 @@ export async function POST(req: Request) {
       phone,
       password: hashedPassword,
       role: role,
+      status: initialStatus,
       wallet_balance: 0,
     });
 

@@ -31,8 +31,15 @@ export default withAuth(
         return NextResponse.redirect(new URL("/login", req.url));
       }
 
-      if (path.startsWith("/ctv") && token?.role !== "CTV" && token?.role !== "Admin") {
-        response = NextResponse.redirect(new URL("/login", req.url));
+      if (path.startsWith("/ctv")) {
+        if (token?.role !== "CTV" && token?.role !== "Admin") {
+          response = NextResponse.redirect(new URL("/login", req.url));
+        } else if (token?.status === "Pending") {
+          // Cho phép truy cập trang báo Pending, chặn các trang con khác
+          if (path !== "/ctv/pending") {
+            response = NextResponse.redirect(new URL("/ctv/pending", req.url));
+          }
+        }
       }
     }
 
