@@ -3,6 +3,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import NextTopLoader from 'nextjs-toploader';
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col pb-16 md:pb-0 bg-background text-foreground">
         <AuthProvider>
+          <NextTopLoader color="#4f46e5" showSpinner={false} />
           {children}
           <MobileBottomNav />
         </AuthProvider>
