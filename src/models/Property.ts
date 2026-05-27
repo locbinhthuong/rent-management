@@ -3,6 +3,12 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IProperty extends Document {
   name: string;
   address: string;
+  city?: string;
+  district?: string;
+  ward?: string;
+  description?: string;
+  images?: string[];
+  amenities?: string[];
   owner_id: mongoose.Types.ObjectId;
   total_rooms: number;
   financial_config: {
@@ -19,6 +25,12 @@ const PropertySchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     address: { type: String, required: true },
+    city: { type: String },
+    district: { type: String },
+    ward: { type: String },
+    description: { type: String },
+    images: [{ type: String }],
+    amenities: [{ type: String }],
     owner_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     total_rooms: { type: Number, required: true },
     financial_config: {

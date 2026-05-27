@@ -10,6 +10,7 @@ export default function FilterSearch() {
 
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
   const [propertyType, setPropertyType] = useState(searchParams.get('type') || '');
+  const [district, setDistrict] = useState(searchParams.get('district') || '');
   const [priceMin, setPriceMin] = useState(searchParams.get('priceMin') || '');
   const [priceMax, setPriceMax] = useState(searchParams.get('priceMax') || '');
   const [showFilters, setShowFilters] = useState(false);
@@ -20,6 +21,7 @@ export default function FilterSearch() {
     const params = new URLSearchParams();
     if (keyword) params.set('keyword', keyword);
     if (propertyType) params.set('type', propertyType);
+    if (district) params.set('district', district);
     if (priceMin) params.set('priceMin', priceMin);
     if (priceMax) params.set('priceMax', priceMax);
 
@@ -29,6 +31,7 @@ export default function FilterSearch() {
   const clearFilters = () => {
     setKeyword('');
     setPropertyType('');
+    setDistrict('');
     setPriceMin('');
     setPriceMax('');
     router.push('/');
@@ -84,16 +87,36 @@ export default function FilterSearch() {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none font-medium text-slate-700 appearance-none"
               >
                 <option value="">Tất cả các loại</option>
-                <option value="Phòng trọ">Phòng trọ sinh viên</option>
+                <option value="Phòng trọ sinh viên">Phòng trọ sinh viên</option>
+                <option value="Chung cư mini">Chung cư mini</option>
+                <option value="Căn hộ dịch vụ (CHDV)">Căn hộ dịch vụ (CHDV)</option>
+                <option value="Ký túc xá / Sleepbox">Ký túc xá / Sleepbox</option>
                 <option value="Nhà nguyên căn">Nhà nguyên căn</option>
-                <option value="Minihouse">Minihouse / Studio</option>
-                <option value="Chung cư">Căn hộ chung cư</option>
-                <option value="Mặt bằng">Mặt bằng kinh doanh</option>
+              </select>
+            </div>
+
+            {/* Khu vực */}
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-slate-400" /> Khu vực (Quận/Huyện)
+              </label>
+              <select 
+                value={district} 
+                onChange={(e) => setDistrict(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none font-medium text-slate-700 appearance-none"
+              >
+                <option value="">Tất cả khu vực</option>
+                <option value="Quận 1">Quận 1</option>
+                <option value="Quận 2">Quận 2</option>
+                <option value="Quận 3">Quận 3</option>
+                <option value="Quận 7">Quận 7</option>
+                <option value="Quận 9">Quận 9</option>
+                <option value="Bình Thạnh">Bình Thạnh</option>
               </select>
             </div>
 
             {/* Mức giá */}
-            <div>
+            <div className="md:col-span-2">
               <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-slate-400" /> Khoảng giá (VNĐ)
               </label>

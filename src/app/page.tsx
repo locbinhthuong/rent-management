@@ -23,6 +23,14 @@ async function getActivePosts(filters: any) {
     query.property_type = filters.type;
   }
 
+  if (filters.district) {
+    query.$or = query.$or || [];
+    query.$or.push(
+      { district: filters.district },
+      { address: { $regex: filters.district, $options: 'i' } }
+    );
+  }
+
   if (filters.priceMin || filters.priceMax) {
     query.price = {};
     if (filters.priceMin) query.price.$gte = filters.priceMin;
@@ -53,10 +61,11 @@ export default async function CustomerHome(props: Props) {
   
   const keyword = typeof resolvedParams.keyword === 'string' ? resolvedParams.keyword : undefined;
   const type = typeof resolvedParams.type === 'string' ? resolvedParams.type : undefined;
+  const district = typeof resolvedParams.district === 'string' ? resolvedParams.district : undefined;
   const priceMin = typeof resolvedParams.priceMin === 'string' ? parseInt(resolvedParams.priceMin) : undefined;
   const priceMax = typeof resolvedParams.priceMax === 'string' ? parseInt(resolvedParams.priceMax) : undefined;
 
-  const posts = await getActivePosts({ keyword, type, priceMin, priceMax });
+  const posts = await getActivePosts({ keyword, type, district, priceMin, priceMax });
   const session = await getServerSession(authOptions);
 
   return (

@@ -7,10 +7,11 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Users, Home, Settings, Search, FileText } from 'lucide-react';
 import PostsTable from './PostsTable';
+import FilterBar from '@/components/admin/FilterBar';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPostsPage() {
+export default async function AdminPostsPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
   const session = await getServerSession(authOptions);
   
   if (!session || session.user.role !== 'Admin') {
@@ -20,8 +21,31 @@ export default async function AdminPostsPage() {
   await connectDB();
   User.init();
   
+  const query: any = {};
+  if (searchParams?.q) {
+    query.$or = [
+      { title: { $regex: searchParams.q, $options: 'i' } },
+      { address: { $regex: searchParams.q, $options: 'i' } }
+    ];
+  }
+  if (searchParams?.room_type) {
+    query.property_type = searchParams.room_type;
+  }
+  if (searchParams?.district) {
+    query.$or = query.$or || [];
+    query.$or.push(
+      { district: searchParams.district },
+      { address: { $regex: searchParams.district, $options: 'i' } }
+    );
+  }
+  if (searchParams?.priceRange) {
+    if (searchParams.priceRange === 'under_2m') query.price = { $lt: 2000000 };
+    if (searchParams.priceRange === '2m_to_4m') query.price = { $gte: 2000000, $lte: 4000000 };
+    if (searchParams.priceRange === 'over_4m') query.price = { $gt: 4000000 };
+  }
+
   // Fetch Posts
-  const posts = await Post.find()
+  const posts = await Post.find(query)
     .populate('ctv_id', 'name phone email')
     .sort({ createdAt: -1 })
     .lean() as any[];
@@ -64,7 +88,9 @@ export default async function AdminPostsPage() {
           <h2 className="text-lg md:text-xl font-bold text-slate-800">Duyệt bài đăng Cộng tác viên</h2>
         </header>
 
-        <div className="p-4 md:p-8 pb-20 md:pb-8">
+        <div className="p-4 md:p-8 pb-20 md:pb-8 space-y-6">
+          <FilterBar />
+
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">

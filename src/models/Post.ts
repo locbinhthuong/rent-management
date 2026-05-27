@@ -11,8 +11,13 @@ export interface IPost extends Document {
   
   // Các trường mới cho bài đăng chi tiết (Rao vặt)
   address?: string;
+  city?: string;
+  district?: string;
+  ward?: string;
   price?: number;
-  property_type?: string;
+  property_type?: string; // Loại phòng (Phòng trọ, Chung cư mini, etc.)
+  area_sqm?: number;
+  amenities?: string[];
   utility_costs?: string;
   contract_terms?: string;
   target_audience?: string;
@@ -37,8 +42,13 @@ const PostSchema: Schema = new Schema(
     
     // Thêm các trường mới
     address: { type: String },
+    city: { type: String },
+    district: { type: String },
+    ward: { type: String },
     price: { type: Number },
     property_type: { type: String },
+    area_sqm: { type: Number },
+    amenities: [{ type: String }],
     utility_costs: { type: String },
     contract_terms: { type: String },
     target_audience: { type: String },

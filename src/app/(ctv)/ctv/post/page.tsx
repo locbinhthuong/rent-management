@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function CreatePostPage() {
   const router = useRouter();
@@ -19,12 +20,20 @@ export default function CreatePostPage() {
     utility_costs: 'Điện 3.5k/kwh - Nước 100k/người',
     contract_terms: 'Cọc 1 tháng - Hợp đồng 6 tháng',
     target_audience: 'Sinh viên, Người đi làm',
-    images: '',
+    images: [] as string[],
     description: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageUpload = (url: string) => {
+    setFormData(prev => ({ ...prev, images: [...prev.images, url] }));
+  };
+
+  const handleImageRemove = (url: string) => {
+    setFormData(prev => ({ ...prev, images: prev.images.filter(img => img !== url) }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,17 +171,14 @@ export default function CreatePostPage() {
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4 text-indigo-600" /> Đường link Hình ảnh
+                    <ImageIcon className="w-4 h-4 text-indigo-600" /> Hình ảnh phòng trọ *
                   </label>
-                  <input
-                    type="url"
-                    name="images"
+                  <ImageUpload 
                     value={formData.images}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                    placeholder="https://link-anh-cua-ban.com/hinh.jpg"
+                    onChange={handleImageUpload}
+                    onRemove={handleImageRemove}
                   />
-                  <p className="text-xs text-slate-500 mt-1">Tạm thời dán link ảnh vào đây (Unsplash, Imgur...)</p>
+                  <p className="text-xs text-slate-500 mt-2">Upload ít nhất 1 ảnh (khuyến khích tỉ lệ ngang 4:3).</p>
                 </div>
               </div>
 
