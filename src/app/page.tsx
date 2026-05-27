@@ -74,10 +74,7 @@ export default async function CustomerHome(props: Props) {
       <header className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-200/50 shadow-sm supports-[backdrop-filter]:bg-white/60">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between transition-all">
           <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
-              <Home className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-extrabold text-2xl text-slate-800 tracking-tight">RentHome</span>
+            <Image src="/logo.png" alt="thuenhatro.com" width={220} height={60} className="h-10 w-auto object-contain" />
           </div>
           <nav className="flex items-center gap-3 md:gap-6 text-sm font-semibold text-slate-600">
             <Link href="/saved" className="flex items-center gap-2 hover:text-indigo-600 transition-colors">
@@ -123,12 +120,56 @@ export default async function CustomerHome(props: Props) {
       </header>
 
       {/* Hero Search */}
-      <section className="bg-gradient-to-r from-indigo-600 to-violet-600 py-16 px-4">
-        <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white text-center leading-tight">
-            Tìm phòng trọ ưng ý <br className="hidden md:block" />ngay hôm nay
-          </h1>
+      <section className="relative py-24 px-4 md:py-32 flex flex-col items-center justify-center min-h-[500px] overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop" 
+            alt="Phòng trọ đẹp" 
+            fill 
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
+        </div>
+
+        <div className="relative z-10 w-full max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-md">
+              thuenhatro<span className="text-primary">.com</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 font-medium drop-shadow">
+              Hệ thống tìm thuê nhà trọ nhanh chóng, uy tín
+            </p>
+          </div>
           <FilterSearch />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="bg-white py-12 border-b border-slate-100">
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
+              <Search className="w-8 h-8" />
+            </div>
+            <h3 className="font-bold text-slate-800 text-lg">Tìm kiếm dễ dàng</h3>
+            <p className="text-slate-500 text-sm">Hàng ngàn phòng trọ được cập nhật liên tục</p>
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
+              <Home className="w-8 h-8" />
+            </div>
+            <h3 className="font-bold text-slate-800 text-lg">Phòng đẹp, Giá tốt</h3>
+            <p className="text-slate-500 text-sm">Chất lượng phòng được đảm bảo với giá thuê tốt nhất</p>
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
+              <Phone className="w-8 h-8" />
+            </div>
+            <h3 className="font-bold text-slate-800 text-lg">Hỗ trợ 24/7</h3>
+            <p className="text-slate-500 text-sm">Đội ngũ luôn sẵn sàng hỗ trợ bạn bất cứ lúc nào</p>
+          </div>
         </div>
       </section>
 
@@ -164,19 +205,19 @@ export default async function CustomerHome(props: Props) {
                         className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-sm font-extrabold text-indigo-600 shadow-lg border border-white/20 transform group-hover:-translate-y-1 transition-transform duration-300">
+                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-sm font-extrabold text-primary shadow-lg border border-white/20 transform group-hover:-translate-y-1 transition-transform duration-300">
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
                       </div>
                       {post.property_type && (
-                        <div className="absolute bottom-3 left-3 bg-black/50 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-white/10">
+                        <div className="absolute bottom-3 left-3 bg-primary/90 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-white/10">
                           {post.property_type}
                         </div>
                       )}
                     </div>
                     
                     <div className="p-5 flex-1 flex flex-col">
-                      <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-3 text-lg flex items-start gap-1">
-                        {post.is_verified && <span title="Đã xác thực" className="shrink-0 mt-0.5 flex items-center"><ShieldCheck className="w-5 h-5 text-blue-500" /></span>}
+                      <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-primary transition mb-3 text-lg flex items-start gap-1">
+                        {post.is_verified && <span title="Đã xác thực" className="shrink-0 mt-0.5 flex items-center"><ShieldCheck className="w-5 h-5 text-primary" /></span>}
                         {post.title}
                       </h3>
                       
@@ -224,7 +265,7 @@ export default async function CustomerHome(props: Props) {
                             href={`https://zalo.me/${ctvPhone}`} 
                             target="_blank" 
                             rel="noreferrer"
-                            className="flex items-center justify-center px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition shadow-sm border border-blue-100 hover:border-blue-600"
+                            className="flex items-center justify-center px-4 py-2.5 bg-primary/10 text-primary rounded-xl font-bold hover:bg-primary hover:text-white transition shadow-sm border border-primary/20"
                             title="Nhắn Zalo"
                           >
                             Zalo
