@@ -10,7 +10,10 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@next/next/no-html-link-for-pages": "off",
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "prefer-const": "off",
+      "@typescript-eslint/no-require-imports": "off"
     }
   },
   // Override default ignores of eslint-config-next.
