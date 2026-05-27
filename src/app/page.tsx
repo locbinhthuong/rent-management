@@ -11,7 +11,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { LogOut, LayoutDashboard } from 'lucide-react';
 
-export const revalidate = 60; // Cache for 60 seconds to improve load times
+export const dynamic = 'force-dynamic';
 
 async function getActivePosts(filters: any) {
   await connectDB();

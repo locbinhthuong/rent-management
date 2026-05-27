@@ -8,7 +8,7 @@ import ContactButton from '@/components/ContactButton';
 import WishlistButton from '@/components/WishlistButton';
 import { notFound } from 'next/navigation';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 async function getPostDetail(id: string) {
   try {
