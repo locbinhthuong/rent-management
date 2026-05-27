@@ -56,7 +56,6 @@ export default async function CTVCustomersPage() {
           <Link href="/ctv/customers" className="flex items-center gap-3 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-md">
             <MessageCircle className="w-4 h-4" /> Khách liên hệ
           </Link>
-          </Link>
         </nav>
       </aside>
 
