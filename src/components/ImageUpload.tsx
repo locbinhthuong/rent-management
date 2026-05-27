@@ -56,7 +56,6 @@ export default function ImageUpload({
           cropping: true,
           croppingAspectRatio: 4 / 3,
           showSkipCropButton: false,
-          clientAllowedFormats: ['images'],
           maxFiles: 10,
         }}
       >
