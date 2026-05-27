@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-27T06:55:00Z",
+  "title": "Design System: QuanLy_chothue",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Stripe Blurple", "canonical": "oklch(0.5 0.2 260)" },
+      "neutral-bg": { "role": "neutral", "displayName": "Linear Deep Background", "canonical": "oklch(0.145 0 0)" }
+    }
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Financial Command Center",
+    "overview": "Sự kết hợp giữa tốc độ, độ chính xác của Linear và sự tin cậy tài chính của Stripe. Giao diện tĩnh lặng, đẳng cấp.",
+    "keyCharacteristics": ["Tối giản, tập trung vào dữ liệu", "Không gian giao diện tĩnh lặng", "Viền và góc bo tinh tế"],
+    "rules": [
+      { "name": "The Focus Rule", "body": "Màu Primary chỉ chiếm tối đa 10% diện tích màn hình.", "section": "colors" },
+      { "name": "The Flat-By-Default Rule", "body": "Bề mặt phẳng ở trạng thái nghỉ, không bóng đổ.", "section": "elevation" }
+    ],
+    "dos": ["Do sử dụng viền mỏng 1px"],
+    "donts": ["Don't dùng bóng đổ lố hoặc glassmorphism", "Don't tạo khối viền dày đặc"]
+  }
+}
