@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, XCircle, Trash2, Eye, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { CheckCircle, XCircle, Trash2, Eye, ShieldCheck, ShieldAlert, Edit } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
@@ -108,6 +108,9 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                     <>
                       <a href={`/p/${post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
                         <Eye className="w-5 h-5" />
+                      </a>
+                      <a href={`/ctv/post/${post._id}/edit`} className="inline-flex text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition" title="Sửa bài đăng">
+                        <Edit className="w-5 h-5" />
                       </a>
                       <button 
                         onClick={() => handleUpdateStatus(post._id, undefined, !post.is_verified)} 

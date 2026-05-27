@@ -4,7 +4,7 @@ import connectDB from '@/lib/db';
 import User from '@/models/User';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Home, Settings, Search, FileText } from 'lucide-react';
+import { Users, Home, Settings, Search, FileText, MessageCircle } from 'lucide-react';
 import UserActionButtons from './UserActionButtons';
 
 export const dynamic = 'force-dynamic';
@@ -40,6 +40,12 @@ export default async function AdminUsersPage() {
           </Link>
           <Link href="/admin/users" className="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg">
             <Users className="w-5 h-5" /> Quản lý CTV
+          </Link>
+          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+            <MessageCircle className="w-5 h-5" /> Quản lý Khách hàng
+          </Link>
+          <Link href="/admin/settings" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+            <Settings className="w-5 h-5" /> Cấu hình Web
           </Link>
         </nav>
       </aside>

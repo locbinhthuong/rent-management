@@ -1,17 +1,17 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
-import Post from '@/models/Post';
+import Lead from '@/models/Lead';
 import User from '@/models/User';
+import Post from '@/models/Post';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Home, Settings, Search, FileText, MessageCircle } from 'lucide-react';
-import PostsTable from './PostsTable';
-import FilterBar from '@/components/admin/FilterBar';
+import { Users, Home, Settings, FileText, MessageCircle } from 'lucide-react';
+import LeadsTable from '@/app/(ctv)/ctv/customers/LeadsTable';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPostsPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+export default async function AdminLeadsPage() {
   const session = await getServerSession(authOptions);
   
   if (!session || session.user.role !== 'Admin') {
@@ -20,43 +20,21 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: {
 
   await connectDB();
   User.init();
+  Post.init();
   
-  const query: any = {};
-  if (searchParams?.q) {
-    query.$or = [
-      { title: { $regex: searchParams.q, $options: 'i' } },
-      { address: { $regex: searchParams.q, $options: 'i' } }
-    ];
-  }
-  if (searchParams?.room_type) {
-    query.property_type = searchParams.room_type;
-  }
-  if (searchParams?.district) {
-    query.$or = query.$or || [];
-    query.$or.push(
-      { district: searchParams.district },
-      { address: { $regex: searchParams.district, $options: 'i' } }
-    );
-  }
-  if (searchParams?.priceRange) {
-    if (searchParams.priceRange === 'under_2m') query.price = { $lt: 2000000 };
-    if (searchParams.priceRange === '2m_to_4m') query.price = { $gte: 2000000, $lte: 4000000 };
-    if (searchParams.priceRange === 'over_4m') query.price = { $gt: 4000000 };
-  }
-
-  // Fetch Posts
-  const posts = await Post.find(query)
-    .populate('ctv_id', 'name phone email')
+  const leads = await Lead.find()
+    .populate('post_id', 'title')
+    .populate('ctv_id', 'name phone')
     .sort({ createdAt: -1 })
-    .lean() as any[];
+    .lean();
 
-  // Convert ObjectIds to strings to pass to Client Component
-  const serializedPosts = posts.map(p => ({
-    ...p,
-    _id: p._id.toString(),
-    ctv_id: p.ctv_id ? { ...p.ctv_id, _id: p.ctv_id._id.toString() } : null,
-    createdAt: p.createdAt?.toISOString(),
-    updatedAt: p.updatedAt?.toISOString()
+  const serializedLeads = leads.map((lead: any) => ({
+    ...lead,
+    _id: lead._id.toString(),
+    post_id: lead.post_id ? { ...lead.post_id, _id: lead.post_id._id.toString() } : null,
+    ctv_id: lead.ctv_id ? { ...lead.ctv_id, _id: lead.ctv_id._id.toString() } : null,
+    createdAt: lead.createdAt.toISOString(),
+    updatedAt: lead.updatedAt?.toISOString(),
   }));
 
   return (
@@ -73,13 +51,13 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: {
           <Link href="/admin" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
             <Home className="w-5 h-5" /> Tổng quan
           </Link>
-          <Link href="/admin/posts" className="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg">
+          <Link href="/admin/posts" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
             <FileText className="w-5 h-5" /> Duyệt bài đăng
           </Link>
           <Link href="/admin/users" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
             <Users className="w-5 h-5" /> Quản lý CTV
           </Link>
-          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+          <Link href="/admin/leads" className="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg">
             <MessageCircle className="w-5 h-5" /> Quản lý Khách hàng
           </Link>
           <Link href="/admin/settings" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
@@ -91,20 +69,18 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-y-auto">
         <header className="bg-white p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-          <h2 className="text-lg md:text-xl font-bold text-slate-800">Duyệt bài đăng Cộng tác viên</h2>
+          <h2 className="text-lg md:text-xl font-bold text-slate-800">Quản lý Khách hàng (Leads)</h2>
         </header>
 
-        <div className="p-4 md:p-8 pb-20 md:pb-8 space-y-6">
-          <FilterBar />
-
+        <div className="p-4 md:p-8 pb-20 md:pb-8">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+            <div className="p-4 md:p-5 border-b border-slate-200 bg-slate-50">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-indigo-600" /> Quản lý tất cả Bài đăng
+                <MessageCircle className="w-5 h-5 text-indigo-600" /> Tất cả khách hàng trong hệ thống ({leads.length})
               </h3>
             </div>
-            
-            <PostsTable initialPosts={serializedPosts} />
+
+            <LeadsTable initialLeads={serializedLeads} isAdmin={true} />
           </div>
         </div>
       </main>

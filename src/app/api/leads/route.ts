@@ -51,13 +51,20 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== 'CTV') {
+    if (!session || !['CTV', 'Admin'].includes(session.user.role)) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     
     await connectDB();
-    const leads = await Lead.find({ ctv_id: session.user.id })
+    
+    let query = {};
+    if (session.user.role === 'CTV') {
+      query = { ctv_id: session.user.id };
+    }
+
+    const leads = await Lead.find(query)
       .populate('post_id', 'title')
+      .populate('ctv_id', 'name phone')
       .sort({ createdAt: -1 })
       .lean();
       

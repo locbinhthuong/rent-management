@@ -2,41 +2,73 @@
 
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 export default function WishlistButton({ post }: { post: any }) {
   const [isSaved, setIsSaved] = useState(false);
 
-  useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    setIsSaved(savedPosts.some((p: any) => p._id === post._id));
-  }, [post._id]);
+  const { data: session } = useSession();
 
-  const toggleWishlist = (e: React.MouseEvent) => {
+  useEffect(() => {
+    if (session) {
+      // Fetch user's wishlist from DB
+      fetch('/api/wishlist')
+        .then(res => res.json())
+        .then(data => {
+          if (data.wishlists) {
+            setIsSaved(data.wishlists.some((w: any) => w.post_id?._id === post._id));
+          }
+        });
+    } else {
+      const savedPosts = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsSaved(savedPosts.some((p: any) => p._id === post._id));
+    }
+  }, [post._id, session]);
+
+  const toggleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    let savedPosts = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    
-    if (isSaved) {
-      savedPosts = savedPosts.filter((p: any) => p._id !== post._id);
-      setIsSaved(false);
+    if (session) {
+      try {
+        const res = await fetch('/api/wishlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: post._id })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setIsSaved(data.isLiked);
+          window.dispatchEvent(new Event('wishlist-updated'));
+        } else {
+          alert(data.message || 'Lỗi hệ thống');
+        }
+      } catch (err) {
+        console.error(err);
+      }
     } else {
-      // Chỉ lưu các thông tin cần thiết
-      const postToSave = {
-        _id: post._id,
-        title: post.title,
-        price: post.price,
-        address: post.address,
-        image: post.images?.[0] || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop',
-        property_type: post.property_type
-      };
-      savedPosts.push(postToSave);
-      setIsSaved(true);
+      // Local Storage for guests
+      let savedPosts = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      
+      if (isSaved) {
+        savedPosts = savedPosts.filter((p: any) => p._id !== post._id);
+        setIsSaved(false);
+      } else {
+        const postToSave = {
+          _id: post._id,
+          title: post.title,
+          price: post.price,
+          address: post.address,
+          image: post.images?.[0] || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop',
+          property_type: post.property_type
+        };
+        savedPosts.push(postToSave);
+        setIsSaved(true);
+      }
+      
+      localStorage.setItem('wishlist', JSON.stringify(savedPosts));
+      window.dispatchEvent(new Event('wishlist-updated'));
     }
-    
-    localStorage.setItem('wishlist', JSON.stringify(savedPosts));
-    // Trigger event to update other components if needed
-    window.dispatchEvent(new Event('wishlist-updated'));
   };
 
   return (

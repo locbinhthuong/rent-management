@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Users, FileText, Settings, DollarSign, TrendingUp, CheckCircle, Clock, LogOut } from 'lucide-react';
+import { Home, Users, FileText, Settings, DollarSign, TrendingUp, CheckCircle, Clock, LogOut, MessageCircle } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
@@ -61,6 +61,12 @@ export default async function AdminDashboard() {
           </Link>
           <Link href="/admin/users" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
             <Users className="w-5 h-5" /> Quản lý CTV
+          </Link>
+          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+            <MessageCircle className="w-5 h-5" /> Quản lý Khách hàng
+          </Link>
+          <Link href="/admin/settings" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+            <Settings className="w-5 h-5" /> Cấu hình Web
           </Link>
         </nav>
       </aside>

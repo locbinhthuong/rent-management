@@ -5,20 +5,42 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Home, Heart, MapPin } from 'lucide-react';
 import WishlistButton from '@/components/WishlistButton';
+import { useSession } from 'next-auth/react';
 
 export default function SavedPostsPage() {
   const [savedPosts, setSavedPosts] = useState<any[]>([]);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const loadWishlist = () => {
-      const posts = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      setSavedPosts(posts);
+      if (session) {
+        fetch('/api/wishlist')
+          .then(res => res.json())
+          .then(data => {
+            if (data.wishlists) {
+              setSavedPosts(data.wishlists.map((w: any) => {
+                const p = w.post_id || {};
+                return {
+                  _id: p._id,
+                  title: p.title,
+                  price: p.price,
+                  address: p.address,
+                  image: p.images?.[0] || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop',
+                  property_type: p.property_type
+                };
+              }).filter((p: any) => p._id));
+            }
+          });
+      } else {
+        const posts = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        setSavedPosts(posts);
+      }
     };
 
     loadWishlist();
     window.addEventListener('wishlist-updated', loadWishlist);
     return () => window.removeEventListener('wishlist-updated', loadWishlist);
-  }, []);
+  }, [session]);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">

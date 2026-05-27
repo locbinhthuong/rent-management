@@ -1,14 +1,15 @@
 import Link from 'next/link';
-import { Home, PlusCircle, Users, Wallet, UploadCloud, MessageCircle, LogOut } from 'lucide-react';
+import { Home, PlusCircle, Users, Wallet, UploadCloud, MessageCircle, LogOut, Eye } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import Lead from '@/models/Lead';
+import Wishlist from '@/models/Wishlist';
 import { redirect } from 'next/navigation';
 import BumpButton from '@/components/BumpButton';
-import { Eye } from 'lucide-react';
+import PostActionButtons from '@/components/PostActionButtons';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,15 @@ export default async function CTVDashboard() {
   const leads = await Lead.find({ ctv_id: session.user.id }).select('post_id').lean();
   const leadsMap = leads.reduce((acc: any, lead: any) => {
     const postId = lead.post_id.toString();
+    acc[postId] = (acc[postId] || 0) + 1;
+    return acc;
+  }, {});
+
+  // Tính số lượng lượt lưu (Wishlist) cho mỗi bài đăng
+  const postIds = posts.map(p => p._id);
+  const wishlists = await Wishlist.find({ post_id: { $in: postIds } }).select('post_id').lean();
+  const wishlistsMap = wishlists.reduce((acc: any, w: any) => {
+    const postId = w.post_id.toString();
     acc[postId] = (acc[postId] || 0) + 1;
     return acc;
   }, {});
@@ -117,6 +127,7 @@ export default async function CTVDashboard() {
                       <div className="text-sm text-slate-500 flex flex-wrap gap-4">
                         <span>Lượt xem: <strong className="text-slate-700">{post.views || 0}</strong></span>
                         <span>Khách liên hệ: <strong className="text-emerald-600">{leadsMap[post._id.toString()] || 0}</strong></span>
+                        <span>Lượt lưu (Tym): <strong className="text-red-500">{wishlistsMap[post._id.toString()] || 0}</strong></span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -133,6 +144,9 @@ export default async function CTVDashboard() {
                       {post.status === 'Active' && (
                         <BumpButton postId={post._id.toString()} isVip={post.is_vip} />
                       )}
+                      
+                      {/* Action Buttons */}
+                      <PostActionButtons postId={post._id.toString()} />
                     </div>
                   </div>
                 ))}

@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Search, Filter, Home, MapPin, DollarSign, X } from 'lucide-react';
 
-export default function FilterSearch() {
+interface FilterSearchProps {
+  propertyTypes?: string[];
+  locations?: string[];
+}
+
+export default function FilterSearch({ propertyTypes = [], locations = [] }: FilterSearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -87,11 +92,9 @@ export default function FilterSearch() {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-medium text-slate-700 appearance-none"
               >
                 <option value="">Tất cả các loại</option>
-                <option value="Phòng trọ sinh viên">Phòng trọ sinh viên</option>
-                <option value="Chung cư mini">Chung cư mini</option>
-                <option value="Căn hộ dịch vụ (CHDV)">Căn hộ dịch vụ (CHDV)</option>
-                <option value="Ký túc xá / Sleepbox">Ký túc xá / Sleepbox</option>
-                <option value="Nhà nguyên căn">Nhà nguyên căn</option>
+                {propertyTypes.map(pt => (
+                  <option key={pt} value={pt}>{pt}</option>
+                ))}
               </select>
             </div>
 
@@ -106,12 +109,9 @@ export default function FilterSearch() {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-medium text-slate-700 appearance-none"
               >
                 <option value="">Tất cả khu vực</option>
-                <option value="Quận 1">Quận 1</option>
-                <option value="Quận 2">Quận 2</option>
-                <option value="Quận 3">Quận 3</option>
-                <option value="Quận 7">Quận 7</option>
-                <option value="Quận 9">Quận 9</option>
-                <option value="Bình Thạnh">Bình Thạnh</option>
+                {locations.map(loc => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
               </select>
             </div>
 

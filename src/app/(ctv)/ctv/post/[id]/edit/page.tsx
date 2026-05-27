@@ -1,40 +1,67 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft } from 'lucide-react';
+import { useRouter, useParams } from 'next/navigation';
+import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
 
-export default function CreatePostPage() {
+export default function EditPostPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params?.id as string;
+  
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [config, setConfig] = useState({ propertyTypes: [], locations: [] });
 
-  useEffect(() => {
-    fetch('/api/admin/settings')
-      .then(res => res.json())
-      .then(data => {
-        if (data.config) {
-          setConfig({ propertyTypes: data.config.propertyTypes || [], locations: data.config.locations || [] });
-        }
-      });
-  }, []);
-
   const [formData, setFormData] = useState({
     title: '',
     address: '',
+    district: '',
     price: '',
-    property_type: 'Phòng trọ sinh viên',
-    utility_costs: 'Điện 3.5k/kwh - Nước 100k/người',
-    contract_terms: 'Cọc 1 tháng - Hợp đồng 6 tháng',
-    target_audience: 'Sinh viên, Người đi làm',
+    property_type: '',
+    utility_costs: '',
+    contract_terms: '',
+    target_audience: '',
     images: [] as string[],
     description: '',
   });
+
+  useEffect(() => {
+    // Fetch System Config and Post Data in parallel
+    Promise.all([
+      fetch('/api/admin/settings').then(res => res.json()),
+      fetch(`/api/posts/${id}`).then(res => {
+        if (!res.ok) throw new Error('Không tìm thấy bài đăng');
+        return res.json();
+      })
+    ])
+    .then(([configData, postData]) => {
+      if (configData.config) {
+        setConfig({ propertyTypes: configData.config.propertyTypes || [], locations: configData.config.locations || [] });
+      }
+      if (postData.post) {
+        setFormData({
+          title: postData.post.title || '',
+          address: postData.post.address || '',
+          district: postData.post.district || '',
+          price: postData.post.price || '',
+          property_type: postData.post.property_type || '',
+          utility_costs: postData.post.utility_costs || '',
+          contract_terms: postData.post.contract_terms || '',
+          target_audience: postData.post.target_audience || '',
+          images: postData.post.images || [],
+          description: postData.post.description || '',
+        });
+      }
+    })
+    .catch(err => setError(err.message))
+    .finally(() => setInitialLoading(false));
+  }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,15 +81,15 @@ export default function CreatePostPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/ctv/posts', {
-        method: 'POST',
+      const res = await fetch(`/api/posts/${id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.message || 'Lỗi tạo bài đăng');
+        throw new Error(data.error || 'Lỗi cập nhật bài đăng');
       }
 
       setSuccess(true);
@@ -76,6 +103,10 @@ export default function CreatePostPage() {
     }
   };
 
+  if (initialLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-600" /></div>;
+  }
+
   if (success) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center h-screen bg-slate-50">
@@ -83,8 +114,8 @@ export default function CreatePostPage() {
           <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Send className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Đăng bài thành công!</h2>
-          <p className="text-slate-500 mb-6">Bài đăng của bạn đã được gửi đi và đang chờ Admin kiểm duyệt.</p>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Cập nhật thành công!</h2>
+          <p className="text-slate-500 mb-6">Bài đăng của bạn đã được thay đổi.</p>
           <p className="text-sm text-slate-400">Đang quay lại bảng điều khiển...</p>
         </div>
       </div>
@@ -97,14 +128,14 @@ export default function CreatePostPage() {
         <Link href="/ctv" className="text-slate-500 hover:text-indigo-600 transition bg-slate-100 hover:bg-indigo-50 p-2 rounded-full">
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h2 className="text-xl font-bold text-slate-800">Tạo tin đăng phòng trọ</h2>
+        <h2 className="text-xl font-bold text-slate-800">Chỉnh sửa tin đăng phòng trọ</h2>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 mt-8">
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-white">
-            <h3 className="text-lg font-bold">Thông tin Rao vặt chi tiết</h3>
-            <p className="text-indigo-100 text-sm mt-1">Vui lòng điền thông tin thật chính xác để thu hút khách hàng.</p>
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white">
+            <h3 className="text-lg font-bold">Cập nhật thông tin Rao vặt</h3>
+            <p className="text-emerald-100 text-sm mt-1">Sửa đổi thông tin bài đăng của bạn.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
@@ -119,7 +150,7 @@ export default function CreatePostPage() {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-indigo-600" /> Tiêu đề bài đăng *
+                    <FileText className="w-4 h-4 text-emerald-600" /> Tiêu đề bài đăng *
                   </label>
                   <input
                     type="text"
@@ -127,14 +158,13 @@ export default function CreatePostPage() {
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                    placeholder="VD: Phòng trọ ban công rộng gần ĐH Bách Khoa..."
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-indigo-600" /> Địa chỉ chi tiết *
+                    <MapPin className="w-4 h-4 text-emerald-600" /> Địa chỉ chi tiết *
                   </label>
                   <input
                     type="text"
@@ -142,33 +172,35 @@ export default function CreatePostPage() {
                     required
                     value={formData.address}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                    placeholder="Tên đường, phường, khu vực..."
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-indigo-600" /> Khu vực (Quận/Huyện) *
+                    <MapPin className="w-4 h-4 text-emerald-600" /> Khu vực (Quận/Huyện) *
                   </label>
                   <select
                     name="district"
                     required
-                    value={(formData as any).district || ''}
+                    value={formData.district || ''}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white"
                   >
                     <option value="">Chọn khu vực</option>
                     {config.locations.map((loc: string) => (
                       <option key={loc} value={loc}>{loc}</option>
                     ))}
+                    {formData.district && !config.locations.includes(formData.district) && (
+                       <option value={formData.district}>{formData.district}</option>
+                    )}
                   </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-indigo-600" /> Giá / Tháng *
+                      <DollarSign className="w-4 h-4 text-emerald-600" /> Giá / Tháng *
                     </label>
                     <input
                       type="number"
@@ -176,31 +208,32 @@ export default function CreatePostPage() {
                       required
                       value={formData.price}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                      placeholder="3500000"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                      <Home className="w-4 h-4 text-indigo-600" /> Loại nhà trọ
+                      <Home className="w-4 h-4 text-emerald-600" /> Loại nhà trọ
                     </label>
                     <select
                       name="property_type"
                       value={formData.property_type}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white"
                     >
                       {config.propertyTypes.map((type: string) => (
                         <option key={type} value={type}>{type}</option>
                       ))}
-                      {config.propertyTypes.length === 0 && <option value="Phòng trọ sinh viên">Phòng trọ sinh viên</option>}
+                      {formData.property_type && !config.propertyTypes.includes(formData.property_type as never) && (
+                         <option value={formData.property_type}>{formData.property_type}</option>
+                      )}
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4 text-indigo-600" /> Hình ảnh phòng trọ *
+                    <ImageIcon className="w-4 h-4 text-emerald-600" /> Hình ảnh phòng trọ *
                   </label>
                   <ImageUpload 
                     value={formData.images}
@@ -215,43 +248,40 @@ export default function CreatePostPage() {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <Bolt className="w-4 h-4 text-indigo-600" /> Chính sách Điện - Nước - Dịch vụ
+                    <Bolt className="w-4 h-4 text-emerald-600" /> Chính sách Điện - Nước - Dịch vụ
                   </label>
                   <input
                     type="text"
                     name="utility_costs"
                     value={formData.utility_costs}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                    placeholder="Điện 3.5k/kwh - Nước 100k/người - Dịch vụ 150k"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-indigo-600" /> Điều khoản hợp đồng
+                    <FileText className="w-4 h-4 text-emerald-600" /> Điều khoản hợp đồng
                   </label>
                   <input
                     type="text"
                     name="contract_terms"
                     value={formData.contract_terms}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                    placeholder="Cọc 1 tháng, Hợp đồng 6-12 tháng"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <Users className="w-4 h-4 text-indigo-600" /> Đối tượng phù hợp
+                    <Users className="w-4 h-4 text-emerald-600" /> Đối tượng phù hợp
                   </label>
                   <input
                     type="text"
                     name="target_audience"
                     value={formData.target_audience}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-                    placeholder="Sinh viên, Dân văn phòng, Vợ chồng trẻ..."
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
                   />
                 </div>
 
@@ -263,8 +293,7 @@ export default function CreatePostPage() {
                     value={formData.description}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none resize-none"
-                    placeholder="Mô tả nội thất, tiện ích xung quanh, giờ giấc..."
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none resize-none"
                   ></textarea>
                 </div>
               </div>
@@ -277,10 +306,10 @@ export default function CreatePostPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`px-8 py-3 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2 ${loading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg'}`}
+                className={`px-8 py-3 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2 ${loading ? 'bg-emerald-400' : 'bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg'}`}
               >
                 <Send className="w-5 h-5" />
-                {loading ? 'Đang gửi...' : 'Đăng bài kiểm duyệt'}
+                {loading ? 'Đang cập nhật...' : 'Cập nhật bài đăng'}
               </button>
             </div>
           </form>

@@ -3,6 +3,7 @@ import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users, Heart, Shie
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
+import SystemConfig from '@/models/SystemConfig';
 import ContactButton from '@/components/ContactButton';
 import FilterSearch from '@/components/FilterSearch';
 import WishlistButton from '@/components/WishlistButton';
@@ -68,8 +69,25 @@ export default async function CustomerHome(props: Props) {
   const posts = await getActivePosts({ keyword, type, district, priceMin, priceMax });
   const session = await getServerSession(authOptions);
 
+  // Fetch SystemConfig
+  let config = await SystemConfig.findOne().lean() as any;
+  if (!config) {
+    config = {
+      announcement: { isActive: false, text: '' },
+      propertyTypes: ['Phòng trọ', 'Chung cư mini', 'Nhà nguyên căn'],
+      locations: []
+    };
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      {/* Announcement Banner */}
+      {config.announcement?.isActive && config.announcement?.text && (
+        <div className="bg-indigo-600 text-white px-4 py-2 text-center text-sm font-medium animate-in slide-in-from-top-full">
+          {config.announcement.text}
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-200/50 shadow-sm supports-[backdrop-filter]:bg-white/60">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between transition-all">
@@ -142,7 +160,10 @@ export default async function CustomerHome(props: Props) {
               Hệ thống tìm thuê nhà trọ nhanh chóng, uy tín
             </p>
           </div>
-          <FilterSearch />
+          <FilterSearch 
+            propertyTypes={config.propertyTypes || []} 
+            locations={config.locations || []} 
+          />
         </div>
       </section>
 

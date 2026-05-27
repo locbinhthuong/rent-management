@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { PhoneCall, CheckCircle, XCircle, DollarSign } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
+export default function LeadsTable({ initialLeads, isAdmin = false }: { initialLeads: any[], isAdmin?: boolean }) {
   const [leads, setLeads] = useState(initialLeads);
   const router = useRouter();
 
@@ -25,16 +25,20 @@ export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
     return () => clearInterval(interval);
   }, []);
 
-  const handleUpdateStatus = async (id: string, status: string) => {
+  const handleUpdateStatus = async (id: string, status?: string, note?: string) => {
     try {
+      const body: any = {};
+      if (status) body.status = status;
+      if (note !== undefined) body.note = note;
+
       const res = await fetch(`/api/leads/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
+        body: JSON.stringify(body)
       });
       if (res.ok) {
-        setLeads(leads.map(l => l._id === id ? { ...l, status } : l));
-        router.refresh();
+        setLeads(leads.map(l => l._id === id ? { ...l, ...body } : l));
+        if (status) router.refresh();
       }
     } catch(err) {
       alert('Lỗi hệ thống');
@@ -48,15 +52,17 @@ export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
           <tr>
             <th className="px-6 py-4 font-medium">Khách hàng</th>
             <th className="px-6 py-4 font-medium">Liên hệ</th>
+            {isAdmin && <th className="px-6 py-4 font-medium">Người quản lý (CTV)</th>}
             <th className="px-6 py-4 font-medium">Phòng quan tâm</th>
             <th className="px-6 py-4 font-medium">Trạng thái</th>
+            <th className="px-6 py-4 font-medium">Ghi chú</th>
             <th className="px-6 py-4 font-medium text-right">Thao tác</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
           {leads.length === 0 ? (
             <tr>
-              <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+              <td colSpan={isAdmin ? 6 : 5} className="px-6 py-8 text-center text-slate-500">
                 Chưa có khách hàng nào để lại thông tin.
               </td>
             </tr>
@@ -68,6 +74,12 @@ export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
                   <div className="font-medium text-slate-800">{lead.phone}</div>
                   <div className="text-xs text-slate-500">{new Date(lead.createdAt).toLocaleDateString('vi-VN')}</div>
                 </td>
+                {isAdmin && (
+                  <td className="px-6 py-4">
+                    <div className="font-bold text-indigo-600">{lead.ctv_id?.name || 'N/A'}</div>
+                    <div className="text-xs text-slate-500">{lead.ctv_id?.phone}</div>
+                  </td>
+                )}
                 <td className="px-6 py-4 text-slate-600">
                   {lead.post_id?.title || 'Bài viết đã bị xóa'}
                 </td>
@@ -82,6 +94,19 @@ export default function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
                      lead.status === 'Contacted' ? 'Đã gọi tư vấn' :
                      lead.status === 'Success' ? 'Chốt thành công' : 'Thất bại'}
                   </span>
+                </td>
+                <td className="px-6 py-4">
+                  <input 
+                    type="text" 
+                    defaultValue={lead.note || ''}
+                    onBlur={(e) => {
+                      if (e.target.value !== lead.note) {
+                        handleUpdateStatus(lead._id, undefined, e.target.value);
+                      }
+                    }}
+                    placeholder="Nhập ghi chú..."
+                    className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-600 outline-none"
+                  />
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
                   <a href={`tel:${lead.phone}`} className="inline-flex text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition tooltip" title="Gọi ngay">
