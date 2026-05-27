@@ -56,8 +56,6 @@ export default async function CTVCustomersPage() {
           <Link href="/ctv/customers" className="flex items-center gap-3 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-md">
             <MessageCircle className="w-4 h-4" /> Khách liên hệ
           </Link>
-          <Link href="/ctv/wallet" className="flex items-center gap-3 text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-slate-50 transition">
-            <Wallet className="w-4 h-4" /> Ví thu nhập
           </Link>
         </nav>
       </aside>
