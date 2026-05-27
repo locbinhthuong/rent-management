@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import ImageUpload from '@/components/ImageUpload';
+import dynamic from 'next/dynamic';
+const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
 
 export default function CreatePostPage() {
   const router = useRouter();
