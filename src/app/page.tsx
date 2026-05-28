@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users, Heart, ShieldCheck } from 'lucide-react';
+import { MapPin, Phone, Home, Filter, Search, Bolt, FileText, Users, Heart, ShieldCheck, DollarSign } from 'lucide-react';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
@@ -137,27 +137,15 @@ export default async function CustomerHome(props: Props) {
         </div>
       </header>
 
-      {/* Hero Search */}
-      <section className="relative py-24 px-4 md:py-32 flex flex-col items-center justify-center min-h-[500px] overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop" 
-            alt="Phòng trọ đẹp" 
-            fill 
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
-        </div>
-
-        <div className="relative z-10 w-full max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-md">
-              thuenhatro<span className="text-primary">.com</span>
+      {/* Hero Search - Simplified */}
+      <section className="bg-gradient-to-b from-indigo-50 to-white py-12 px-4 border-b border-slate-200">
+        <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 leading-tight">
+              Kênh thông tin Phòng Trọ số 1 Việt Nam
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 font-medium drop-shadow">
-              Hệ thống tìm thuê nhà trọ nhanh chóng, uy tín
+            <p className="text-lg text-slate-500 font-medium">
+              Cho thuê phòng trọ, căn hộ, nhà nguyên căn nhanh chóng, hiệu quả
             </p>
           </div>
           <FilterSearch 
@@ -167,142 +155,147 @@ export default async function CustomerHome(props: Props) {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="bg-white py-12 border-b border-slate-100">
-        <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="flex flex-col items-center justify-center space-y-3">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
-              <Search className="w-8 h-8" />
-            </div>
-            <h3 className="font-bold text-slate-800 text-lg">Tìm kiếm dễ dàng</h3>
-            <p className="text-slate-500 text-sm">Hàng ngàn phòng trọ được cập nhật liên tục</p>
-          </div>
-          <div className="flex flex-col items-center justify-center space-y-3">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
-              <Home className="w-8 h-8" />
-            </div>
-            <h3 className="font-bold text-slate-800 text-lg">Phòng đẹp, Giá tốt</h3>
-            <p className="text-slate-500 text-sm">Chất lượng phòng được đảm bảo với giá thuê tốt nhất</p>
-          </div>
-          <div className="flex flex-col items-center justify-center space-y-3">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
-              <Phone className="w-8 h-8" />
-            </div>
-            <h3 className="font-bold text-slate-800 text-lg">Hỗ trợ 24/7</h3>
-            <p className="text-slate-500 text-sm">Đội ngũ luôn sẵn sàng hỗ trợ bạn bất cứ lúc nào</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Masonry Grid List */}
-      <main className="max-w-7xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Phòng trọ mới nhất</h2>
-          <span className="text-slate-500 font-medium text-sm">{posts.length} kết quả</span>
-        </div>
+      {/* Main Content 2 Columns */}
+      <main className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {posts.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
-            <p className="text-slate-500">Hiện tại chưa có phòng trống nào được đăng.</p>
+        {/* Left Column: Post Feed */}
+        <div className="lg:col-span-8 space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+            <h2 className="text-2xl font-bold text-slate-800">Phòng trọ mới nhất</h2>
+            <span className="text-slate-500 font-medium text-sm bg-slate-100 px-3 py-1 rounded-full">{posts.length} kết quả</span>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {posts.map((post) => {
-              const price = post.price || 0;
-              const address = post.address || 'Chưa cập nhật địa chỉ';
-              const imageUrl = post.images && post.images.length > 0 ? post.images[0] : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop';
-              const ctvPhone = post.ctv_id?.phone || '';
+          
+          {posts.length === 0 ? (
+            <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300">
+              <p className="text-slate-500">Hiện tại chưa có phòng trống nào phù hợp.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {posts.map((post) => {
+                const price = post.price || 0;
+                const address = post.address || 'Chưa cập nhật địa chỉ';
+                const imageUrl = post.images && post.images.length > 0 ? post.images[0] : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop';
+                const ctvPhone = post.ctv_id?.phone || '';
 
-              return (
-                <div key={post._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-200 flex flex-col relative">
-                  <WishlistButton post={{ ...post, _id: post._id.toString() }} />
-                  
-                  <Link prefetch={true} href={`/p/${post._id}`} className="flex-1 flex flex-col cursor-pointer block">
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                return (
+                  <div key={post._id.toString()} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group border border-slate-200 flex flex-col sm:flex-row relative">
+                    <WishlistButton post={{ ...post, _id: post._id.toString() }} />
+                    
+                    {/* Thumbnail */}
+                    <Link prefetch={true} href={`/p/${post._id}`} className="sm:w-64 shrink-0 relative aspect-[4/3] sm:aspect-square overflow-hidden bg-slate-100 block">
                       <Image
                         src={imageUrl}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-sm font-extrabold text-primary shadow-lg border border-white/20 transform group-hover:-translate-y-1 transition-transform duration-300">
-                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
+                      <div className="absolute top-2 left-2 bg-indigo-600/90 backdrop-blur-md text-white px-2 py-1 rounded text-xs font-semibold">
+                        {post.property_type || 'Phòng trọ'}
                       </div>
-                      {post.property_type && (
-                        <div className="absolute bottom-3 left-3 bg-primary/90 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-white/10">
-                          {post.property_type}
-                        </div>
-                      )}
-                    </div>
+                    </Link>
                     
-                    <div className="p-5 flex-1 flex flex-col">
-                      <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-primary transition mb-3 text-lg flex items-start gap-1">
-                        {post.is_verified && <span title="Đã xác thực" className="shrink-0 mt-0.5 flex items-center"><ShieldCheck className="w-5 h-5 text-primary" /></span>}
-                        {post.title}
-                      </h3>
-                      
-                      <div className="space-y-2 mb-4 flex-1">
-                        <div className="flex items-start gap-2 text-slate-600 text-sm">
+                    {/* Content */}
+                    <div className="p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        <Link prefetch={true} href={`/p/${post._id}`} className="block">
+                          <h3 className="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-indigo-600 transition mb-2 text-lg uppercase flex items-start gap-1">
+                            {post.is_verified && <span title="Đã xác thực" className="shrink-0 mt-0.5"><ShieldCheck className="w-5 h-5 text-emerald-500" /></span>}
+                            {post.title}
+                          </h3>
+                        </Link>
+                        
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-3">
+                          <div className="font-extrabold text-emerald-600 text-lg">
+                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
+                          </div>
+                          {post.area_sqm && (
+                            <div className="text-slate-600 font-medium text-sm bg-slate-100 px-2 py-0.5 rounded">
+                              {post.area_sqm} m²
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex items-start gap-2 text-slate-500 text-sm mb-2">
                           <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-slate-400" />
                           <span className="line-clamp-2">{address}</span>
                         </div>
-                        
-                        {post.utility_costs && (
-                          <div className="flex items-start gap-2 text-slate-600 text-sm">
-                            <Bolt className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
-                            <span className="line-clamp-1" title={post.utility_costs}>{post.utility_costs}</span>
-                          </div>
-                        )}
-                        
-                        {post.contract_terms && (
-                          <div className="flex items-start gap-2 text-slate-600 text-sm">
-                            <FileText className="w-4 h-4 mt-0.5 shrink-0 text-blue-500" />
-                            <span className="line-clamp-1" title={post.contract_terms}>{post.contract_terms}</span>
-                          </div>
-                        )}
-                        
-                        {post.target_audience && (
-                          <div className="flex items-start gap-2 text-slate-600 text-sm">
-                            <Users className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" />
-                            <span className="line-clamp-1" title={post.target_audience}>Phù hợp: {post.target_audience}</span>
-                          </div>
-                        )}
                       </div>
-                    </div>
-                  </Link>
-                    
-                  <div className="p-5 pt-0 mt-auto">
-                    <div className="pt-4 border-t border-slate-100">
-                      <div className="flex items-center gap-2">
-                        <ContactButton 
-                          postId={post._id.toString()} 
-                          ctvId={post.ctv_id?._id?.toString() || ''}
-                          postTitle={post.title}
-                        />
+                      
+                      <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div className="text-sm text-slate-500 flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">
+                            {post.ctv_id?.name?.charAt(0) || 'U'}
+                          </div>
+                          <span className="font-medium">{post.ctv_id?.name || 'Ẩn danh'}</span>
+                        </div>
                         
-                        {ctvPhone && (
-                          <a 
-                            href={`https://zalo.me/${ctvPhone}`} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            className="flex items-center justify-center px-4 py-2.5 bg-primary/10 text-primary rounded-xl font-bold hover:bg-primary hover:text-white transition shadow-sm border border-primary/20"
-                            title="Nhắn Zalo"
-                          >
-                            Zalo
-                          </a>
-                        )}
-                      </div>
-                      <div className="text-center mt-3 text-xs text-slate-400 font-medium">
-                        CTV: {post.ctv_id?.name || 'Ẩn danh'}
+                        <div className="flex items-center gap-2">
+                          {ctvPhone && (
+                            <a 
+                              href={`https://zalo.me/${ctvPhone}`} 
+                              target="_blank" 
+                              rel="noreferrer"
+                              className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md font-bold hover:bg-blue-600 hover:text-white transition text-sm border border-blue-100 hover:border-blue-600"
+                            >
+                              Zalo
+                            </a>
+                          )}
+                          <ContactButton 
+                            postId={post._id.toString()} 
+                            ctvId={post.ctv_id?._id?.toString() || ''}
+                            postTitle={post.title}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: Sidebar */}
+        <aside className="lg:col-span-4 space-y-6">
+          
+          {/* Box Lọc theo Khoảng giá */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-indigo-600" /> Xem theo khoảng giá
+            </h3>
+            <ul className="grid grid-cols-2 gap-2 text-sm text-slate-600">
+              <li><Link href="/?priceMax=1000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Dưới 1 triệu</Link></li>
+              <li><Link href="/?priceMin=1000000&priceMax=2000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 1 - 2 triệu</Link></li>
+              <li><Link href="/?priceMin=2000000&priceMax=3000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 2 - 3 triệu</Link></li>
+              <li><Link href="/?priceMin=3000000&priceMax=5000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 3 - 5 triệu</Link></li>
+              <li><Link href="/?priceMin=5000000&priceMax=7000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 5 - 7 triệu</Link></li>
+              <li><Link href="/?priceMin=7000000&priceMax=10000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 7 - 10 triệu</Link></li>
+              <li><Link href="/?priceMin=10000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Trên 10 triệu</Link></li>
+            </ul>
           </div>
-        )}
+
+          {/* Box Lọc theo Diện tích */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+              <Home className="w-5 h-5 text-indigo-600" /> Xem theo diện tích
+            </h3>
+            <ul className="grid grid-cols-2 gap-2 text-sm text-slate-600">
+              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Dưới 20 m²</Link></li>
+              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 20 - 30 m²</Link></li>
+              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 30 - 50 m²</Link></li>
+              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 50 - 70 m²</Link></li>
+              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 70 - 90 m²</Link></li>
+              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Trên 90 m²</Link></li>
+            </ul>
+          </div>
+
+          {/* Banner Ads Placeholder */}
+          <div className="bg-slate-100 rounded-xl border border-slate-200 h-[400px] flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest relative overflow-hidden group">
+            <div className="absolute inset-0 bg-indigo-600/5 group-hover:bg-indigo-600/10 transition"></div>
+            Banner Quảng Cáo
+          </div>
+
+        </aside>
       </main>
     </div>
   );

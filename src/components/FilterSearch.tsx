@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, Home, MapPin } from 'lucide-react';
+import { Search, Home, MapPin, Navigation } from 'lucide-react';
 
 interface FilterSearchProps {
   propertyTypes?: string[];
@@ -16,6 +16,48 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
   const [propertyType, setPropertyType] = useState(searchParams.get('type') || '');
   const [district, setDistrict] = useState(searchParams.get('district') || '');
+  const [locating, setLocating] = useState(false);
+
+  const handleGPSLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Trình duyệt của bạn không hỗ trợ định vị GPS.");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+        // Dùng API Nominatim để lấy địa chỉ từ tọa độ
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`);
+        const data = await res.json();
+        
+        let foundDistrict = data.address?.suburb || data.address?.city_district || data.address?.county || '';
+        if (foundDistrict) {
+          // Bỏ chữ "Quận/Huyện" dư thừa nếu API trả về
+          foundDistrict = foundDistrict.replace(/District|Quận|Huyện|Thành phố/g, '').trim();
+          // Tìm quận gần giống nhất trong danh sách locations
+          const matched = locations.find(loc => loc.toLowerCase().includes(foundDistrict.toLowerCase()) || foundDistrict.toLowerCase().includes(loc.toLowerCase()));
+          
+          if (matched) {
+            setDistrict(matched);
+            alert(`Đã tìm thấy bạn ở ${matched}! Bấm Tìm kiếm để xem phòng gần đây.`);
+          } else {
+            setDistrict(foundDistrict);
+            alert(`Đã lấy vị trí: ${foundDistrict}`);
+          }
+        } else {
+          alert("Không thể xác định Quận/Huyện từ vị trí của bạn.");
+        }
+      } catch (err) {
+        alert("Lỗi khi kết nối đến dịch vụ bản đồ.");
+      } finally {
+        setLocating(false);
+      }
+    }, (error) => {
+      alert("Vui lòng cấp quyền vị trí để sử dụng tính năng này.");
+      setLocating(false);
+    }, { timeout: 10000 });
+  };
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -75,10 +117,21 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
         </div>
 
         {/* Nút tìm kiếm */}
-        <button type="submit" className="w-full md:w-auto px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition shrink-0 flex items-center justify-center shadow-md">
-          <Search className="w-5 h-5 mr-2 md:hidden" />
-          <span>Tìm kiếm</span>
-        </button>
+        <div className="w-full md:w-auto flex gap-2">
+          <button 
+            type="button" 
+            onClick={handleGPSLocation}
+            disabled={locating}
+            title="Tìm quanh đây"
+            className="px-4 py-3.5 bg-slate-100 text-slate-600 font-bold rounded-full hover:bg-slate-200 transition shrink-0 flex items-center justify-center shadow-sm disabled:opacity-50"
+          >
+            {locating ? <span className="animate-spin text-xl leading-none">⏳</span> : <Navigation className="w-5 h-5 text-indigo-600" />}
+          </button>
+          <button type="submit" className="flex-1 md:w-auto md:px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition shrink-0 flex items-center justify-center shadow-md">
+            <Search className="w-5 h-5 mr-2 md:hidden" />
+            <span>Tìm kiếm</span>
+          </button>
+        </div>
       </form>
     </div>
   );
