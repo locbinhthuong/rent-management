@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Save, Plus, X, Loader2, Megaphone, MapPin, Home, FileText, Users, Settings, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function SettingsPage() {
   const queryClient = useQueryClient();
