@@ -137,15 +137,27 @@ export default async function CustomerHome(props: Props) {
         </div>
       </header>
 
-      {/* Hero Search - Simplified */}
-      <section className="bg-gradient-to-b from-indigo-50 to-white py-12 px-4 border-b border-slate-200">
-        <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 leading-tight">
-              Kênh thông tin Phòng Trọ số 1 Việt Nam
+      {/* Hero Search */}
+      <section className="relative py-24 px-4 md:py-32 flex flex-col items-center justify-center min-h-[500px] overflow-hidden border-b border-slate-200">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop" 
+            alt="Phòng trọ đẹp" 
+            fill 
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
+        </div>
+
+        <div className="relative z-10 w-full max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-md">
+              thuenhatro<span className="text-indigo-400">.com</span>
             </h1>
-            <p className="text-lg text-slate-500 font-medium">
-              Cho thuê phòng trọ, căn hộ, nhà nguyên căn nhanh chóng, hiệu quả
+            <p className="text-xl md:text-2xl text-white/90 font-medium drop-shadow">
+              Hệ thống tìm thuê nhà trọ nhanh chóng, uy tín
             </p>
           </div>
           <FilterSearch 
@@ -257,44 +269,11 @@ export default async function CustomerHome(props: Props) {
 
         {/* Right Column: Sidebar */}
         <aside className="lg:col-span-4 space-y-6">
-          
-          {/* Box Lọc theo Khoảng giá */}
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-            <h3 className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-indigo-600" /> Xem theo khoảng giá
-            </h3>
-            <ul className="grid grid-cols-2 gap-2 text-sm text-slate-600">
-              <li><Link href="/?priceMax=1000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Dưới 1 triệu</Link></li>
-              <li><Link href="/?priceMin=1000000&priceMax=2000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 1 - 2 triệu</Link></li>
-              <li><Link href="/?priceMin=2000000&priceMax=3000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 2 - 3 triệu</Link></li>
-              <li><Link href="/?priceMin=3000000&priceMax=5000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 3 - 5 triệu</Link></li>
-              <li><Link href="/?priceMin=5000000&priceMax=7000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 5 - 7 triệu</Link></li>
-              <li><Link href="/?priceMin=7000000&priceMax=10000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 7 - 10 triệu</Link></li>
-              <li><Link href="/?priceMin=10000000" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Trên 10 triệu</Link></li>
-            </ul>
-          </div>
-
-          {/* Box Lọc theo Diện tích */}
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-            <h3 className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
-              <Home className="w-5 h-5 text-indigo-600" /> Xem theo diện tích
-            </h3>
-            <ul className="grid grid-cols-2 gap-2 text-sm text-slate-600">
-              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Dưới 20 m²</Link></li>
-              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 20 - 30 m²</Link></li>
-              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 30 - 50 m²</Link></li>
-              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 50 - 70 m²</Link></li>
-              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Từ 70 - 90 m²</Link></li>
-              <li><Link href="#" className="flex items-center gap-2 hover:text-indigo-600"><span className="text-slate-300">›</span> Trên 90 m²</Link></li>
-            </ul>
-          </div>
-
           {/* Banner Ads Placeholder */}
-          <div className="bg-slate-100 rounded-xl border border-slate-200 h-[400px] flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest relative overflow-hidden group">
+          <div className="bg-slate-100 rounded-xl border border-slate-200 h-[400px] flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest relative overflow-hidden group shadow-sm">
             <div className="absolute inset-0 bg-indigo-600/5 group-hover:bg-indigo-600/10 transition"></div>
             Banner Quảng Cáo
           </div>
-
         </aside>
       </main>
     </div>

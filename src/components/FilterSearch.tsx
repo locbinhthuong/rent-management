@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, Home, MapPin, Navigation } from 'lucide-react';
+import { Search, Home, MapPin, Navigation, DollarSign } from 'lucide-react';
 
 interface FilterSearchProps {
   propertyTypes?: string[];
@@ -16,6 +16,7 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
   const [propertyType, setPropertyType] = useState(searchParams.get('type') || '');
   const [district, setDistrict] = useState(searchParams.get('district') || '');
+  const [priceMax, setPriceMax] = useState(searchParams.get('priceMax') || '');
   const [locating, setLocating] = useState(false);
 
   const handleGPSLocation = () => {
@@ -66,16 +67,38 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
     if (keyword) params.set('keyword', keyword);
     if (propertyType) params.set('type', propertyType);
     if (district) params.set('district', district);
+    if (priceMax) {
+      if (priceMax === '1000000') {
+        params.set('priceMax', '1000000');
+      } else if (priceMax === '2000000') {
+        params.set('priceMin', '1000000');
+        params.set('priceMax', '2000000');
+      } else if (priceMax === '3000000') {
+        params.set('priceMin', '2000000');
+        params.set('priceMax', '3000000');
+      } else if (priceMax === '5000000') {
+        params.set('priceMin', '3000000');
+        params.set('priceMax', '5000000');
+      } else if (priceMax === '7000000') {
+        params.set('priceMin', '5000000');
+        params.set('priceMax', '7000000');
+      } else if (priceMax === '10000000') {
+        params.set('priceMin', '7000000');
+        params.set('priceMax', '10000000');
+      } else if (priceMax === '10000001') {
+        params.set('priceMin', '10000000');
+      }
+    }
 
     router.push(`/?${params.toString()}`);
   };
 
   return (
     <div className="w-full relative z-10">
-      <form onSubmit={handleSearch} className="bg-white rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl max-w-5xl mx-auto gap-2 md:gap-0">
+      <form onSubmit={handleSearch} className="bg-white rounded-2xl md:rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl max-w-5xl mx-auto gap-2 md:gap-0">
         
         {/* Tìm kiếm từ khóa */}
-        <div className="w-full md:w-1/3 flex items-center px-4 md:border-r border-slate-200 text-slate-500">
+        <div className="w-full md:w-1/4 flex items-center px-4 md:border-r border-slate-200 text-slate-500">
           <Search className="w-5 h-5 text-indigo-600 shrink-0 mr-2" />
           <input 
             type="text" 
@@ -87,7 +110,7 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
         </div>
         
         {/* Chọn khu vực */}
-        <div className="w-full md:w-1/3 flex items-center px-4 md:border-r border-slate-200 text-slate-500 relative group">
+        <div className="w-full md:w-1/4 flex items-center px-4 md:border-r border-slate-200 text-slate-500 relative group">
           <MapPin className="w-5 h-5 text-indigo-600 shrink-0 mr-2" />
           <select 
             value={district} 
@@ -102,7 +125,7 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
         </div>
 
         {/* Chọn loại phòng */}
-        <div className="w-full md:w-1/3 flex items-center px-4 text-slate-500 relative group">
+        <div className="w-full md:w-1/4 flex items-center px-4 md:border-r border-slate-200 text-slate-500 relative group">
           <Home className="w-5 h-5 text-indigo-600 shrink-0 mr-2" />
           <select 
             value={propertyType} 
@@ -116,8 +139,27 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
           </select>
         </div>
 
+        {/* Chọn mức giá */}
+        <div className="w-full md:w-1/4 flex items-center px-4 text-slate-500 relative group">
+          <DollarSign className="w-5 h-5 text-indigo-600 shrink-0 mr-2" />
+          <select 
+            value={priceMax} 
+            onChange={(e) => setPriceMax(e.target.value)}
+            className="w-full bg-transparent outline-none text-slate-800 font-medium py-3 appearance-none cursor-pointer"
+          >
+            <option value="">Chọn mức giá</option>
+            <option value="1000000">Dưới 1 triệu</option>
+            <option value="2000000">Từ 1 - 2 triệu</option>
+            <option value="3000000">Từ 2 - 3 triệu</option>
+            <option value="5000000">Từ 3 - 5 triệu</option>
+            <option value="7000000">Từ 5 - 7 triệu</option>
+            <option value="10000000">Từ 7 - 10 triệu</option>
+            <option value="10000001">Trên 10 triệu</option>
+          </select>
+        </div>
+
         {/* Nút tìm kiếm */}
-        <div className="w-full md:w-auto flex gap-2">
+        <div className="w-full md:w-auto flex gap-2 pl-2">
           <button 
             type="button" 
             onClick={handleGPSLocation}
