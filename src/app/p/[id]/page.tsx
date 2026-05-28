@@ -15,11 +15,10 @@ async function getPostDetail(id: string) {
     await connectDB();
     User.init();
     
-    const post = await Post.findByIdAndUpdate(
-      id,
-      { $inc: { views: 1 } },
-      { new: true }
-    ).populate('ctv_id', 'name phone').lean();
+    const post = await Post.findById(id).populate('ctv_id', 'name phone').lean();
+    
+    // Tăng views bất đồng bộ (không block quá trình render)
+    Post.findByIdAndUpdate(id, { $inc: { views: 1 } }).exec().catch(() => {});
     
     if (!post) return null;
     

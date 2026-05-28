@@ -217,7 +217,7 @@ export default async function CustomerHome(props: Props) {
                 <div key={post._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-200 flex flex-col relative">
                   <WishlistButton post={{ ...post, _id: post._id.toString() }} />
                   
-                  <Link href={`/p/${post._id}`} className="flex-1 flex flex-col cursor-pointer block">
+                  <Link prefetch={true} href={`/p/${post._id}`} className="flex-1 flex flex-col cursor-pointer block">
                     <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
                       <Image
                         src={imageUrl}
