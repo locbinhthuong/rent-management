@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
@@ -7,15 +7,14 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import NextTopLoader from 'nextjs-toploader';
 import Footer from "@/components/Footer";
 
-const fontSans = localFont({
-  src: "./fonts/GeistVF.woff",
+const fontSans = Inter({
   variable: "--font-sans",
-  weight: "100 900",
+  subsets: ["latin"],
 });
-const fontMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+
+const fontMono = Geist_Mono({
   variable: "--font-mono",
-  weight: "100 900",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
