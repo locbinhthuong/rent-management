@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
+import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import NextTopLoader from 'nextjs-toploader';
 
@@ -32,9 +33,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col pb-16 md:pb-0 bg-background text-foreground">
         <AuthProvider>
-          <NextTopLoader color="#4f46e5" showSpinner={false} />
-          {children}
-          <MobileBottomNav />
+          <ReactQueryProvider>
+            <NextTopLoader color="#4f46e5" showSpinner={false} />
+            {children}
+            <MobileBottomNav />
+          </ReactQueryProvider>
         </AuthProvider>
       </body>
     </html>
