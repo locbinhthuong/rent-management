@@ -29,9 +29,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontMono.variable} h-full antialiased dark`}
+      className={`${fontSans.variable} ${fontMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col pb-16 md:pb-0 bg-background text-foreground">
+      <body className="min-h-full flex flex-col pb-16 md:pb-0 bg-slate-50 text-slate-900">
         <AuthProvider>
           <ReactQueryProvider>
             <NextTopLoader color="#4f46e5" showSpinner={false} />
