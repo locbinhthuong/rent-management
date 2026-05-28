@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, Home, MapPin, Navigation, DollarSign, Loader2 } from 'lucide-react';
+import { Search, Home, MapPin, Navigation, DollarSign, Loader2, RotateCcw } from 'lucide-react';
 
 interface FilterSearchProps {
   propertyTypes?: string[];
@@ -119,6 +119,14 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
     router.push(`/?${params.toString()}`);
   };
 
+  const handleClearFilters = () => {
+    setKeyword('');
+    setPropertyType('');
+    setDistrict('');
+    setPriceMax('');
+    router.push('/');
+  };
+
   return (
     <div className="w-full relative z-10">
       <form onSubmit={handleSearch} className="bg-white rounded-2xl md:rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl max-w-5xl mx-auto gap-2 md:gap-0">
@@ -186,6 +194,16 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
 
         {/* Nút tìm kiếm */}
         <div className="w-full md:w-auto flex gap-2 pl-2">
+          {(keyword || propertyType || district || priceMax) && (
+            <button 
+              type="button" 
+              onClick={handleClearFilters}
+              title="Xóa tất cả bộ lọc"
+              className="px-4 py-3.5 bg-rose-50 text-rose-600 font-bold rounded-full hover:bg-rose-100 hover:text-rose-700 transition shrink-0 flex items-center justify-center shadow-sm border border-rose-100 animate-in fade-in zoom-in duration-200"
+            >
+              <RotateCcw className="w-5 h-5" />
+            </button>
+          )}
           <button 
             type="button" 
             onClick={handleGPSLocation}
