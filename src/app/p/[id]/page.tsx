@@ -1,12 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight } from 'lucide-react';
+import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight, Bath, Maximize } from 'lucide-react';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import ContactButton from '@/components/ContactButton';
 import WishlistButton from '@/components/WishlistButton';
 import { notFound } from 'next/navigation';
+import GlassPropertyCard from '@/components/GlassPropertyCard';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
@@ -31,7 +32,7 @@ async function getPostDetail(id: string) {
         // Lấy 1 phần của địa chỉ để tìm (ví dụ: Quận 1)
         { address: { $regex: (post.address || '').split(',').pop()?.trim() || '', $options: 'i' } }
       ]
-    }).limit(4).lean();
+    }).limit(4).lean() as any[];
     
     return { post, similarPosts };
   } catch (err) {
@@ -54,126 +55,161 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const isVerified = post.is_verified || false;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-20 relative overflow-hidden font-sans">
+      {/* Ambient glowing background effects */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-[20%] right-[-10%] w-[600px] h-[600px] bg-violet-500/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
+
       {/* Header */}
-      <header className="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
+      <header className="bg-slate-950/60 backdrop-blur-xl sticky top-0 z-50 border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-slate-500 hover:text-indigo-600 transition p-2 -ml-2 rounded-lg hover:bg-slate-50">
+            <Link href="/" className="text-slate-400 hover:text-cyan-400 transition-colors p-2 -ml-2 rounded-lg hover:bg-white/5">
               <ChevronLeft className="w-6 h-6" />
             </Link>
-            <Link href="/" className="flex items-center gap-2">
-              <Home className="w-6 h-6 text-indigo-600 hidden sm:block" />
-              <span className="font-bold text-xl text-slate-800">RentHome</span>
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="bg-cyan-500/20 p-1.5 rounded-lg border border-cyan-500/30 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all">
+                <Home className="w-5 h-5 text-cyan-400 hidden sm:block" />
+              </div>
+              <span className="font-space font-bold text-xl tracking-tight text-white">thuenhatro<span className="text-cyan-400">.com</span></span>
             </Link>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-4 py-8 relative z-10">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Left Column: Images & Details */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Image Gallery */}
-            <div className="bg-white rounded-3xl p-2 shadow-sm border border-slate-200 relative">
-              <WishlistButton post={{ ...post, _id: post._id.toString() }} />
+            
+            {/* Image Gallery (Glassmorphism) */}
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-white/10 relative">
+              <div className="absolute top-5 right-5 z-20">
+                <WishlistButton post={{ ...post, _id: post._id.toString() }} />
+              </div>
+              
               {isVerified && (
-                <div className="absolute top-4 left-4 z-10 bg-emerald-500 text-white px-3 py-1.5 rounded-lg font-bold text-sm flex items-center gap-1.5 shadow-lg">
+                <div className="absolute top-5 left-5 z-20 bg-emerald-500/20 backdrop-blur-md text-emerald-400 px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1.5 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                   <ShieldCheck className="w-4 h-4" /> Đã xác thực
                 </div>
               )}
               
               {post.images && post.images.length > 0 ? (
-                <div className="grid grid-cols-4 gap-2 h-[400px]">
+                <div className="grid grid-cols-4 gap-3 h-[300px] sm:h-[400px]">
                   <div className="col-span-4 md:col-span-3 row-span-2 relative rounded-2xl overflow-hidden group">
-                    <Image src={post.images[0]} alt="Phòng" fill className="object-cover group-hover:scale-105 transition duration-500" />
+                    <Image src={post.images[0]} alt="Phòng chính" fill className="object-cover group-hover:scale-105 transition duration-700" priority sizes="(max-width: 768px) 100vw, 66vw" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-80 pointer-events-none"></div>
                   </div>
                   {post.images.slice(1, 3).map((img: string, idx: number) => (
                     <div key={idx} className="hidden md:block col-span-1 relative rounded-2xl overflow-hidden group">
-                      <Image src={img} alt="Phòng" fill className="object-cover group-hover:scale-105 transition duration-500" />
+                      <Image src={img} alt={`Phòng góc ${idx+1}`} fill className="object-cover group-hover:scale-110 transition duration-500" sizes="33vw" />
+                      <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="w-full h-[400px] bg-slate-100 rounded-2xl flex items-center justify-center">
-                  <span className="text-slate-400">Không có hình ảnh</span>
+                <div className="w-full h-[400px] bg-slate-900/50 rounded-2xl flex items-center justify-center border border-white/5">
+                  <span className="text-slate-500 font-space tracking-wider">CHƯA CÓ HÌNH ẢNH</span>
                 </div>
               )}
             </div>
 
             {/* Title & Info */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-              <div className="flex flex-wrap gap-2 mb-4">
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-white/10 relative overflow-hidden">
+              {/* Subtle inner glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+              <div className="flex flex-wrap gap-3 mb-6">
                 {post.property_type && (
-                  <span className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-bold border border-indigo-100">
+                  <span className="px-4 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-full text-sm font-bold border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
                     {post.property_type}
                   </span>
                 )}
-                <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm font-medium">
-                  {new Date(post.createdAt).toLocaleDateString('vi-VN')}
+                <span className="px-4 py-1.5 bg-slate-800/50 text-slate-400 rounded-full text-sm font-medium border border-white/5">
+                  Đăng ngày {new Date(post.createdAt).toLocaleDateString('vi-VN')}
                 </span>
               </div>
               
-              <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800 leading-snug mb-4">
+              <h1 className="text-2xl md:text-4xl font-extrabold text-white leading-tight mb-5 font-space tracking-tight">
                 {post.title}
               </h1>
               
-              <div className="flex items-start gap-3 text-slate-600 mb-6 pb-6 border-b border-slate-100">
-                <MapPin className="w-5 h-5 mt-0.5 shrink-0 text-slate-400" />
+              <div className="flex items-start gap-3 text-slate-300 mb-8 pb-8 border-b border-white/10">
+                <MapPin className="w-6 h-6 mt-0.5 shrink-0 text-violet-400" />
                 <span className="text-lg leading-relaxed">{address}</span>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                  <div className="text-slate-500 text-sm font-medium mb-1">Mức giá thuê</div>
-                  <div className="text-2xl font-extrabold text-indigo-600">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}<span className="text-sm font-medium text-slate-500">/tháng</span>
+                  <div className="text-slate-400 text-sm font-semibold mb-2 uppercase tracking-widest">Mức giá thuê</div>
+                  <div className="flex items-end gap-2">
+                    <div className="text-4xl md:text-5xl font-extrabold text-cyan-400 font-space glow-cyan-text">
+                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}
+                    </div>
+                    <span className="text-lg font-medium text-slate-500 mb-1">/tháng</span>
                   </div>
+                </div>
+
+                <div className="flex items-center gap-6 text-slate-300">
+                   {post.area_sqm && (
+                     <div className="flex flex-col items-center gap-1">
+                       <Maximize className="w-6 h-6 text-slate-400" />
+                       <span className="font-semibold">{post.area_sqm} m²</span>
+                     </div>
+                   )}
+                   <div className="flex flex-col items-center gap-1">
+                     <Home className="w-6 h-6 text-slate-400" />
+                     <span className="font-semibold">1 PN</span>
+                   </div>
+                   <div className="flex flex-col items-center gap-1">
+                     <Bath className="w-6 h-6 text-slate-400" />
+                     <span className="font-semibold">1 WC</span>
+                   </div>
                 </div>
               </div>
             </div>
 
             {/* Thông số kỹ thuật / Tiện ích */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-              <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-indigo-600" /> Thông tin chi tiết
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-white/10 relative overflow-hidden">
+              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3 font-space">
+                <FileText className="w-6 h-6 text-cyan-400" /> Thông tin chi tiết
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
                 {post.utility_costs && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
-                      <Bolt className="w-5 h-5 text-amber-500" />
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500/20 transition-colors">
+                      <Bolt className="w-6 h-6 text-amber-400" />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-700">Chi phí dịch vụ</div>
-                      <div className="text-slate-600 text-sm mt-1">{post.utility_costs}</div>
+                      <div className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-1">Chi phí dịch vụ</div>
+                      <div className="text-slate-400 leading-relaxed">{post.utility_costs}</div>
                     </div>
                   </div>
                 )}
                 
                 {post.contract_terms && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                      <Calendar className="w-5 h-5 text-blue-500" />
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors">
+                      <Calendar className="w-6 h-6 text-blue-400" />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-700">Điều kiện hợp đồng</div>
-                      <div className="text-slate-600 text-sm mt-1">{post.contract_terms}</div>
+                      <div className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-1">Điều kiện hợp đồng</div>
+                      <div className="text-slate-400 leading-relaxed">{post.contract_terms}</div>
                     </div>
                   </div>
                 )}
 
                 {post.target_audience && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
-                      <Users className="w-5 h-5 text-emerald-500" />
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
+                      <Users className="w-6 h-6 text-emerald-400" />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-700">Đối tượng phù hợp</div>
-                      <div className="text-slate-600 text-sm mt-1">{post.target_audience}</div>
+                      <div className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-1">Đối tượng phù hợp</div>
+                      <div className="text-slate-400 leading-relaxed">{post.target_audience}</div>
                     </div>
                   </div>
                 )}
@@ -181,10 +217,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             </div>
 
             {/* Mô tả */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-              <h2 className="text-xl font-bold text-slate-800 mb-4">Mô tả phòng</h2>
-              <div className="prose prose-slate max-w-none">
-                <p className="whitespace-pre-line text-slate-600 leading-relaxed">
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-white/10">
+              <h2 className="text-2xl font-bold text-white mb-6 font-space">Mô tả phòng</h2>
+              <div className="prose prose-invert prose-slate max-w-none">
+                <p className="whitespace-pre-line text-slate-300 leading-relaxed text-lg">
                   {post.description}
                 </p>
               </div>
@@ -193,29 +229,36 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           
           {/* Right Column: Contact Widget */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-3xl p-6 shadow-xl border border-slate-200">
-              <div className="text-center mb-6 pb-6 border-b border-slate-100">
-                <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl font-black">{post.ctv_id?.name?.charAt(0) || 'U'}</span>
+            <div className="sticky top-24 bg-slate-900/80 backdrop-blur-2xl rounded-3xl p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-white/10 relative overflow-hidden">
+              {/* Highlight gradient at the top border */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-violet-500"></div>
+
+              <div className="text-center mb-6 pb-6 border-b border-white/10 relative z-10">
+                <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)] p-1">
+                   <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-white">
+                      {post.ctv_id?.name?.charAt(0) || 'U'}
+                   </div>
                 </div>
-                <h3 className="font-bold text-lg text-slate-800">{post.ctv_id?.name || 'Ẩn danh'}</h3>
-                <p className="text-slate-500 text-sm mt-1">Cộng tác viên tư vấn</p>
+                <h3 className="font-space font-bold text-xl text-white tracking-wide">{post.ctv_id?.name || 'Ẩn danh'}</h3>
+                <p className="text-cyan-400 text-sm mt-1 font-medium">Chuyên viên tư vấn</p>
               </div>
               
-              <div className="space-y-3">
-                <ContactButton 
-                  postId={post._id.toString()} 
-                  ctvId={post.ctv_id?._id?.toString() || ''}
-                  postTitle={post.title}
-                />
+              <div className="space-y-4 relative z-10">
+                <div className="[&>button]:w-full [&>button]:py-4 [&>button]:rounded-xl [&>button]:font-bold [&>button]:text-lg">
+                  <ContactButton 
+                    postId={post._id.toString()} 
+                    ctvId={post.ctv_id?._id?.toString() || ''}
+                    postTitle={post.title}
+                  />
+                </div>
                 
                 {ctvPhone && (
                   <a 
                     href={`tel:${ctvPhone}`} 
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-50 text-emerald-600 rounded-xl font-bold hover:bg-emerald-600 hover:text-white transition shadow-sm border border-emerald-100 hover:border-emerald-600"
+                    className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-emerald-500/10 text-emerald-400 rounded-xl font-bold hover:bg-emerald-500/20 transition-all border border-emerald-500/30 hover:border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
                   >
-                    <Phone className="w-5 h-5" />
-                    {ctvPhone}
+                    <Phone className="w-6 h-6" />
+                    <span className="text-lg">{ctvPhone}</span>
                   </a>
                 )}
                 
@@ -224,18 +267,18 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                     href={`https://zalo.me/${ctvPhone}`} 
                     target="_blank" 
                     rel="noreferrer"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition shadow-sm border border-blue-100 hover:border-blue-600"
+                    className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-blue-500/10 text-blue-400 rounded-xl font-bold hover:bg-blue-500/20 transition-all border border-blue-500/30 hover:border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
                   >
-                    <span className="font-black text-lg leading-none">Zalo</span>
-                    Nhắn tin Zalo
+                    <span className="font-black text-xl leading-none">Zalo</span>
+                    <span className="text-lg">Nhắn tin Zalo</span>
                   </a>
                 )}
               </div>
               
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-start gap-3 bg-amber-50 p-3 rounded-xl">
-                <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                <p className="text-xs text-amber-700">
-                  <span className="font-bold">Lưu ý an toàn:</span> Không bao giờ chuyển khoản đặt cọc trước khi đến xem phòng trực tiếp và ký hợp đồng.
+              <div className="mt-8 pt-5 border-t border-white/10 flex items-start gap-3 bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10 relative z-10">
+                <ShieldCheck className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-200/70 leading-relaxed">
+                  <span className="font-bold text-amber-400">Lưu ý an toàn:</span> Không bao giờ chuyển khoản đặt cọc trước khi đến xem phòng trực tiếp và ký hợp đồng.
                 </p>
               </div>
             </div>
@@ -244,34 +287,18 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
         {/* Similar Posts */}
         {similarPosts && similarPosts.length > 0 && (
-          <div className="mt-16">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-800">Phòng trọ tương tự</h2>
-              <Link href="/" className="text-indigo-600 font-bold hover:underline flex items-center gap-1">
-                Xem tất cả <ArrowRight className="w-4 h-4" />
+          <div className="mt-20">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-white font-space tracking-tight">Gợi ý tương tự</h2>
+              <Link href="/" className="text-cyan-400 font-bold hover:text-cyan-300 transition-colors flex items-center gap-2 group bg-cyan-500/10 px-4 py-2 rounded-full border border-cyan-500/20">
+                Xem tất cả <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {similarPosts.map((p: any) => {
-                const img = p.images?.[0] || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop';
-                return (
-                  <Link href={`/p/${p._id}`} key={p._id.toString()} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group border border-slate-200">
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                      <Image src={img} alt={p.title} fill className="object-cover group-hover:scale-110 transition duration-500" />
-                      <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-extrabold text-indigo-600">
-                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(p.price || 0)}/th
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-slate-800 line-clamp-1 group-hover:text-indigo-600 transition text-sm">{p.title}</h3>
-                      <div className="flex items-center gap-1 text-slate-500 text-xs mt-2">
-                        <MapPin className="w-3 h-3 shrink-0" />
-                        <span className="line-clamp-1">{p.address}</span>
-                      </div>
-                    </div>
-                  </Link>
-                )
+                 p._id = p._id.toString(); // Ensure ID is string for client component
+                 return <GlassPropertyCard key={p._id} post={p} />
               })}
             </div>
           </div>
