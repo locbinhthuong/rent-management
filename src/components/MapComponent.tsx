@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { Layers } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
@@ -15,63 +16,41 @@ interface MapComponentProps {
 
 // Function to safely extract coordinates from a post
 const getCoordinates = (post: any): [number, number] => {
-  // If post has explicit coordinates (e.g. from Mapbox/Google API earlier)
   if (post.location && post.location.coordinates && post.location.coordinates.length === 2) {
-    // GeoJSON format is [longitude, latitude], Leaflet needs [latitude, longitude]
     return [post.location.coordinates[1], post.location.coordinates[0]];
   }
-  
-  // Fallback: Random coordinates around Hanoi/HCMC just for demo if none exists
-  // In a real app, you'd geocode the address before saving
   const hanoiCenter = [21.0285, 105.8542];
   const randOffset = () => (Math.random() - 0.5) * 0.05;
   return [hanoiCenter[0] + randOffset(), hanoiCenter[1] + randOffset()];
 };
 
-// Component to handle auto-panning to the hovered marker
 const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null, posts: any[] }) => {
   const map = useMap();
-  
   useEffect(() => {
     if (hoveredPostId) {
       const post = posts.find(p => p._id.toString() === hoveredPostId);
       if (post) {
-        const coords = getCoordinates(post);
-        map.flyTo(coords, 14, {
-          animate: true,
-          duration: 1
-        });
+        map.flyTo(getCoordinates(post), 14, { animate: true, duration: 1 });
       }
     }
   }, [hoveredPostId, map, posts]);
-
   return null;
 };
 
-// Component to handle auto-panning to device's location
 const DeviceLocationPanner = () => {
   const map = useMap();
-  
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          map.setView([lat, lng], 13);
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-        },
+        (position) => map.setView([position.coords.latitude, position.coords.longitude], 13),
+        (error) => console.error("Geolocation error:", error),
         { enableHighAccuracy: true, timeout: 5000 }
       );
     }
   }, [map]);
-
   return null;
 };
 
-// Custom SVG Icons
 const createCustomIcon = (isActive: boolean) => {
   const html = `
     <div style="
@@ -90,7 +69,6 @@ const createCustomIcon = (isActive: boolean) => {
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
     </div>
   `;
-
   return L.divIcon({
     html,
     className: 'custom-leaflet-marker',
@@ -101,11 +79,29 @@ const createCustomIcon = (isActive: boolean) => {
 };
 
 export default function MapComponent({ posts, hoveredPostId }: MapComponentProps) {
-  // Default center
   const defaultCenter: [number, number] = posts.length > 0 ? getCoordinates(posts[0]) : [21.0285, 105.8542];
+  const [mapType, setMapType] = useState<'street' | 'satellite'>('street');
 
   return (
     <div className="w-full h-full relative z-0">
+      
+      {/* Map Style Toggle */}
+      <div className="absolute top-4 right-4 z-[1000] bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col font-space">
+        <button 
+          onClick={() => setMapType('street')}
+          className={`px-4 py-2 text-sm font-bold flex items-center gap-2 transition-colors ${mapType === 'street' ? 'bg-cyan-50 text-cyan-600' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
+        >
+          Bản đồ
+        </button>
+        <div className="h-px w-full bg-slate-100"></div>
+        <button 
+          onClick={() => setMapType('satellite')}
+          className={`px-4 py-2 text-sm font-bold flex items-center gap-2 transition-colors ${mapType === 'satellite' ? 'bg-cyan-50 text-cyan-600' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
+        >
+          Vệ tinh
+        </button>
+      </div>
+
       <MapContainer 
         center={defaultCenter} 
         zoom={13} 
@@ -113,10 +109,17 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
         style={{ height: '100%', width: '100%', background: '#e5e7eb' }}
         zoomControl={false}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        />
+        {mapType === 'street' ? (
+          <TileLayer
+            attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          />
+        ) : (
+          <TileLayer
+            attribution='Tiles &copy; Esri'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          />
+        )}
         
         <DeviceLocationPanner />
         <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
