@@ -6,6 +6,7 @@ import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import NextTopLoader from 'nextjs-toploader';
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -48,6 +49,7 @@ export default function RootLayout({
             <Footer />
           </ReactQueryProvider>
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

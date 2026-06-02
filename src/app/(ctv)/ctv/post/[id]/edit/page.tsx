@@ -16,7 +16,7 @@ export default function EditPostPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [config, setConfig] = useState({ propertyTypes: [], locations: [] });
+  const [config, setConfig] = useState<{ propertyTypes: string[], locations: string[] }>({ propertyTypes: [], locations: [] });
 
   const [formData, setFormData] = useState({
     title: '',

@@ -1,13 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useOptimistic, startTransition } from 'react';
 import { Heart } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { toggleWishlistAction } from '@/actions/wishlist';
+import { toast } from 'sonner';
 
 export default function WishlistButton({ post }: { post: any }) {
   const [isSaved, setIsSaved] = useState(false);
-
   const { data: session } = useSession();
+  
+  // React 19 useOptimistic hook
+  const [optimisticIsSaved, addOptimisticIsSaved] = useOptimistic(
+    isSaved,
+    (state, newState: boolean) => newState
+  );
 
   useEffect(() => {
     if (session) {
@@ -30,21 +37,19 @@ export default function WishlistButton({ post }: { post: any }) {
     e.stopPropagation();
     
     if (session) {
-      try {
-        const res = await fetch('/api/wishlist', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ post_id: post._id })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setIsSaved(data.isLiked);
-          window.dispatchEvent(new Event('wishlist-updated'));
-        } else {
-          alert(data.message || 'Lỗi hệ thống');
-        }
-      } catch (err) {
-        console.error(err);
+      // Optimistic Update
+      startTransition(() => {
+        addOptimisticIsSaved(!optimisticIsSaved);
+      });
+
+      const res = await toggleWishlistAction(post._id);
+      if (res.success) {
+        setIsSaved(res.isLiked);
+        toast.success(res.message);
+        window.dispatchEvent(new Event('wishlist-updated'));
+      } else {
+        toast.error(res.message);
+        // Revert will happen automatically since we didn't update actual state
       }
     } else {
       // Local Storage for guests
@@ -53,6 +58,7 @@ export default function WishlistButton({ post }: { post: any }) {
       if (isSaved) {
         savedPosts = savedPosts.filter((p: any) => p._id !== post._id);
         setIsSaved(false);
+        toast.info('Đã bỏ lưu tin');
       } else {
         const postToSave = {
           _id: post._id,
@@ -64,6 +70,7 @@ export default function WishlistButton({ post }: { post: any }) {
         };
         savedPosts.push(postToSave);
         setIsSaved(true);
+        toast.success('Đã lưu tin thành công');
       }
       
       localStorage.setItem('wishlist', JSON.stringify(savedPosts));
@@ -74,10 +81,10 @@ export default function WishlistButton({ post }: { post: any }) {
   return (
     <button 
       onClick={toggleWishlist}
-      className={`absolute top-3 left-3 p-2 rounded-full backdrop-blur-sm shadow-md transition z-10 ${isSaved ? 'bg-red-50 text-red-500' : 'bg-white/80 text-slate-400 hover:text-red-500 hover:bg-white'}`}
-      title={isSaved ? 'Bỏ lưu' : 'Lưu tin'}
+      className={`absolute top-3 left-3 p-2 rounded-full backdrop-blur-sm shadow-md transition z-10 ${optimisticIsSaved ? 'bg-red-50 text-red-500' : 'bg-white/80 text-slate-400 hover:text-red-500 hover:bg-white'}`}
+      title={optimisticIsSaved ? 'Bỏ lưu' : 'Lưu tin'}
     >
-      <Heart className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+      <Heart className={`w-5 h-5 ${optimisticIsSaved ? 'fill-current' : ''}`} />
     </button>
   );
 }

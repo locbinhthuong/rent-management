@@ -1,36 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { Edit, Trash2, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { deletePostAction } from '@/actions/post';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 export default function PostActionButtons({ postId }: { postId: string }) {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleDelete = async () => {
     if (!confirm('Bạn có chắc chắn muốn xóa bài đăng này không? Hành động này không thể hoàn tác.')) {
       return;
     }
 
-    setIsDeleting(true);
-    try {
-      const res = await fetch(`/api/posts/${postId}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Lỗi khi xóa bài đăng');
+    startTransition(async () => {
+      const res = await deletePostAction(postId);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
       }
-      
-      alert('Xóa bài đăng thành công!');
-      router.refresh();
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setIsDeleting(false);
-    }
+    });
   };
 
   return (
@@ -42,14 +34,16 @@ export default function PostActionButtons({ postId }: { postId: string }) {
       >
         <Edit className="w-4 h-4" />
       </Link>
-      <button 
+      <Button 
         onClick={handleDelete}
-        disabled={isDeleting}
-        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+        disabled={isPending}
+        variant="ghost"
+        size="icon"
+        className="text-slate-400 hover:text-red-600 hover:bg-red-50"
         title="Xóa bài đăng"
       >
-        {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-      </button>
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+      </Button>
     </div>
   );
 }

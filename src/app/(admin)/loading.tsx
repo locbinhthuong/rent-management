@@ -1,10 +1,24 @@
-import { Loader2 } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="flex-1 min-h-screen flex flex-col items-center justify-center bg-slate-50">
-      <Loader2 className="w-12 h-12 text-indigo-600 animate-spin mb-4" />
-      <p className="text-slate-500 font-medium">Đang tải dữ liệu...</p>
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 min-h-screen bg-slate-950">
+      <div className="flex items-center justify-between space-y-2">
+        <Skeleton className="h-10 w-48 bg-white/10" />
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} className="h-32 w-full rounded-xl bg-white/5" />
+        ))}
+      </div>
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+        <div className="col-span-4">
+          <Skeleton className="h-[400px] w-full rounded-xl bg-white/5" />
+        </div>
+        <div className="col-span-3">
+          <Skeleton className="h-[400px] w-full rounded-xl bg-white/5" />
+        </div>
+      </div>
     </div>
   );
 }
