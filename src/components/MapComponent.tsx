@@ -1,0 +1,151 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+import Image from 'next/image';
+
+interface MapComponentProps {
+  posts: any[];
+  hoveredPostId: string | null;
+}
+
+// Function to safely extract coordinates from a post
+const getCoordinates = (post: any): [number, number] => {
+  // If post has explicit coordinates (e.g. from Mapbox/Google API earlier)
+  if (post.location && post.location.coordinates && post.location.coordinates.length === 2) {
+    // GeoJSON format is [longitude, latitude], Leaflet needs [latitude, longitude]
+    return [post.location.coordinates[1], post.location.coordinates[0]];
+  }
+  
+  // Fallback: Random coordinates around Hanoi/HCMC just for demo if none exists
+  // In a real app, you'd geocode the address before saving
+  const hanoiCenter = [21.0285, 105.8542];
+  const randOffset = () => (Math.random() - 0.5) * 0.05;
+  return [hanoiCenter[0] + randOffset(), hanoiCenter[1] + randOffset()];
+};
+
+// Component to handle auto-panning to the hovered marker
+const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null, posts: any[] }) => {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (hoveredPostId) {
+      const post = posts.find(p => p._id.toString() === hoveredPostId);
+      if (post) {
+        const coords = getCoordinates(post);
+        map.flyTo(coords, 14, {
+          animate: true,
+          duration: 1
+        });
+      }
+    }
+  }, [hoveredPostId, map, posts]);
+
+  return null;
+};
+
+// Custom SVG Icons
+const createCustomIcon = (isActive: boolean) => {
+  const html = `
+    <div style="
+      background-color: ${isActive ? '#4f46e5' : '#ffffff'};
+      border: 3px solid ${isActive ? '#ffffff' : '#4f46e5'};
+      width: ${isActive ? '36px' : '28px'};
+      height: ${isActive ? '36px' : '28px'};
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: ${isActive ? '#ffffff' : '#4f46e5'};
+    ">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+    </div>
+  `;
+
+  return L.divIcon({
+    html,
+    className: 'custom-leaflet-marker',
+    iconSize: isActive ? [36, 36] : [28, 28],
+    iconAnchor: isActive ? [18, 36] : [14, 28],
+    popupAnchor: [0, -36]
+  });
+};
+
+export default function MapComponent({ posts, hoveredPostId }: MapComponentProps) {
+  // Default center
+  const defaultCenter: [number, number] = posts.length > 0 ? getCoordinates(posts[0]) : [21.0285, 105.8542];
+
+  return (
+    <div className="w-full h-full relative z-0">
+      <MapContainer 
+        center={defaultCenter} 
+        zoom={13} 
+        scrollWheelZoom={true} 
+        style={{ height: '100%', width: '100%', background: '#e5e7eb' }}
+        zoomControl={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        />
+        
+        <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
+
+        {posts.map((post) => {
+          const isActive = hoveredPostId === post._id.toString();
+          const coords = getCoordinates(post);
+          const price = post.price || 0;
+          const imageUrl = post.images && post.images.length > 0 
+            ? post.images[0] 
+            : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop';
+
+          return (
+            <Marker 
+              key={post._id.toString()} 
+              position={coords}
+              icon={createCustomIcon(isActive)}
+              zIndexOffset={isActive ? 1000 : 0}
+            >
+              <Popup className="glass-popup" closeButton={false}>
+                <div className="w-48 overflow-hidden rounded-xl bg-white shadow-lg p-0 m-[-14px]">
+                  <div className="relative h-24 w-full">
+                    <Image src={imageUrl} alt="Room" fill className="object-cover" />
+                  </div>
+                  <div className="p-3">
+                    <div className="font-bold text-slate-800 line-clamp-1 mb-1">{post.title}</div>
+                    <div className="font-extrabold text-indigo-600">
+                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
+                    </div>
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
+      
+      {/* Custom styles for Leaflet Popup to make it fit Glassmorphism */}
+      <style jsx global>{`
+        .glass-popup .leaflet-popup-content-wrapper {
+          padding: 0;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        .glass-popup .leaflet-popup-tip {
+          box-shadow: none;
+        }
+        .custom-leaflet-marker {
+          background: transparent;
+          border: none;
+        }
+      `}</style>
+    </div>
+  );
+}
