@@ -8,9 +8,9 @@ import GlassPropertyCard from '@/components/GlassPropertyCard';
 const MapComponent = dynamic(() => import('@/components/MapComponent'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
-      <p className="text-slate-500 font-medium">Đang tải bản đồ...</p>
+    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mb-4 glow-cyan"></div>
+      <p className="text-cyan-400 font-medium font-space">Đang tải bản đồ...</p>
     </div>
   ),
 });
@@ -28,22 +28,22 @@ export default function MapSearchClient({ posts }: { posts: any[] }) {
 
       {/* Right side: Glassmorphism List */}
       {/* On mobile, this takes full width. On desktop, it takes the right 2/5 */}
-      <div className="w-full md:w-2/5 h-full overflow-y-auto bg-slate-50/50 relative z-10 custom-scrollbar">
+      <div className="w-full md:w-2/5 h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5">
         
         {/* Subtle glass effect behind the list */}
-        <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] pointer-events-none z-[-1]"></div>
+        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md pointer-events-none z-[-1]"></div>
         
         <div className="p-4 md:p-6 space-y-5">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-xl font-bold text-slate-800">Kết quả tìm kiếm</h1>
-            <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold shadow-sm">
-              {posts.length} phòng
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-bold text-white font-space tracking-tight">Khu vực Lân Cận</h1>
+            <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded-full text-sm font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+              {posts.length} kết quả
             </span>
           </div>
           
           {posts.length === 0 ? (
-            <div className="text-center py-20 bg-white/40 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm">
-              <p className="text-slate-500">Không tìm thấy phòng trống nào.</p>
+            <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-sm">
+              <p className="text-slate-400 font-space">Không tìm thấy không gian sống nào.</p>
             </div>
           ) : (
             <div className="space-y-4">

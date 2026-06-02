@@ -52,17 +52,17 @@ const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null,
 const createCustomIcon = (isActive: boolean) => {
   const html = `
     <div style="
-      background-color: ${isActive ? '#4f46e5' : '#ffffff'};
-      border: 3px solid ${isActive ? '#ffffff' : '#4f46e5'};
+      background-color: ${isActive ? '#06b6d4' : '#1e293b'};
+      border: 2px solid ${isActive ? '#ffffff' : '#06b6d4'};
       width: ${isActive ? '36px' : '28px'};
       height: ${isActive ? '36px' : '28px'};
       border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 0 15px ${isActive ? 'rgba(6, 182, 212, 0.8)' : 'rgba(6, 182, 212, 0.4)'};
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: ${isActive ? '#ffffff' : '#4f46e5'};
+      color: ${isActive ? '#ffffff' : '#22d3ee'};
     ">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
     </div>
@@ -92,7 +92,7 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
         
         <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
@@ -113,13 +113,13 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
               zIndexOffset={isActive ? 1000 : 0}
             >
               <Popup className="glass-popup" closeButton={false}>
-                <div className="w-48 overflow-hidden rounded-xl bg-white shadow-lg p-0 m-[-14px]">
+                <div className="w-48 overflow-hidden rounded-xl bg-slate-900 border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] p-0 m-[-14px]">
                   <div className="relative h-24 w-full">
                     <Image src={imageUrl} alt="Room" fill className="object-cover" />
                   </div>
                   <div className="p-3">
-                    <div className="font-bold text-slate-800 line-clamp-1 mb-1">{post.title}</div>
-                    <div className="font-extrabold text-indigo-600">
+                    <div className="font-bold text-slate-100 line-clamp-1 mb-1 font-space">{post.title}</div>
+                    <div className="font-extrabold text-cyan-400 font-space glow-cyan-text">
                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
                     </div>
                   </div>

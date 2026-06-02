@@ -4,10 +4,11 @@ import User from '@/models/User';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { Heart } from 'lucide-react';
+import { Heart, Home } from 'lucide-react';
 import Image from 'next/image';
 
-// Client component wrapper for split screen state
+// Client components
+import FuturisticHero from '@/components/FuturisticHero';
 import MapSearchClient from '@/components/MapSearchClient';
 
 export const revalidate = 60;
@@ -38,28 +39,32 @@ export default async function CustomerHome() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="h-screen w-full flex flex-col bg-slate-50 overflow-hidden">
-      {/* Glassmorphism Header */}
-      <header className="h-16 shrink-0 bg-white/70 backdrop-blur-xl z-50 border-b border-white/40 shadow-sm flex items-center justify-between px-4 lg:px-8">
+    <div className="w-full flex flex-col bg-slate-950 overflow-x-hidden text-slate-100">
+      {/* Glassmorphism Header (Fixed) */}
+      <header className="fixed top-0 inset-x-0 h-16 bg-slate-950/50 backdrop-blur-xl z-50 border-b border-white/10 shadow-lg flex items-center justify-between px-4 lg:px-8">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="thuenhatro.com" width={160} height={40} className="h-8 w-auto object-contain" />
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="bg-cyan-500/20 p-2 rounded-lg border border-cyan-500/30 group-hover:glow-cyan transition-all">
+              <Home className="w-5 h-5 text-cyan-400" />
+            </div>
+            {/* If there's a dark mode logo, use it. Otherwise use text */}
+            <span className="font-space font-bold text-xl tracking-tight text-white hidden sm:block">thuenhatro<span className="text-cyan-400">.com</span></span>
           </Link>
         </div>
         
         <nav className="flex items-center gap-4">
-          <Link href="/saved" className="flex items-center gap-2 hover:text-indigo-600 transition-colors font-semibold text-sm text-slate-600">
+          <Link href="/saved" className="flex items-center gap-2 text-slate-300 hover:text-cyan-400 transition-colors font-medium text-sm">
             <Heart className="w-5 h-5" />
             <span className="hidden sm:inline">Đã lưu</span>
           </Link>
           
-          <div className="w-px h-5 bg-slate-300 mx-1"></div>
+          <div className="w-px h-5 bg-white/20 mx-1"></div>
           
           {session ? (
             <div className="flex items-center gap-3">
               <Link 
                 href={session.user?.role === 'Admin' ? '/admin' : session.user?.role === 'CTV' ? '/ctv' : '/'}
-                className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 text-white flex items-center justify-center font-bold text-sm shadow-md border-2 border-white"
+                className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-500 text-white flex items-center justify-center font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)] border border-white/20 hover:scale-105 transition-transform"
                 title="Bảng điều khiển"
               >
                 {session.user?.name?.charAt(0).toUpperCase() || 'U'}
@@ -68,7 +73,7 @@ export default async function CustomerHome() {
           ) : (
             <Link 
               href="/login" 
-              className="px-4 py-1.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition shadow text-sm"
+              className="px-5 py-2 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all shadow-[0_0_15px_rgba(37,99,235,0.5)] text-sm"
             >
               Đăng Nhập
             </Link>
@@ -76,8 +81,15 @@ export default async function CustomerHome() {
         </nav>
       </header>
 
-      {/* Main Split Content */}
-      <MapSearchClient posts={posts} />
+      {/* Futuristic Hero Section */}
+      <main className="pt-16">
+        <FuturisticHero />
+        
+        {/* Split Content: Map & List */}
+        <section id="explore" className="w-full h-[90vh] relative flex flex-col border-t border-white/10 shadow-[0_-20px_50px_rgba(6,182,212,0.1)]">
+          <MapSearchClient posts={posts} />
+        </section>
+      </main>
     </div>
   );
 }
