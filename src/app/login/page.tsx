@@ -2,14 +2,16 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, ShieldCheck, User, Phone } from 'lucide-react';
+import { Lock, Mail, ShieldCheck, User, Phone, ArrowLeft } from 'lucide-react';
 import { signIn, getSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState(true); // Toggle giữa Đăng nhập và Đăng ký
+  const [isLogin, setIsLogin] = useState(true);
   
-  // States cho form
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -37,7 +39,6 @@ export default function LoginPage() {
         setError(res.error);
         setLoading(false);
       } else {
-        // Fetch session to check role
         const session = await getSession();
         if (session?.user?.role === 'Admin') {
           window.location.href = '/admin';
@@ -72,8 +73,8 @@ export default function LoginPage() {
         setLoading(false);
       } else {
         setSuccess('Đăng ký tài khoản thành công! Vui lòng Đăng nhập.');
-        setIsLogin(true); // Switch to login
-        setPassword(''); // Clear password for security
+        setIsLogin(true);
+        setPassword('');
         setLoading(false);
       }
     } catch(err) {
@@ -83,25 +84,57 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-        <div className="bg-indigo-600 p-6 text-center text-white">
-          <ShieldCheck className="w-12 h-12 mx-auto mb-3 text-indigo-200" />
-          <h1 className="text-2xl font-bold">{isLogin ? 'Đăng nhập Hệ thống' : 'Tạo Tài khoản mới'}</h1>
-          <p className="text-indigo-200 text-sm mt-1">Dành cho Khách hàng & Cộng tác viên</p>
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-8 overflow-hidden">
+      {/* Full-screen Background Image */}
+      <Image 
+        src="/login-bg.png" 
+        alt="Background" 
+        fill 
+        priority
+        className="object-cover object-center z-0"
+      />
+      
+      {/* Dark Gradient Overlay for readability */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-black/70 via-black/40 to-indigo-900/40 backdrop-blur-[2px]" />
+
+      <Link 
+        href="/" 
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 text-white/80 hover:text-white transition group bg-black/20 px-4 py-2 rounded-full backdrop-blur-md border border-white/10"
+      >
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <span className="text-sm font-medium">Trang chủ</span>
+      </Link>
+
+      {/* Central Glassmorphism Panel */}
+      <div className="relative z-10 max-w-[420px] w-full rounded-3xl overflow-hidden backdrop-blur-xl bg-white/10 border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+        
+        {/* Header Section */}
+        <div className="p-8 text-center border-b border-white/10 relative overflow-hidden">
+          {/* Glow Effect */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-indigo-500/50 rounded-full blur-[50px] -z-10" />
+          
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-white/20">
+            <ShieldCheck className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">
+            {isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
+          </h1>
+          <p className="text-white/60 text-sm mt-2 font-medium">
+            Truy cập nền tảng môi giới hiện đại nhất
+          </p>
         </div>
 
         {/* Tab Toggle */}
-        <div className="flex border-b border-slate-200">
+        <div className="flex border-b border-white/10 bg-black/20">
           <button 
-            className={`flex-1 py-3 text-sm font-bold text-center ${isLogin ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+            className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${isLogin ? 'text-white border-b-2 border-indigo-400 bg-white/5' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}
             onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
             type="button"
           >
             ĐĂNG NHẬP
           </button>
           <button 
-            className={`flex-1 py-3 text-sm font-bold text-center ${!isLogin ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+            className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${!isLogin ? 'text-white border-b-2 border-indigo-400 bg-white/5' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}
             onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}
             type="button"
           >
@@ -109,120 +142,118 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="p-8">
+        {/* Form Content */}
+        <div className="p-8 relative">
+          {/* Subtle bottom glow */}
+          <div className="absolute bottom-0 right-0 w-40 h-40 bg-violet-500/20 rounded-full blur-[60px] -z-10 pointer-events-none" />
+
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg">
+            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 text-red-200 text-sm rounded-xl backdrop-blur-md">
               {error}
             </div>
           )}
           {success && (
-            <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm rounded-lg font-medium">
+            <div className="mb-6 p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 text-sm rounded-xl font-medium backdrop-blur-md">
               {success}
             </div>
           )}
 
           <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
             
-            {/* Registration Fields */}
             {!isLogin && (
-              <>
-                <div className="flex gap-4 mb-4">
-                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 border rounded-xl cursor-pointer transition ${role === 'Customer' ? 'bg-indigo-50 border-indigo-600 text-indigo-700 font-semibold' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+              <div className="space-y-4">
+                <div className="flex gap-3 mb-2">
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'Customer' ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-white/10 text-white/60 hover:bg-white/5'}`}>
                     <input type="radio" name="role" value="Customer" checked={role === 'Customer'} onChange={() => setRole('Customer')} className="hidden" />
-                    <span>Khách Hàng</span>
+                    <span className="text-sm font-bold tracking-wide">KHÁCH</span>
                   </label>
-                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 border rounded-xl cursor-pointer transition ${role === 'CTV' ? 'bg-indigo-50 border-indigo-600 text-indigo-700 font-semibold' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'CTV' ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-white/10 text-white/60 hover:bg-white/5'}`}>
                     <input type="radio" name="role" value="CTV" checked={role === 'CTV'} onChange={() => setRole('CTV')} className="hidden" />
-                    <span>Cộng Tác Viên</span>
+                    <span className="text-sm font-bold tracking-wide">MÔI GIỚI</span>
                   </label>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Họ và Tên</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
                       <User className="w-5 h-5" />
                     </div>
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
-                      placeholder="Nguyễn Văn A"
+                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                      placeholder="Họ và Tên"
                       required={!isLogin}
                     />
                   </div>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Số điện thoại</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
                       <Phone className="w-5 h-5" />
                     </div>
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
-                      placeholder="0912345678"
+                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                      placeholder="Số điện thoại"
                       required={!isLogin}
                     />
                   </div>
                 </div>
-              </>
+              </div>
             )}
 
-            {/* Common Fields */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Email / Tài khoản</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
-                  placeholder="Nhập email của bạn..."
+                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                  placeholder="Email đăng nhập"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Mật khẩu</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition"
-                  placeholder="••••••••"
+                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                  placeholder="Mật khẩu"
                   required
                 />
               </div>
               {isLogin && (
-                <div className="flex justify-end mt-2">
-                  <a href="#" className="text-sm font-medium text-indigo-600 hover:underline">Quên mật khẩu?</a>
+                <div className="flex justify-end mt-3">
+                  <a href="#" className="text-xs font-medium text-indigo-300 hover:text-white transition-colors hover:underline">
+                    Quên mật khẩu?
+                  </a>
                 </div>
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className={`w-full text-white font-bold py-3 rounded-lg transition shadow-md mt-4 ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg'}`}
+              className={`w-full py-6 mt-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-white/20'}`}
             >
-              {loading ? 'Đang xử lý...' : (isLogin ? 'Đăng nhập' : 'Đăng ký ngay')}
-            </button>
+              {loading ? 'ĐANG XỬ LÝ...' : (isLogin ? 'ĐĂNG NHẬP' : 'TẠO TÀI KHOẢN')}
+            </Button>
           </form>
-        </div>
-        
-        <div className="bg-slate-50 p-4 border-t border-slate-100 text-center text-sm text-slate-500">
-          <a href="/" className="text-indigo-600 font-medium hover:underline inline-block">← Quay lại trang chủ</a>
         </div>
       </div>
     </div>

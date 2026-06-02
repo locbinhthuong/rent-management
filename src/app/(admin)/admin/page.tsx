@@ -28,14 +28,12 @@ export default async function AdminDashboard() {
   const totalRoomsCount = await Room.countDocuments();
   const ctvCount = await User.countDocuments({ role: 'CTV' });
   
-  // Doanh thu (Ví dụ: tính tổng các transaction "Thu tiền phòng")
   const revenueTransactions = await Transaction.aggregate([
     { $match: { type: 'Thu tiền phòng', status: 'Completed' } },
     { $group: { _id: null, total: { $sum: '$amount' } } }
   ]);
   const totalRevenue = revenueTransactions.length > 0 ? revenueTransactions[0].total : 0;
   
-  // Thống kê Leads
   const leadStats = await Lead.aggregate([
     { $group: { _id: '$status', count: { $sum: 1 } } }
   ]);
@@ -43,100 +41,125 @@ export default async function AdminDashboard() {
   const occupancyRate = totalRoomsCount > 0 ? Math.round((rentedRoomsCount / totalRoomsCount) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col">
-        <div className="p-5 border-b border-slate-800">
-          <h1 className="text-2xl font-bold flex items-center gap-3">
-            <Settings className="w-6 h-6 text-indigo-400" />
+    <div className="min-h-screen bg-slate-50 flex pb-16 md:pb-0 relative">
+      {/* Background ambient light */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
+      <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-emerald-500/50 rounded-full blur-[100px] pointer-events-none opacity-10 z-0" />
+
+      {/* Desktop Sidebar */}
+      <aside className="w-72 bg-slate-900 text-white hidden md:flex flex-col relative z-20 shadow-2xl">
+        <div className="p-6 border-b border-white/10">
+          <h1 className="text-2xl font-black flex items-center gap-3">
+            <Settings className="w-7 h-7 text-indigo-400" />
             Admin Portal
           </h1>
         </div>
-        <nav className="flex-1 p-4 space-y-2 text-sm font-medium">
-          <Link href="/admin" className="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg">
+        <nav className="flex-1 p-4 space-y-2 text-sm font-semibold">
+          <Link href="/admin" className="flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-4 py-3.5 rounded-xl shadow-[0_0_15px_rgba(99,102,241,0.4)]">
             <Home className="w-5 h-5" /> Tổng quan
           </Link>
-          <Link href="/admin/posts" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+          <Link href="/admin/posts" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
             <FileText className="w-5 h-5" /> Duyệt bài đăng
           </Link>
-          <Link href="/admin/users" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+          <Link href="/admin/users" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
             <Users className="w-5 h-5" /> Quản lý CTV
           </Link>
-          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
             <MessageCircle className="w-5 h-5" /> Quản lý Khách hàng
           </Link>
-          <Link href="/admin/settings" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+          <Link href="/admin/settings" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
             <Settings className="w-5 h-5" /> Cấu hình Web
           </Link>
         </nav>
       </aside>
 
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-slate-900 text-slate-400 flex items-center justify-around z-50 px-2 py-3 border-t border-white/10 backdrop-blur-xl bg-slate-900/90 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] pb-safe">
+        <Link href="/admin" className="flex flex-col items-center gap-1 text-indigo-400 p-2">
+          <Home className="w-6 h-6" />
+          <span className="text-[10px] font-bold">Tổng quan</span>
+        </Link>
+        <Link href="/admin/posts" className="flex flex-col items-center gap-1 hover:text-white p-2 transition-colors">
+          <FileText className="w-6 h-6" />
+          <span className="text-[10px] font-semibold">Duyệt bài</span>
+        </Link>
+        <Link href="/admin/users" className="flex flex-col items-center gap-1 hover:text-white p-2 transition-colors">
+          <Users className="w-6 h-6" />
+          <span className="text-[10px] font-semibold">Quản lý CTV</span>
+        </Link>
+        <Link href="/admin/settings" className="flex flex-col items-center gap-1 hover:text-white p-2 transition-colors">
+          <Settings className="w-6 h-6" />
+          <span className="text-[10px] font-semibold">Cấu hình</span>
+        </Link>
+      </nav>
+
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10">
         {/* Header */}
-        <header className="bg-white p-4 md:p-5 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sticky top-0 z-10 shadow-sm">
-          <h2 className="text-lg md:text-xl font-bold text-slate-800">
-            Xin chào, Quản trị viên {session?.user?.name?.split(' ').pop() || ''}
+        <header className="bg-white/70 backdrop-blur-md p-4 md:px-8 md:py-6 border-b border-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30">
+          <h2 className="text-lg md:text-2xl font-extrabold text-slate-800 tracking-tight">
+            Xin chào, {session?.user?.name?.split(' ').pop() || 'Admin'}
           </h2>
-          <div className="flex gap-2 w-full md:w-auto">
-            <Link href="/" target="_blank" className="flex-1 md:flex-none text-center text-xs md:text-sm font-bold text-indigo-600 border-2 border-indigo-100 bg-indigo-50 px-3 py-2 rounded-lg hover:bg-indigo-100 transition">
+          <div className="flex gap-3 w-full md:w-auto">
+            <Link href="/" target="_blank" className="flex-1 md:flex-none text-center text-sm font-bold text-indigo-600 bg-indigo-50 px-5 py-2.5 rounded-xl hover:bg-indigo-100 transition-colors shadow-sm border border-indigo-100">
               Trang Khách
             </Link>
-            <Link href="/api/auth/signout" className="flex-1 md:flex-none justify-center text-xs md:text-sm font-bold text-red-600 border-2 border-red-100 bg-red-50 px-3 py-2 rounded-lg hover:bg-red-100 transition flex items-center gap-2">
+            <Link href="/api/auth/signout" className="flex-1 md:flex-none justify-center text-sm font-bold text-red-600 bg-red-50 px-5 py-2.5 rounded-xl hover:bg-red-100 transition-colors flex items-center gap-2 shadow-sm border border-red-100">
               <LogOut className="w-4 h-4" /> Đăng xuất
             </Link>
           </div>
         </header>
 
-        <div className="p-4 md:p-8 pb-20 md:pb-8 space-y-6 md:space-y-8">
+        <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3 hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-slate-500 font-medium">
-                <div className="bg-indigo-100 p-2 rounded-lg"><DollarSign className="w-5 h-5 text-indigo-600" /></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(99,102,241,0.1)] transition-all duration-300">
+              <div className="flex items-center justify-between text-slate-500 font-semibold">
                 <span>Doanh thu thu tiền</span>
+                <div className="bg-indigo-50 p-2.5 rounded-xl border border-indigo-100"><DollarSign className="w-5 h-5 text-indigo-600" /></div>
               </div>
-              <div className="text-3xl font-extrabold text-slate-800">
+              <div className="text-3xl font-black text-slate-800 tracking-tight">
                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}
               </div>
-              <div className="text-sm text-emerald-600 font-bold flex items-center gap-1"><TrendingUp className="w-4 h-4"/> Đã ghi nhận trong hệ thống</div>
+              <div className="text-sm text-emerald-600 font-bold flex items-center gap-1.5"><TrendingUp className="w-4 h-4"/> Đã ghi nhận</div>
             </div>
             
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3 hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-slate-500 font-medium">
-                <div className="bg-emerald-100 p-2 rounded-lg"><CheckCircle className="w-5 h-5 text-emerald-600" /></div>
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(16,185,129,0.1)] transition-all duration-300">
+              <div className="flex items-center justify-between text-slate-500 font-semibold">
                 <span>Phòng đã thuê</span>
+                <div className="bg-emerald-50 p-2.5 rounded-xl border border-emerald-100"><CheckCircle className="w-5 h-5 text-emerald-600" /></div>
               </div>
-              <div className="text-3xl font-extrabold text-slate-800">{rentedRoomsCount}/{totalRoomsCount}</div>
+              <div className="text-3xl font-black text-slate-800 tracking-tight">{rentedRoomsCount}/{totalRoomsCount}</div>
               <div className="text-sm text-slate-500 font-medium">Tỷ lệ lấp đầy: <span className="text-emerald-600 font-bold">{occupancyRate}%</span></div>
             </div>
             
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3 hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-slate-500 font-medium">
-                <div className="bg-orange-100 p-2 rounded-lg"><Clock className="w-5 h-5 text-orange-600" /></div>
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(249,115,22,0.1)] transition-all duration-300">
+              <div className="flex items-center justify-between text-slate-500 font-semibold">
                 <span>Bài chờ duyệt</span>
+                <div className="bg-orange-50 p-2.5 rounded-xl border border-orange-100"><Clock className="w-5 h-5 text-orange-600" /></div>
               </div>
-              <div className="text-3xl font-extrabold text-slate-800">{pendingPostsCount}</div>
+              <div className="text-3xl font-black text-slate-800 tracking-tight">{pendingPostsCount}</div>
               <div className="text-sm text-orange-500 font-bold">Cần kiểm tra ngay</div>
             </div>
             
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3 hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-slate-500 font-medium">
-                <div className="bg-blue-100 p-2 rounded-lg"><Users className="w-5 h-5 text-blue-600" /></div>
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] transition-all duration-300">
+              <div className="flex items-center justify-between text-slate-500 font-semibold">
                 <span>Cộng tác viên</span>
+                <div className="bg-blue-50 p-2.5 rounded-xl border border-blue-100"><Users className="w-5 h-5 text-blue-600" /></div>
               </div>
-              <div className="text-3xl font-extrabold text-slate-800">{ctvCount}</div>
-              <div className="text-sm text-slate-500 font-medium">CTV đang hoạt động</div>
+              <div className="text-3xl font-black text-slate-800 tracking-tight">{ctvCount}</div>
+              <div className="text-sm text-slate-500 font-medium">Đang hoạt động</div>
             </div>
           </div>
           
-          <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="text-xl font-bold text-slate-800 mb-6">Thống kê chung</h3>
+          <div className="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white shadow-lg">
+            <h3 className="text-xl font-extrabold text-slate-800 mb-6">Thống kê dữ liệu</h3>
             {leadStats.length > 0 ? (
               <AdminCharts leadStats={leadStats} />
             ) : (
-              <div className="bg-slate-50 border border-slate-100 rounded-xl p-8 text-center">
-                <p className="text-slate-400">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+                <FileText className="w-12 h-12 text-slate-300" />
+                <p className="text-slate-500 font-medium">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
               </div>
             )}
           </div>
