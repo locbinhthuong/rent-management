@@ -46,7 +46,7 @@ export default function MapSearchClient({ posts }: { posts: any[] }) {
               <p className="text-slate-400 font-space">Không tìm thấy không gian sống nào.</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {posts.map((post) => (
                 <GlassPropertyCard 
                   key={post._id} 

@@ -48,6 +48,29 @@ const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null,
   return null;
 };
 
+// Component to handle auto-panning to device's location
+const DeviceLocationPanner = () => {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          map.setView([lat, lng], 13);
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    }
+  }, [map]);
+
+  return null;
+};
+
 // Custom SVG Icons
 const createCustomIcon = (isActive: boolean) => {
   const html = `
@@ -95,6 +118,7 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
         
+        <DeviceLocationPanner />
         <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
 
         {posts.map((post) => {

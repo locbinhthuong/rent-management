@@ -50,52 +50,52 @@ export default function FuturisticHero() {
           <div className="flex-1 flex flex-col md:flex-row items-center w-full divide-y md:divide-y-0 md:divide-x divide-white/20">
             
             {/* Segment 1: Search */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors rounded-l-full cursor-pointer group">
+            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors rounded-l-full cursor-pointer group">
               <Search className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
               <div className="flex flex-col">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Từ khóa</span>
                 <span className="text-slate-100 font-medium">Bạn muốn tìm gì?</span>
               </div>
-            </div>
+            </a>
 
             {/* Segment 2: Location */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
+            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
               <MapPin className="w-5 h-5 text-violet-400 group-hover:text-violet-300 transition-colors" />
               <div className="flex flex-col">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Khu vực</span>
                 <span className="text-slate-100 font-medium">Chọn địa điểm</span>
               </div>
-            </div>
+            </a>
 
             {/* Segment 3: Property Type */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
+            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
               <Home className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
               <div className="flex flex-col">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Loại phòng</span>
                 <span className="text-slate-100 font-medium">Tất cả</span>
               </div>
-            </div>
+            </a>
 
             {/* Segment 4: Price */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
+            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
               <DollarSign className="w-5 h-5 text-amber-400 group-hover:text-amber-300 transition-colors" />
               <div className="flex flex-col">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mức giá</span>
                 <span className="text-slate-100 font-medium">Bất kỳ</span>
               </div>
-            </div>
+            </a>
 
           </div>
 
           {/* Search Button (Bright Blue Circle) */}
-          <button className="bg-cyan-500 hover:bg-cyan-400 w-14 h-14 shrink-0 rounded-full flex items-center justify-center ml-2 mr-1 transition-all glow-cyan hover:scale-110 active:scale-95 shadow-lg hidden md:flex">
+          <a href="#explore" className="bg-cyan-500 hover:bg-cyan-400 w-14 h-14 shrink-0 rounded-full flex items-center justify-center ml-2 mr-1 transition-all glow-cyan hover:scale-110 active:scale-95 shadow-lg hidden md:flex">
             <Search className="w-6 h-6 text-slate-900" />
-          </button>
+          </a>
           
           {/* Mobile Search Button */}
-          <button className="md:hidden bg-cyan-500 w-full mt-2 py-3 rounded-full flex items-center justify-center gap-2 font-bold text-slate-900 glow-cyan">
+          <a href="#explore" className="md:hidden bg-cyan-500 w-full mt-2 py-3 rounded-full flex items-center justify-center gap-2 font-bold text-slate-900 glow-cyan">
             <Search className="w-5 h-5" /> TÌM KIẾM
-          </button>
+          </a>
         </motion.div>
       </div>
       
