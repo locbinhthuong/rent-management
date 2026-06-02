@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
@@ -11,15 +10,7 @@ import Image from 'next/image';
 // Client component wrapper for split screen state
 import MapSearchClient from './MapSearchClient';
 
-// Dynamically import map component with no SSR because it depends on window/document
-const MapComponent = dynamic(() => import('@/components/MapComponent'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-slate-100">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-    </div>
-  ),
-});
+
 
 export const revalidate = 60;
 
