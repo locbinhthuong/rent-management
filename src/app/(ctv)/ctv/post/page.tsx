@@ -6,6 +6,7 @@ import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Se
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
+const MapPicker = dynamic(() => import('@/components/MapPicker'), { ssr: false });
 
 export default function CreatePostPage() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function CreatePostPage() {
   const [formData, setFormData] = useState({
     title: '',
     address: '',
+    city: 'Hồ Chí Minh',
     price: '',
     property_type: 'Phòng trọ sinh viên',
     utility_costs: 'Điện 3.5k/kwh - Nước 100k/người',
@@ -34,6 +36,7 @@ export default function CreatePostPage() {
     target_audience: 'Sinh viên, Người đi làm',
     images: [] as string[],
     description: '',
+    location: null as [number, number] | null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -54,10 +57,18 @@ export default function CreatePostPage() {
     setError('');
 
     try {
+      const payload: any = { ...formData };
+      if (formData.location) {
+        payload.location = {
+          type: 'Point',
+          coordinates: [formData.location[1], formData.location[0]] // [lng, lat]
+        };
+      }
+
       const res = await fetch('/api/ctv/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -147,22 +158,53 @@ export default function CreatePostPage() {
                   />
                 </div>
 
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-indigo-600" /> Tỉnh/Thành *
+                    </label>
+                    <select
+                      name="city"
+                      required
+                      value={formData.city}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                    >
+                      <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                      <option value="Hà Nội">Hà Nội</option>
+                      <option value="Đà Nẵng">Đà Nẵng</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-indigo-600" /> Khu vực (Quận) *
+                    </label>
+                    <select
+                      name="district"
+                      required
+                      value={(formData as any).district || ''}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                    >
+                      <option value="">Chọn khu vực</option>
+                      {config.locations.map((loc: string) => (
+                        <option key={loc} value={loc}>{loc}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-indigo-600" /> Khu vực (Quận/Huyện) *
+                    <MapPin className="w-4 h-4 text-indigo-600" /> Ghim Vị trí trên Bản đồ *
                   </label>
-                  <select
-                    name="district"
-                    required
-                    value={(formData as any).district || ''}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
-                  >
-                    <option value="">Chọn khu vực</option>
-                    {config.locations.map((loc: string) => (
-                      <option key={loc} value={loc}>{loc}</option>
-                    ))}
-                  </select>
+                  <MapPicker 
+                    position={formData.location} 
+                    onPositionChange={(pos) => setFormData(prev => ({ ...prev, location: pos }))} 
+                    city={formData.city} 
+                    district={(formData as any).district} 
+                  />
+                  <p className="text-xs text-slate-500 mt-2">Bấm vào bản đồ để chọn tọa độ chính xác của phòng trọ. Việc này giúp khách hàng tìm kiếm dễ dàng hơn.</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">

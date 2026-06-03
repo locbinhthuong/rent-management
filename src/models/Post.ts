@@ -25,6 +25,10 @@ export interface IPost extends Document {
   bumped_at?: Date;
   is_verified?: boolean;
   views?: number;
+  location?: {
+    type: 'Point';
+    coordinates: number[]; // [lng, lat]
+  };
 
   createdAt: Date;
   updatedAt: Date;
@@ -56,8 +60,24 @@ const PostSchema: Schema = new Schema(
     bumped_at: { type: Date },
     is_verified: { type: Boolean, default: false },
     views: { type: Number, default: 0 },
+    
+    // GeoJSON cho định vị bản đồ
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point'
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        index: '2dsphere'
+      }
+    }
   },
   { timestamps: true }
 );
+
+// Tạo 2dsphere index trên trường location
+PostSchema.index({ location: '2dsphere' });
 
 export default mongoose.models.Post || mongoose.model<IPost>('Post', PostSchema);

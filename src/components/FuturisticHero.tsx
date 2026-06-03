@@ -1,11 +1,58 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Home, DollarSign, ChevronDown } from 'lucide-react';
-import Link from 'next/link';
+import { Search, MapPin, Home, DollarSign, Navigation } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function FuturisticHero() {
+  const router = useRouter();
+  const [city, setCity] = useState('');
+  const [district, setDistrict] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  
+  const [config, setConfig] = useState({ propertyTypes: [], locations: [] });
+
+  useEffect(() => {
+    fetch('/api/admin/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.config) {
+          setConfig({ propertyTypes: data.config.propertyTypes || [], locations: data.config.locations || [] });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (city) params.set('city', city);
+    if (district) params.set('district', district);
+    if (propertyType) params.set('property_type', propertyType);
+    
+    router.push(`/?${params.toString()}#explore`);
+  };
+
+  const handleNearMe = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const params = new URLSearchParams();
+          params.set('lat', position.coords.latitude.toString());
+          params.set('lng', position.coords.longitude.toString());
+          router.push(`/?${params.toString()}#explore`);
+        },
+        (error) => {
+          alert("Không thể lấy vị trí của bạn. Vui lòng kiểm tra quyền trên trình duyệt.");
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    } else {
+      alert("Trình duyệt không hỗ trợ định vị.");
+    }
+  };
+
   return (
     <div className="relative w-full h-[90vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Hyper-realistic Background */}
@@ -43,59 +90,87 @@ export default function FuturisticHero() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.8, type: "spring", stiffness: 100 }}
-          whileHover={{ scale: 1.02 }}
-          className="glass-pill rounded-full p-2 w-full flex flex-col md:flex-row items-center justify-between mx-auto shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all"
+          className="glass-pill rounded-[2rem] p-2 w-full flex flex-col md:flex-row items-center justify-between mx-auto shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all"
         >
           {/* Segments */}
           <div className="flex-1 flex flex-col md:flex-row items-center w-full divide-y md:divide-y-0 md:divide-x divide-white/20">
             
-            {/* Segment 1: Search */}
-            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors rounded-l-full cursor-pointer group">
-              <Search className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
-              <div className="flex flex-col">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Từ khóa</span>
-                <span className="text-slate-100 font-medium">Bạn muốn tìm gì?</span>
+            {/* Segment 1: City */}
+            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors rounded-t-[1.5rem] md:rounded-l-full group relative">
+              <MapPin className="w-5 h-5 text-cyan-400 shrink-0" />
+              <div className="flex flex-col w-full">
+                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tỉnh/Thành</span>
+                <select 
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                >
+                  <option value="" className="bg-slate-800">Toàn quốc</option>
+                  <option value="Hồ Chí Minh" className="bg-slate-800">Hồ Chí Minh</option>
+                  <option value="Hà Nội" className="bg-slate-800">Hà Nội</option>
+                  <option value="Đà Nẵng" className="bg-slate-800">Đà Nẵng</option>
+                </select>
               </div>
-            </a>
+            </div>
 
             {/* Segment 2: Location */}
-            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
-              <MapPin className="w-5 h-5 text-violet-400 group-hover:text-violet-300 transition-colors" />
-              <div className="flex flex-col">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Khu vực</span>
-                <span className="text-slate-100 font-medium">Chọn địa điểm</span>
+            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative">
+              <MapPin className="w-5 h-5 text-violet-400 shrink-0" />
+              <div className="flex flex-col w-full">
+                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Quận/Huyện</span>
+                <select 
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                >
+                  <option value="" className="bg-slate-800">Tất cả khu vực</option>
+                  {config.locations.map((loc: string) => (
+                    <option key={loc} value={loc} className="bg-slate-800">{loc}</option>
+                  ))}
+                </select>
               </div>
-            </a>
+            </div>
 
             {/* Segment 3: Property Type */}
-            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
-              <Home className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
-              <div className="flex flex-col">
+            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative">
+              <Home className="w-5 h-5 text-emerald-400 shrink-0" />
+              <div className="flex flex-col w-full">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Loại phòng</span>
-                <span className="text-slate-100 font-medium">Tất cả</span>
+                <select 
+                  value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                >
+                  <option value="" className="bg-slate-800">Tất cả loại hình</option>
+                  {config.propertyTypes.map((type: string) => (
+                    <option key={type} value={type} className="bg-slate-800">{type}</option>
+                  ))}
+                </select>
               </div>
-            </a>
-
-            {/* Segment 4: Price */}
-            <a href="#explore" className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors cursor-pointer group">
-              <DollarSign className="w-5 h-5 text-amber-400 group-hover:text-amber-300 transition-colors" />
-              <div className="flex flex-col">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mức giá</span>
-                <span className="text-slate-100 font-medium">Bất kỳ</span>
-              </div>
-            </a>
+            </div>
 
           </div>
 
-          {/* Search Button (Bright Blue Circle) */}
-          <a href="#explore" className="bg-cyan-500 hover:bg-cyan-400 w-14 h-14 shrink-0 rounded-full flex items-center justify-center ml-2 mr-1 transition-all glow-cyan hover:scale-110 active:scale-95 shadow-lg hidden md:flex">
-            <Search className="w-6 h-6 text-slate-900" />
-          </a>
-          
-          {/* Mobile Search Button */}
-          <a href="#explore" className="md:hidden bg-cyan-500 w-full mt-2 py-3 rounded-full flex items-center justify-center gap-2 font-bold text-slate-900 glow-cyan">
-            <Search className="w-5 h-5" /> TÌM KIẾM
-          </a>
+          <div className="flex gap-2 w-full md:w-auto p-2 md:p-0">
+            {/* Near Me Button */}
+            <button 
+              onClick={handleNearMe}
+              title="Tìm quanh đây"
+              className="bg-violet-500/20 hover:bg-violet-500/40 border border-violet-500/50 w-full md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center transition-all glow-violet hover:scale-105 active:scale-95 shadow-lg"
+            >
+              <Navigation className="w-6 h-6 text-violet-300" />
+              <span className="md:hidden ml-2 font-bold text-violet-300">Gần Tôi</span>
+            </button>
+            
+            {/* Search Button */}
+            <button 
+              onClick={handleSearch}
+              className="bg-cyan-500 hover:bg-cyan-400 w-full md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center md:ml-2 md:mr-1 transition-all glow-cyan hover:scale-105 active:scale-95 shadow-lg"
+            >
+              <Search className="w-6 h-6 text-slate-900 shrink-0" />
+              <span className="md:hidden ml-2 font-bold text-slate-900">TÌM KIẾM</span>
+            </button>
+          </div>
         </motion.div>
       </div>
       

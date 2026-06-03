@@ -13,18 +13,44 @@ import MapSearchClient from '@/components/MapSearchClient';
 
 export const revalidate = 60;
 
-async function getActivePosts() {
+async function getActivePosts(searchParams?: { [key: string]: string | string[] | undefined }) {
   await connectDB();
   User.init(); // Ensure user model is registered
 
   const query: any = { status: 'Active' };
 
-  // Just fetch latest 50 posts for the map
-  const posts = await Post.find(query)
-    .populate('ctv_id', 'name phone')
-    .sort({ is_vip: -1, bumped_at: -1, createdAt: -1 })
-    .limit(50)
-    .lean() as any[];
+  if (searchParams) {
+    if (searchParams.city) query.city = searchParams.city;
+    if (searchParams.district) query.district = searchParams.district;
+    if (searchParams.property_type) query.property_type = searchParams.property_type;
+    
+    // Xử lý GPS (near)
+    if (searchParams.lat && searchParams.lng) {
+      const lat = parseFloat(searchParams.lat as string);
+      const lng = parseFloat(searchParams.lng as string);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        query.location = {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [lng, lat] // [longitude, latitude]
+            },
+            $maxDistance: 10000 // 10km radius
+          }
+        };
+      }
+    }
+  }
+
+  // Nếu có GPS ($near) thì Mongoose sẽ tự động sort theo khoảng cách.
+  // Không nên ghi đè sort khác nếu có $near.
+  let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone');
+  
+  if (!query.location) {
+    mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+  }
+  
+  const posts = await mongooseQuery.limit(50).lean() as any[];
 
   // Convert ObjectIds to strings to pass to client components safely
   return posts.map(post => ({
@@ -34,8 +60,12 @@ async function getActivePosts() {
   }));
 }
 
-export default async function CustomerHome() {
-  const posts = await getActivePosts();
+export default async function CustomerHome({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const posts = await getActivePosts(searchParams);
   const session = await getServerSession(authOptions);
 
   return (
