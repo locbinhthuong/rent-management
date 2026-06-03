@@ -12,6 +12,7 @@ export default function FuturisticHero() {
   const [city, setCity] = useState('');
   const [district, setDistrict] = useState('');
   const [propertyType, setPropertyType] = useState('');
+  const [priceRange, setPriceRange] = useState('');
   
   const [config, setConfig] = useState({ propertyTypes: [] });
 
@@ -36,6 +37,12 @@ export default function FuturisticHero() {
     if (city) params.set('city', city);
     if (district) params.set('district', district);
     if (propertyType) params.set('property_type', propertyType);
+    
+    if (priceRange) {
+      const [min, max] = priceRange.split('-');
+      params.set('min_price', min);
+      params.set('max_price', max);
+    }
     
     router.push(`/?${params.toString()}#explore`);
   };
@@ -156,6 +163,32 @@ export default function FuturisticHero() {
                   {config.propertyTypes.map((type: string) => (
                     <option key={type} value={type} className="bg-slate-800">{type}</option>
                   ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Segment 4: Price */}
+            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative md:rounded-r-none rounded-b-[1.5rem] md:rounded-b-none">
+              <div className="w-5 h-5 text-amber-400 shrink-0 font-bold flex items-center justify-center">₫</div>
+              <div className="flex flex-col w-full">
+                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mức giá</span>
+                <select 
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (!val) {
+                      setPriceRange('');
+                    } else {
+                      setPriceRange(val);
+                    }
+                  }}
+                  value={priceRange}
+                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                >
+                  <option value="" className="bg-slate-800">Mọi mức giá</option>
+                  <option value="0-2000000" className="bg-slate-800">Dưới 2 triệu</option>
+                  <option value="2000000-5000000" className="bg-slate-800">Từ 2 - 5 triệu</option>
+                  <option value="5000000-10000000" className="bg-slate-800">Từ 5 - 10 triệu</option>
+                  <option value="10000000-999999999" className="bg-slate-800">Trên 10 triệu</option>
                 </select>
               </div>
             </div>
