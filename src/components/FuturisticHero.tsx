@@ -226,7 +226,7 @@ export default function FuturisticHero() {
             <button 
               onClick={handleNearMe}
               title="Tìm quanh đây"
-              className="bg-violet-500/20 hover:bg-violet-500/40 border border-violet-500/50 w-full md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center transition-all glow-violet hover:scale-105 active:scale-95 shadow-lg"
+              className="bg-violet-500/20 hover:bg-violet-500/40 border border-violet-500/50 flex-1 md:flex-none md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center transition-all glow-violet hover:scale-105 active:scale-95 shadow-lg"
             >
               <Navigation className="w-6 h-6 text-violet-300" />
               <span className="md:hidden ml-2 font-bold text-violet-300">Gần Tôi</span>
@@ -235,7 +235,7 @@ export default function FuturisticHero() {
             {/* Search Button */}
             <button 
               onClick={handleSearch}
-              className="bg-cyan-500 hover:bg-cyan-400 w-full md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center md:ml-2 md:mr-1 transition-all glow-cyan hover:scale-105 active:scale-95 shadow-lg"
+              className="bg-cyan-500 hover:bg-cyan-400 flex-1 md:flex-none md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center md:ml-2 md:mr-1 transition-all glow-cyan hover:scale-105 active:scale-95 shadow-lg"
             >
               <Search className="w-6 h-6 text-slate-900 shrink-0" />
               <span className="md:hidden ml-2 font-bold text-slate-900">TÌM KIẾM</span>
