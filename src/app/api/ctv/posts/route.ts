@@ -20,12 +20,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Vui lòng điền các trường bắt buộc (Tiêu đề, Mô tả, Giá, Địa chỉ)' }, { status: 400 });
     }
 
-    // Tạo Post mới
-    const newPost = await Post.create({
+    // Chuẩn bị payload
+    const postPayload: any = {
       ctv_id: session.user.id,
       title: data.title,
       description: data.description,
       address: data.address,
+      city: data.city,
+      district: data.district,
       price: Number(data.price),
       property_type: data.property_type,
       utility_costs: data.utility_costs,
@@ -33,7 +35,14 @@ export async function POST(req: Request) {
       target_audience: data.target_audience,
       images: Array.isArray(data.images) ? data.images : [data.images].filter(Boolean),
       status: 'Pending', // Mặc định phải chờ Admin duyệt
-    });
+    };
+
+    if (data.location && Array.isArray(data.location.coordinates)) {
+      postPayload.location = data.location;
+    }
+
+    // Tạo Post mới
+    const newPost = await Post.create(postPayload);
 
     return NextResponse.json({ message: 'Tạo bài đăng thành công', post: newPost }, { status: 201 });
   } catch (error: any) {
