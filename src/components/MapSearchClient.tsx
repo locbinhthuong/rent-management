@@ -42,11 +42,40 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md pointer-events-none z-[-1]"></div>
         
         <div className="p-4 md:p-6 space-y-5">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-white font-space tracking-tight">Khu vực Lân Cận</h1>
-            <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded-full text-sm font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]">
-              {pagination ? `${pagination.total} kết quả` : `${posts.length} kết quả`}
-            </span>
+          <div className="flex flex-col gap-4 mb-2">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-white font-space tracking-tight">Khu vực Lân Cận</h1>
+              <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded-full text-sm font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)] whitespace-nowrap">
+                {pagination ? `${pagination.total} kết quả` : `${posts.length} kết quả`}
+              </span>
+            </div>
+            
+            {/* Quick Filter inside the list */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+              <span className="text-sm font-medium text-slate-400 whitespace-nowrap">Lọc nhanh:</span>
+              <select 
+                className="bg-white/10 text-white border border-white/20 rounded-lg px-3 py-1.5 text-sm outline-none cursor-pointer focus:border-cyan-400 transition-colors"
+                value={searchParams.get('property_type') || ''}
+                onChange={(e) => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  if (e.target.value) {
+                    params.set('property_type', e.target.value);
+                  } else {
+                    params.delete('property_type');
+                  }
+                  params.set('page', '1'); // Reset page on filter change
+                  router.push(`/?${params.toString()}#explore`);
+                }}
+              >
+                <option value="" className="bg-slate-800">Tất cả loại phòng</option>
+                <option value="Phòng trọ" className="bg-slate-800">Phòng trọ</option>
+                <option value="Chung cư mini" className="bg-slate-800">Chung cư mini</option>
+                <option value="Nhà nguyên căn" className="bg-slate-800">Nhà nguyên căn</option>
+                <option value="Căn hộ dịch vụ" className="bg-slate-800">Căn hộ dịch vụ</option>
+                <option value="Ký túc xá" className="bg-slate-800">Ký túc xá</option>
+                <option value="Mặt bằng kinh doanh" className="bg-slate-800">Mặt bằng kinh doanh</option>
+              </select>
+            </div>
           </div>
           
           {posts.length === 0 ? (

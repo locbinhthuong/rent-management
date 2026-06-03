@@ -82,11 +82,10 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
   };
 }
 
-export default async function CustomerHome({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+export default async function CustomerHome(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const searchParams = await props.searchParams;
   const { posts, pagination } = await getActivePosts(searchParams);
   const session = await getServerSession(authOptions);
 
