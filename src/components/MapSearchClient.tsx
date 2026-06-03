@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GlassPropertyCard from '@/components/GlassPropertyCard';
@@ -18,8 +18,20 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
 
 export default function MapSearchClient({ posts, pagination }: { posts: any[], pagination?: any }) {
   const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
+  const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    fetch('/api/admin/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.config && data.config.propertyTypes) {
+          setPropertyTypes(data.config.propertyTypes);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -68,12 +80,16 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
                 }}
               >
                 <option value="" className="bg-slate-800">Tất cả loại phòng</option>
-                <option value="Phòng trọ" className="bg-slate-800">Phòng trọ</option>
-                <option value="Chung cư mini" className="bg-slate-800">Chung cư mini</option>
-                <option value="Nhà nguyên căn" className="bg-slate-800">Nhà nguyên căn</option>
-                <option value="Căn hộ dịch vụ" className="bg-slate-800">Căn hộ dịch vụ</option>
-                <option value="Ký túc xá" className="bg-slate-800">Ký túc xá</option>
-                <option value="Mặt bằng kinh doanh" className="bg-slate-800">Mặt bằng kinh doanh</option>
+                {propertyTypes.length > 0 ? (
+                  propertyTypes.map((type) => (
+                    <option key={type} value={type} className="bg-slate-800">{type}</option>
+                  ))
+                ) : (
+                  <>
+                    <option value="Phòng trọ" className="bg-slate-800">Phòng trọ</option>
+                    <option value="Chung cư mini" className="bg-slate-800">Chung cư mini</option>
+                  </>
+                )}
               </select>
             </div>
           </div>
