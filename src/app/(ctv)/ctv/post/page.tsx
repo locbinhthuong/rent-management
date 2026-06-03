@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
 const MapPicker = dynamic(() => import('@/components/MapPicker'), { ssr: false });
 
@@ -13,14 +14,14 @@ export default function CreatePostPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [config, setConfig] = useState({ propertyTypes: [], locations: [] });
+  const [config, setConfig] = useState({ propertyTypes: [] });
 
   useEffect(() => {
     fetch('/api/admin/settings')
       .then(res => res.json())
       .then(data => {
         if (data.config) {
-          setConfig({ propertyTypes: data.config.propertyTypes || [], locations: data.config.locations || [] });
+          setConfig({ propertyTypes: data.config.propertyTypes || [] });
         }
       });
   }, []);
@@ -37,10 +38,15 @@ export default function CreatePostPage() {
     images: [] as string[],
     description: '',
     location: null as [number, number] | null,
+    district: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, city: e.target.value, district: '' });
   };
 
   const handleImageUpload = (url: string) => {
@@ -102,6 +108,10 @@ export default function CreatePostPage() {
     );
   }
 
+  // Lấy danh sách Tỉnh/Thành và Quận/Huyện động
+  const provincesList = getAllProvinces();
+  const districtsList = formData.city ? getDistrictsByProvince(formData.city) : [];
+
   return (
     <div className="flex-1 bg-slate-50 min-h-screen pb-12">
       <header className="bg-white p-4 border-b border-slate-200 sticky top-0 z-10 shadow-sm flex items-center gap-4">
@@ -138,7 +148,7 @@ export default function CreatePostPage() {
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-900 font-medium"
                     placeholder="VD: Phòng trọ ban công rộng gần ĐH Bách Khoa..."
                   />
                 </div>
@@ -153,7 +163,7 @@ export default function CreatePostPage() {
                     required
                     value={formData.address}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-900 font-medium"
                     placeholder="Tên đường, phường, khu vực..."
                   />
                 </div>
@@ -167,12 +177,13 @@ export default function CreatePostPage() {
                       name="city"
                       required
                       value={formData.city}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                      onChange={handleCityChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white text-slate-900 font-medium"
                     >
-                      <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                      <option value="Hà Nội">Hà Nội</option>
-                      <option value="Đà Nẵng">Đà Nẵng</option>
+                      <option value="">Chọn Tỉnh/Thành</option>
+                      {provincesList.map((p) => (
+                        <option key={p} value={p}>{p}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
@@ -182,12 +193,13 @@ export default function CreatePostPage() {
                     <select
                       name="district"
                       required
-                      value={(formData as any).district || ''}
+                      value={formData.district}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                      disabled={!formData.city}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white disabled:bg-slate-100 disabled:cursor-not-allowed text-slate-900 font-medium"
                     >
-                      <option value="">Chọn khu vực</option>
-                      {config.locations.map((loc: string) => (
+                      <option value="">{formData.city ? "Chọn khu vực" : "Chọn Tỉnh/Thành trước"}</option>
+                      {districtsList.map((loc: string) => (
                         <option key={loc} value={loc}>{loc}</option>
                       ))}
                     </select>
@@ -218,7 +230,7 @@ export default function CreatePostPage() {
                       required
                       value={formData.price}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-900 font-medium"
                       placeholder="3500000"
                     />
                   </div>
@@ -230,7 +242,7 @@ export default function CreatePostPage() {
                       name="property_type"
                       value={formData.property_type}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none bg-white text-slate-900 font-medium"
                     >
                       {config.propertyTypes.map((type: string) => (
                         <option key={type} value={type}>{type}</option>
@@ -264,7 +276,7 @@ export default function CreatePostPage() {
                     name="utility_costs"
                     value={formData.utility_costs}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-900 font-medium"
                     placeholder="Điện 3.5k/kwh - Nước 100k/người - Dịch vụ 150k"
                   />
                 </div>
@@ -278,7 +290,7 @@ export default function CreatePostPage() {
                     name="contract_terms"
                     value={formData.contract_terms}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-900 font-medium"
                     placeholder="Cọc 1 tháng, Hợp đồng 6-12 tháng"
                   />
                 </div>
@@ -292,7 +304,7 @@ export default function CreatePostPage() {
                     name="target_audience"
                     value={formData.target_audience}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none text-slate-900 font-medium"
                     placeholder="Sinh viên, Dân văn phòng, Vợ chồng trẻ..."
                   />
                 </div>
@@ -305,7 +317,7 @@ export default function CreatePostPage() {
                     value={formData.description}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none resize-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none resize-none text-slate-900 font-medium"
                     placeholder="Mô tả nội thất, tiện ích xung quanh, giờ giấc..."
                   ></textarea>
                 </div>

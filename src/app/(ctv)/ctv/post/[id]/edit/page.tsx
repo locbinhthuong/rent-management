@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
 
 export default function EditPostPage() {
@@ -16,11 +17,12 @@ export default function EditPostPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [config, setConfig] = useState<{ propertyTypes: string[], locations: string[] }>({ propertyTypes: [], locations: [] });
+  const [config, setConfig] = useState<{ propertyTypes: string[] }>({ propertyTypes: [] });
 
   const [formData, setFormData] = useState({
     title: '',
     address: '',
+    city: 'Hồ Chí Minh',
     district: '',
     price: '',
     property_type: '',
@@ -42,12 +44,13 @@ export default function EditPostPage() {
     ])
     .then(([configData, postData]) => {
       if (configData.config) {
-        setConfig({ propertyTypes: configData.config.propertyTypes || [], locations: configData.config.locations || [] });
+        setConfig({ propertyTypes: configData.config.propertyTypes || [] });
       }
       if (postData.post) {
         setFormData({
           title: postData.post.title || '',
           address: postData.post.address || '',
+          city: postData.post.city || 'Hồ Chí Minh',
           district: postData.post.district || '',
           price: postData.post.price || '',
           property_type: postData.post.property_type || '',
@@ -65,6 +68,10 @@ export default function EditPostPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, city: e.target.value, district: '' });
   };
 
   const handleImageUpload = (url: string) => {
@@ -122,6 +129,9 @@ export default function EditPostPage() {
     );
   }
 
+  const provincesList = getAllProvinces();
+  const districtsList = formData.city ? getDistrictsByProvince(formData.city) : [];
+
   return (
     <div className="flex-1 bg-slate-50 min-h-screen pb-12">
       <header className="bg-white p-4 border-b border-slate-200 sticky top-0 z-10 shadow-sm flex items-center gap-4">
@@ -158,7 +168,7 @@ export default function EditPostPage() {
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
@@ -172,29 +182,52 @@ export default function EditPostPage() {
                     required
                     value={formData.address}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-emerald-600" /> Khu vực (Quận/Huyện) *
-                  </label>
-                  <select
-                    name="district"
-                    required
-                    value={formData.district || ''}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white"
-                  >
-                    <option value="">Chọn khu vực</option>
-                    {config.locations.map((loc: string) => (
-                      <option key={loc} value={loc}>{loc}</option>
-                    ))}
-                    {formData.district && !config.locations.includes(formData.district) && (
-                       <option value={formData.district}>{formData.district}</option>
-                    )}
-                  </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-emerald-600" /> Tỉnh/Thành *
+                    </label>
+                    <select
+                      name="city"
+                      required
+                      value={formData.city}
+                      onChange={handleCityChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white text-slate-900 font-medium"
+                    >
+                      <option value="">Chọn Tỉnh/Thành</option>
+                      {provincesList.map((p) => (
+                        <option key={p} value={p}>{p}</option>
+                      ))}
+                      {formData.city && !provincesList.includes(formData.city) && (
+                         <option value={formData.city}>{formData.city}</option>
+                      )}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-emerald-600" /> Khu vực (Quận/Huyện) *
+                    </label>
+                    <select
+                      name="district"
+                      required
+                      value={formData.district || ''}
+                      onChange={handleChange}
+                      disabled={!formData.city}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white disabled:bg-slate-100 disabled:cursor-not-allowed text-slate-900 font-medium"
+                    >
+                      <option value="">{formData.city ? "Chọn khu vực" : "Chọn Tỉnh/Thành trước"}</option>
+                      {districtsList.map((loc: string) => (
+                        <option key={loc} value={loc}>{loc}</option>
+                      ))}
+                      {formData.district && !districtsList.includes(formData.district) && (
+                         <option value={formData.district}>{formData.district}</option>
+                      )}
+                    </select>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -208,7 +241,7 @@ export default function EditPostPage() {
                       required
                       value={formData.price}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none text-slate-900 font-medium"
                     />
                   </div>
                   <div>
@@ -219,7 +252,7 @@ export default function EditPostPage() {
                       name="property_type"
                       value={formData.property_type}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none bg-white text-slate-900 font-medium"
                     >
                       {config.propertyTypes.map((type: string) => (
                         <option key={type} value={type}>{type}</option>
@@ -255,7 +288,7 @@ export default function EditPostPage() {
                     name="utility_costs"
                     value={formData.utility_costs}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
@@ -268,7 +301,7 @@ export default function EditPostPage() {
                     name="contract_terms"
                     value={formData.contract_terms}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
@@ -281,7 +314,7 @@ export default function EditPostPage() {
                     name="target_audience"
                     value={formData.target_audience}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
@@ -293,7 +326,7 @@ export default function EditPostPage() {
                     value={formData.description}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none resize-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none resize-none text-slate-900 font-medium"
                   ></textarea>
                 </div>
               </div>
