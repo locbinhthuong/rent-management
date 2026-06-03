@@ -15,7 +15,7 @@ interface GlassPropertyCardProps {
 
 export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, isActive }: GlassPropertyCardProps) {
   const price = post.price || 0;
-  const address = post.address || 'Chưa cập nhật địa chỉ';
+  const fullAddress = [post.address, post.district, post.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
   const images = post.images && post.images.length > 0 
     ? post.images 
     : ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop'];
@@ -140,7 +140,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
 
             <div className="flex items-start gap-1.5 text-slate-300 text-sm">
               <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-violet-400" />
-              <span className="line-clamp-1">{address}</span>
+              <span className="line-clamp-1">{fullAddress}</span>
             </div>
 
             {/* Amenities Row */}

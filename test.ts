@@ -12,7 +12,12 @@ async function test() {
   
   const activePosts = await postsCollection.find({ status: 'Active' }).toArray();
   console.log('Active posts:', activePosts.length);
-  console.log('Active post property types:', activePosts.map(p => p.property_type));
+  activePosts.forEach(p => {
+    console.log(`Title: ${p.title}`);
+    console.log(`City: ${p.city}, District: ${p.district}`);
+    console.log(`Address: ${p.address}`);
+    console.log(`Property Type: ${p.property_type}`);
+  });
   
   mongoose.disconnect();
 }

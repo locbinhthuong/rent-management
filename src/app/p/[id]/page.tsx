@@ -51,7 +51,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   
   const { post, similarPosts } = data as any;
   const price = post.price || 0;
-  const address = post.address || 'Chưa cập nhật địa chỉ';
+  const fullAddress = [post.address, post.district, post.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
   const ctvPhone = post.ctv_id?.phone || '';
   const isVerified = post.is_verified || false;
 
@@ -120,7 +120,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
               
               <div className="flex items-start gap-3 text-slate-300 mb-8 pb-8 border-b border-white/10">
                 <MapPin className="w-6 h-6 mt-0.5 shrink-0 text-violet-400" />
-                <span className="text-lg leading-relaxed">{address}</span>
+                <span className="text-lg leading-relaxed">{fullAddress}</span>
               </div>
               
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
