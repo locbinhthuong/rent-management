@@ -8,6 +8,7 @@ import Room from '@/models/Room';
 import User from '@/models/User';
 import Transaction from '@/models/Transaction';
 import Lead from '@/models/Lead';
+import DepositRequest from '@/models/DepositRequest';
 import { redirect } from 'next/navigation';
 import AdminCharts from './AdminCharts';
 
@@ -28,11 +29,11 @@ export default async function AdminDashboard() {
   const totalRoomsCount = await Room.countDocuments();
   const ctvCount = await User.countDocuments({ role: 'CTV' });
   
-  const revenueTransactions = await Transaction.aggregate([
-    { $match: { type: 'Thu tiền phòng', status: 'Completed' } },
+  const approvedDeposits = await DepositRequest.aggregate([
+    { $match: { status: 'Approved' } },
     { $group: { _id: null, total: { $sum: '$amount' } } }
   ]);
-  const totalRevenue = revenueTransactions.length > 0 ? revenueTransactions[0].total : 0;
+  const totalRevenue = approvedDeposits.length > 0 ? approvedDeposits[0].total : 0;
   
   const leadStats = await Lead.aggregate([
     { $group: { _id: '$status', count: { $sum: 1 } } }

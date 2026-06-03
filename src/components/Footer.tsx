@@ -60,13 +60,13 @@ export default function Footer() {
                 <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
                   <MapPin className="w-4 h-4 text-indigo-400" />
                 </div>
-                <span className="pt-1">123 Đường Nguyễn Văn Linh, Quận 7, TP. Hồ Chí Minh</span>
+                <span className="pt-1">Quận Ninh Kiều, TP. Cần Thơ</span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
                   <Phone className="w-4 h-4 text-emerald-400" />
                 </div>
-                <span className="font-bold text-white tracking-wide">Hotline: 0987.654.321</span>
+                <span className="font-bold text-white tracking-wide">Hotline: Đang cập nhật</span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
