@@ -13,6 +13,7 @@ export default function FuturisticHero() {
   const [city, setCity] = useState(searchParams.get('city') || '');
   const [district, setDistrict] = useState(searchParams.get('district') || '');
   const [propertyType, setPropertyType] = useState(searchParams.get('property_type') || '');
+  const [keyword, setKeyword] = useState(searchParams.get('q') || '');
   
   // Xử lý logic cho priceRange từ min_price và max_price
   const minPrice = searchParams.get('min_price');
@@ -43,6 +44,7 @@ export default function FuturisticHero() {
     if (city) params.set('city', city);
     if (district) params.set('district', district);
     if (propertyType) params.set('property_type', propertyType);
+    if (keyword) params.set('q', keyword);
     
     if (priceRange) {
       const [min, max] = priceRange.split('-');
@@ -121,8 +123,23 @@ export default function FuturisticHero() {
           {/* Segments */}
           <div className="flex-1 flex flex-col md:flex-row items-center w-full divide-y md:divide-y-0 md:divide-x divide-white/20">
             
-            {/* Segment 1: City */}
+            {/* Segment 0: Keyword */}
             <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors rounded-t-[1.5rem] md:rounded-l-full group relative">
+              <Search className="w-5 h-5 text-blue-400 shrink-0" />
+              <div className="flex flex-col w-full">
+                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Từ khóa</span>
+                <input 
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  placeholder="Tìm tên, địa chỉ..."
+                  className="bg-transparent text-slate-100 font-medium outline-none placeholder-slate-500 w-full"
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                />
+              </div>
+            </div>
+
+            {/* Segment 1: City */}
+            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative">
               <MapPin className="w-5 h-5 text-cyan-400 shrink-0" />
               <div className="flex flex-col w-full">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tỉnh/Thành</span>

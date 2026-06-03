@@ -10,7 +10,8 @@ export default function AdminLeadsControlPage() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
+      <div className="p-8 max-w-7xl mx-auto w-full">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Kiểm Soát Giao Dịch (Chống Cắt Cò)</h1>
@@ -72,6 +73,7 @@ export default function AdminLeadsControlPage() {
           </tbody>
         </table>
       </div>
-    </div>
+      </div>
+    </main>
   );
 }

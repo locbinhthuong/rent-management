@@ -14,10 +14,10 @@ export default function Footer() {
           {/* Về chúng tôi */}
           <div className="space-y-6">
             <h3 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">thuenhatro.com</span>
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">Hệ Thống Thuê Nhà</span>
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Nền tảng tìm kiếm và cho thuê phòng trọ thông minh, hiện đại. Cung cấp thông tin trực quan, chính xác với giao diện 3D và hệ thống quản lý chuyên nghiệp.
+              Nền tảng kết nối người cho thuê và người đi thuê phòng trọ. Cung cấp thông tin trực quan, chính xác với giao diện hiện đại và hệ thống quản lý chuyên nghiệp.
             </p>
             <div className="flex gap-3 pt-2">
               <a href="#" className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-indigo-500 hover:text-white hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] transition-all duration-300 group">
@@ -35,7 +35,6 @@ export default function Footer() {
             <ul className="space-y-4 text-sm">
               <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Trang chủ</Link></li>
               <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Giới thiệu</Link></li>
-              <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Quy chế hoạt động</Link></li>
               <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Quy định sử dụng</Link></li>
               <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Chính sách bảo mật</Link></li>
             </ul>
@@ -47,8 +46,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm">
               <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Hướng dẫn đăng tin</Link></li>
               <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Bảng giá dịch vụ</Link></li>
-              <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Giải quyết khiếu nại</Link></li>
-              <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Tin tức phòng trọ</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Liên hệ hỗ trợ</Link></li>
             </ul>
           </div>
 
@@ -60,7 +58,7 @@ export default function Footer() {
                 <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
                   <MapPin className="w-4 h-4 text-indigo-400" />
                 </div>
-                <span className="pt-1">Quận Ninh Kiều, TP. Cần Thơ</span>
+                <span className="pt-1">Trụ sở chính (Đang cập nhật)</span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
@@ -72,21 +70,15 @@ export default function Footer() {
                 <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
                   <Mail className="w-4 h-4 text-violet-400" />
                 </div>
-                <span>hotro@thuenhatro.com</span>
+                <span>Email: hotro@hethong.com</span>
               </li>
             </ul>
-            <div className="pt-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20 backdrop-blur-sm">
-                <ShieldCheck className="w-5 h-5" />
-                <span className="font-bold text-sm">Đã đăng ký Bộ Công Thương</span>
-              </div>
-            </div>
           </div>
 
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} <span className="text-white/80 font-medium">thuenhatro.com</span>. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} <span className="text-white/80 font-medium">Hệ Thống Thuê Nhà</span>. All rights reserved.</p>
           <div className="flex items-center gap-1.5">
             Thiết kế và phát triển với <span className="text-red-500 animate-pulse">❤️</span>
           </div>

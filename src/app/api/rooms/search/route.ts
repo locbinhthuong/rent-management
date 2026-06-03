@@ -59,18 +59,26 @@ export async function GET(request: Request) {
     const skip = (page - 1) * limit;
 
     // 6. Thực thi truy vấn
-    let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone email');
-
-    // Mongoose tự động sort theo khoảng cách nếu có $near. Nếu không có $near, sort theo bài mới nhất/VIP
-    if (!query.location) {
-      mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
-    }
-
-    // Lấy tổng số lượng bản ghi (để FE làm nút Next/Prev)
-    const total = await Post.countDocuments(query);
+    let total = 0;
+    let posts: any[] = [];
     
-    // Lấy dữ liệu của trang hiện tại
-    const posts = await mongooseQuery.skip(skip).limit(limit).lean();
+    try {
+      let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone email');
+      
+      // Mongoose tự động sort theo khoảng cách nếu có $near. Nếu không có $near, sort theo bài mới nhất/VIP
+      if (!query.location) {
+        mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+      }
+      
+      total = await Post.countDocuments(query);
+      posts = await mongooseQuery.skip(skip).limit(limit).lean();
+    } catch (err) {
+      console.error("GeoQuery failed, falling back to normal query in API:", err);
+      delete query.location;
+      let fallbackQuery = Post.find(query).populate('ctv_id', 'name phone email').sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+      total = await Post.countDocuments(query);
+      posts = await fallbackQuery.skip(skip).limit(limit).lean();
+    }
 
     // 7. Trả về kết quả JSON chuẩn API
     return NextResponse.json({

@@ -40,52 +40,7 @@ export default async function CTVDashboard() {
   }, {});
 
   return (
-    <div className="min-h-screen bg-slate-50 flex pb-16 md:pb-0 relative">
-      {/* Ambient background glows */}
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-violet-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
-
-      {/* Desktop Sidebar */}
-      <aside className="w-72 bg-white border-r border-white/40 hidden md:flex flex-col relative z-20 shadow-[10px_0_30px_rgba(0,0,0,0.02)] backdrop-blur-2xl">
-        <div className="p-6 border-b border-slate-100">
-          <h1 className="text-2xl font-black flex items-center gap-3 text-slate-800">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <Users className="w-5 h-5 text-white" />
-            </div>
-            Bảng điều khiển
-          </h1>
-        </div>
-        <nav className="flex-1 p-4 space-y-2 text-sm font-bold text-slate-500">
-          <Link href="/ctv" className="flex items-center gap-3 bg-indigo-50 text-indigo-700 px-4 py-3.5 rounded-xl border border-indigo-100/50 shadow-sm transition-all duration-300">
-            <Home className="w-5 h-5" /> Tổng quan
-          </Link>
-          <Link href="/ctv/post" className="flex items-center gap-3 hover:text-indigo-600 px-4 py-3.5 rounded-xl hover:bg-slate-50 transition-all duration-300">
-            <PlusCircle className="w-5 h-5" /> Đăng tin mới
-          </Link>
-          <Link href="/ctv/customers" className="flex items-center gap-3 hover:text-indigo-600 px-4 py-3.5 rounded-xl hover:bg-slate-50 transition-all duration-300">
-            <MessageCircle className="w-5 h-5" /> Khách liên hệ
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl border-t border-slate-200 flex items-center justify-around z-50 px-2 py-3 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] pb-safe">
-        <Link href="/ctv" className="flex flex-col items-center gap-1 text-indigo-600 p-2">
-          <Home className="w-6 h-6" />
-          <span className="text-[10px] font-bold">Tổng quan</span>
-        </Link>
-        <Link href="/ctv/post" className="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-600 p-2 transition-colors">
-          <PlusCircle className="w-6 h-6" />
-          <span className="text-[10px] font-semibold">Đăng tin</span>
-        </Link>
-        <Link href="/ctv/customers" className="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-600 p-2 transition-colors">
-          <MessageCircle className="w-6 h-6" />
-          <span className="text-[10px] font-semibold">Khách hàng</span>
-        </Link>
-      </nav>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0">
         {/* Header */}
         <header className="bg-white/60 backdrop-blur-xl p-4 md:px-8 md:py-6 border-b border-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30">
           <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 tracking-tight">
@@ -178,6 +133,5 @@ export default async function CTVDashboard() {
           </div>
         </div>
       </main>
-    </div>
   );
 }

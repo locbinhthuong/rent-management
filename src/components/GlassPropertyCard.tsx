@@ -91,13 +91,13 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
               <>
                 <button 
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIndex((prev) => (prev - 1 + images.length) % images.length); }}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md transition opacity-0 group-hover/slider:opacity-100 z-30"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 z-30"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIndex((prev) => (prev + 1) % images.length); }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md transition opacity-0 group-hover/slider:opacity-100 z-30"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 z-30"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>

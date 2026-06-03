@@ -35,7 +35,20 @@ async function getPostDetail(id: string) {
       ]
     }).limit(4).lean() as any[];
     
-    return { post, similarPosts };
+    const serializePost = (p: any) => ({
+      ...p,
+      _id: p._id.toString(),
+      room_id: p.room_id ? p.room_id.toString() : null,
+      ctv_id: p.ctv_id ? { ...p.ctv_id, _id: p.ctv_id._id.toString() } : null,
+      createdAt: p.createdAt?.toISOString(),
+      updatedAt: p.updatedAt?.toISOString(),
+      bumped_at: p.bumped_at?.toISOString()
+    });
+
+    return { 
+      post: serializePost(post), 
+      similarPosts: similarPosts.map(serializePost) 
+    };
   } catch (err) {
     return null;
   }

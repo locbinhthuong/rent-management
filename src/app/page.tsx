@@ -23,6 +23,13 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
     if (searchParams.city) query.city = searchParams.city;
     if (searchParams.district) query.district = searchParams.district;
     if (searchParams.property_type) query.property_type = searchParams.property_type;
+    if (searchParams.q) {
+      query.$or = [
+        { title: { $regex: searchParams.q, $options: 'i' } },
+        { address: { $regex: searchParams.q, $options: 'i' } },
+        { description: { $regex: searchParams.q, $options: 'i' } }
+      ];
+    }
     
     // 3. Xử lý Lọc theo Giá (Price)
     const minPrice = searchParams.min_price;
@@ -56,22 +63,37 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
   const limit = 20;
   const skip = (page - 1) * limit;
 
-  // Nếu có GPS ($near) thì Mongoose sẽ tự động sort theo khoảng cách.
-  let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone');
-  
-  if (!query.location) {
-    mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+  let total = 0;
+  let posts: any[] = [];
+
+  try {
+    // Nếu có GPS ($near) thì Mongoose sẽ tự động sort theo khoảng cách.
+    let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone');
+    if (!query.location) {
+      mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+    }
+    
+    total = await Post.countDocuments(query);
+    posts = await mongooseQuery.skip(skip).limit(limit).lean() as any[];
+  } catch (error) {
+    console.error("GeoQuery failed, falling back to normal query:", error);
+    // Fallback: nếu query bị lỗi (ví dụ thiếu 2dsphere index), bỏ qua lọc vị trí
+    delete query.location;
+    let fallbackQuery = Post.find(query).populate('ctv_id', 'name phone').sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+    total = await Post.countDocuments(query);
+    posts = await fallbackQuery.skip(skip).limit(limit).lean() as any[];
   }
-  
-  const total = await Post.countDocuments(query);
-  const posts = await mongooseQuery.skip(skip).limit(limit).lean() as any[];
 
   // Convert ObjectIds to strings to pass to client components safely
   return {
     posts: posts.map(post => ({
       ...post,
       _id: post._id.toString(),
-      ctv_id: post.ctv_id ? { ...post.ctv_id, _id: post.ctv_id._id.toString() } : null
+      room_id: post.room_id ? post.room_id.toString() : null,
+      ctv_id: post.ctv_id ? { ...post.ctv_id, _id: post.ctv_id._id.toString() } : null,
+      createdAt: post.createdAt?.toISOString(),
+      updatedAt: post.updatedAt?.toISOString(),
+      bumped_at: post.bumped_at?.toISOString()
     })),
     pagination: {
       total,

@@ -42,60 +42,7 @@ export default async function AdminDashboard() {
   const occupancyRate = totalRoomsCount > 0 ? Math.round((rentedRoomsCount / totalRoomsCount) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex pb-16 md:pb-0 relative">
-      {/* Background ambient light */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
-      <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-emerald-500/50 rounded-full blur-[100px] pointer-events-none opacity-10 z-0" />
-
-      {/* Desktop Sidebar */}
-      <aside className="w-72 bg-slate-900 text-white hidden md:flex flex-col relative z-20 shadow-2xl">
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-2xl font-black flex items-center gap-3">
-            <Settings className="w-7 h-7 text-indigo-400" />
-            Admin Portal
-          </h1>
-        </div>
-        <nav className="flex-1 p-4 space-y-2 text-sm font-semibold">
-          <Link href="/admin" className="flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-4 py-3.5 rounded-xl shadow-[0_0_15px_rgba(99,102,241,0.4)]">
-            <Home className="w-5 h-5" /> Tổng quan
-          </Link>
-          <Link href="/admin/posts" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
-            <FileText className="w-5 h-5" /> Duyệt bài đăng
-          </Link>
-          <Link href="/admin/users" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
-            <Users className="w-5 h-5" /> Quản lý CTV
-          </Link>
-          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
-            <MessageCircle className="w-5 h-5" /> Quản lý Khách hàng
-          </Link>
-          <Link href="/admin/settings" className="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
-            <Settings className="w-5 h-5" /> Cấu hình Web
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-slate-900 text-slate-400 flex items-center justify-around z-50 px-2 py-3 border-t border-white/10 backdrop-blur-xl bg-slate-900/90 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] pb-safe">
-        <Link href="/admin" className="flex flex-col items-center gap-1 text-indigo-400 p-2">
-          <Home className="w-6 h-6" />
-          <span className="text-[10px] font-bold">Tổng quan</span>
-        </Link>
-        <Link href="/admin/posts" className="flex flex-col items-center gap-1 hover:text-white p-2 transition-colors">
-          <FileText className="w-6 h-6" />
-          <span className="text-[10px] font-semibold">Duyệt bài</span>
-        </Link>
-        <Link href="/admin/users" className="flex flex-col items-center gap-1 hover:text-white p-2 transition-colors">
-          <Users className="w-6 h-6" />
-          <span className="text-[10px] font-semibold">Quản lý CTV</span>
-        </Link>
-        <Link href="/admin/settings" className="flex flex-col items-center gap-1 hover:text-white p-2 transition-colors">
-          <Settings className="w-6 h-6" />
-          <span className="text-[10px] font-semibold">Cấu hình</span>
-        </Link>
-      </nav>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0">
         {/* Header */}
         <header className="bg-white/70 backdrop-blur-md p-4 md:px-8 md:py-6 border-b border-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30">
           <h2 className="text-lg md:text-2xl font-extrabold text-slate-800 tracking-tight">
@@ -166,6 +113,4 @@ export default async function AdminDashboard() {
           </div>
         </div>
       </main>
-    </div>
-  );
 }

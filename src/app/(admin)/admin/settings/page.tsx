@@ -74,36 +74,7 @@ export default function SettingsPage() {
   if (isLoading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-primary w-8 h-8" /></div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col">
-        <div className="p-5 border-b border-slate-800">
-          <h1 className="text-2xl font-bold flex items-center gap-3">
-            <Settings className="w-6 h-6 text-indigo-400" />
-            Admin Portal
-          </h1>
-        </div>
-        <nav className="flex-1 p-4 space-y-2 text-sm font-medium">
-          <Link href="/admin" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-            <Home className="w-5 h-5" /> Tổng quan
-          </Link>
-          <Link href="/admin/posts" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-            <FileText className="w-5 h-5" /> Duyệt bài đăng
-          </Link>
-          <Link href="/admin/users" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-            <Users className="w-5 h-5" /> Quản lý CTV
-          </Link>
-          <Link href="/admin/leads" className="flex items-center gap-3 text-slate-300 hover:text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-            <MessageCircle className="w-5 h-5" /> Quản lý Khách hàng
-          </Link>
-          <Link href="/admin/settings" className="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg">
-            <Settings className="w-5 h-5" /> Cấu hình Web
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
         <header className="bg-white p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
           <h2 className="text-lg md:text-xl font-bold text-slate-800">Cấu hình Hệ thống</h2>
           <Link href="/" target="_blank" className="text-sm font-bold text-indigo-600 border-2 border-indigo-100 bg-indigo-50 px-3 py-2 rounded-lg hover:bg-indigo-100 transition">
@@ -230,6 +201,5 @@ export default function SettingsPage() {
           </div>
         </div>
       </main>
-    </div>
   );
 }

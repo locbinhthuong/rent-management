@@ -44,13 +44,13 @@ export default function PostImageGallery({ images }: { images: string[] }) {
         <>
           <button 
             onClick={handlePrev} 
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition opacity-0 group-hover:opacity-100"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover:opacity-100"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button 
             onClick={handleNext} 
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition opacity-0 group-hover:opacity-100"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover:opacity-100"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -70,7 +70,7 @@ export default function PostImageGallery({ images }: { images: string[] }) {
       {/* Fullscreen Toggle */}
       <button 
         onClick={() => setIsFullscreen(true)}
-        className="absolute top-4 right-4 bg-black/40 hover:bg-black/60 text-white p-2 rounded-lg backdrop-blur-md transition opacity-0 group-hover:opacity-100 z-10"
+        className="absolute top-4 right-4 bg-black/40 hover:bg-black/60 text-white p-2 rounded-lg backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover:opacity-100 z-10"
       >
         <Maximize2 className="w-5 h-5" />
       </button>

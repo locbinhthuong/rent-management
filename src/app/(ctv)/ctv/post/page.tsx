@@ -113,7 +113,7 @@ export default function CreatePostPage() {
   const districtsList = formData.city ? getDistrictsByProvince(formData.city) : [];
 
   return (
-    <div className="flex-1 bg-slate-50 min-h-screen pb-12">
+    <main className="flex-1 bg-slate-50 h-screen overflow-y-auto pb-24 md:pb-12">
       <header className="bg-white p-4 border-b border-slate-200 sticky top-0 z-10 shadow-sm flex items-center gap-4">
         <Link href="/ctv" className="text-slate-500 hover:text-indigo-600 transition bg-slate-100 hover:bg-indigo-50 p-2 rounded-full">
           <ArrowLeft className="w-5 h-5" />
@@ -340,6 +340,6 @@ export default function CreatePostPage() {
           </form>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

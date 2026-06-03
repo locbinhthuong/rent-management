@@ -1,0 +1,15 @@
+import React from 'react';
+import AdminSidebar from '@/components/admin/AdminSidebar';
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-slate-50 flex pb-16 md:pb-0 relative overflow-hidden font-sans">
+       {/* Background ambient light */}
+       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
+       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-emerald-500/50 rounded-full blur-[100px] pointer-events-none opacity-10 z-0" />
+       
+       <AdminSidebar />
+       {children}
+    </div>
+  );
+}
