@@ -53,9 +53,7 @@ export default function ImageUpload({
         uploadPreset="rent_management_preset" // You will need to create this in Cloudinary
         options={{
           multiple: true,
-          cropping: true,
-          croppingAspectRatio: 4 / 3,
-          showSkipCropButton: false,
+          cropping: false,
           maxFiles: 10,
         }}
       >

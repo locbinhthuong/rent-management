@@ -8,6 +8,7 @@ import ContactButton from '@/components/ContactButton';
 import WishlistButton from '@/components/WishlistButton';
 import { notFound } from 'next/navigation';
 import GlassPropertyCard from '@/components/GlassPropertyCard';
+import PostImageGallery from '@/components/PostImageGallery';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
@@ -81,40 +82,21 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Left Column: Images & Details */}
-          <div className="lg:col-span-2 space-y-8">
-            
-            {/* Image Gallery (Glassmorphism) */}
-            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-white/10 relative">
-              <div className="absolute top-5 right-5 z-20">
-                <WishlistButton post={{ ...post, _id: post._id.toString() }} />
-              </div>
-              
-              {isVerified && (
-                <div className="absolute top-5 left-5 z-20 bg-emerald-500/20 backdrop-blur-md text-emerald-400 px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1.5 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                  <ShieldCheck className="w-4 h-4" /> Đã xác thực
+            <div className="lg:col-span-2 space-y-8">
+              {/* Image Gallery (Glassmorphism & Carousel) */}
+              <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-white/10 relative">
+                <div className="absolute top-5 right-5 z-20">
+                  <WishlistButton post={{ ...post, _id: post._id.toString() }} />
                 </div>
-              )}
-              
-              {post.images && post.images.length > 0 ? (
-                <div className="grid grid-cols-4 gap-3 h-[300px] sm:h-[400px]">
-                  <div className="col-span-4 md:col-span-3 row-span-2 relative rounded-2xl overflow-hidden group">
-                    <Image src={post.images[0]} alt="Phòng chính" fill className="object-cover group-hover:scale-105 transition duration-700" priority sizes="(max-width: 768px) 100vw, 66vw" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-80 pointer-events-none"></div>
+                
+                {isVerified && (
+                  <div className="absolute top-5 left-5 z-20 bg-emerald-500/20 backdrop-blur-md text-emerald-400 px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1.5 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    <ShieldCheck className="w-4 h-4" /> Đã xác thực
                   </div>
-                  {post.images.slice(1, 3).map((img: string, idx: number) => (
-                    <div key={idx} className="hidden md:block col-span-1 relative rounded-2xl overflow-hidden group">
-                      <Image src={img} alt={`Phòng góc ${idx+1}`} fill className="object-cover group-hover:scale-110 transition duration-500" sizes="33vw" />
-                      <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="w-full h-[400px] bg-slate-900/50 rounded-2xl flex items-center justify-center border border-white/5">
-                  <span className="text-slate-500 font-space tracking-wider">CHƯA CÓ HÌNH ẢNH</span>
-                </div>
-              )}
-            </div>
+                )}
+                
+                <PostImageGallery images={post.images || []} />
+              </div>
 
             {/* Title & Info */}
             <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-white/10 relative overflow-hidden">
