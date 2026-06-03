@@ -36,7 +36,7 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', newPage.toString());
-    router.push(`/?${params.toString()}#explore`);
+    router.push(`/?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -76,7 +76,7 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
                     params.delete('property_type');
                   }
                   params.set('page', '1'); // Reset page on filter change
-                  router.push(`/?${params.toString()}#explore`);
+                  router.push(`/?${params.toString()}`, { scroll: false });
                 }}
               >
                 <option value="" className="bg-slate-800">Tất cả loại phòng</option>

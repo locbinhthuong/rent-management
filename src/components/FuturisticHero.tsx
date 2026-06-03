@@ -9,10 +9,16 @@ import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 
 export default function FuturisticHero() {
   const router = useRouter();
-  const [city, setCity] = useState('');
-  const [district, setDistrict] = useState('');
-  const [propertyType, setPropertyType] = useState('');
-  const [priceRange, setPriceRange] = useState('');
+  const searchParams = useSearchParams();
+  const [city, setCity] = useState(searchParams.get('city') || '');
+  const [district, setDistrict] = useState(searchParams.get('district') || '');
+  const [propertyType, setPropertyType] = useState(searchParams.get('property_type') || '');
+  
+  // Xử lý logic cho priceRange từ min_price và max_price
+  const minPrice = searchParams.get('min_price');
+  const maxPrice = searchParams.get('max_price');
+  const initialPriceRange = (minPrice && maxPrice) ? `${minPrice}-${maxPrice}` : '';
+  const [priceRange, setPriceRange] = useState(initialPriceRange);
   
   const [config, setConfig] = useState({ propertyTypes: [] });
 
@@ -44,7 +50,10 @@ export default function FuturisticHero() {
       params.set('max_price', max);
     }
     
-    router.push(`/?${params.toString()}#explore`);
+    router.push(`/?${params.toString()}`, { scroll: false });
+    setTimeout(() => {
+      document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   const handleNearMe = () => {
