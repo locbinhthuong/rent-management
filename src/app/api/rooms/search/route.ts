@@ -1,0 +1,92 @@
+import { NextResponse } from 'next/server';
+import connectDB from '@/lib/db';
+import Post from '@/models/Post';
+import User from '@/models/User';
+
+export async function GET(request: Request) {
+  try {
+    await connectDB();
+    User.init(); // Đảm bảo model User được load để dùng cho .populate()
+
+    const { searchParams } = new URL(request.url);
+    
+    // 1. Khởi tạo Object query cho MongoDB
+    const query: any = { status: 'Active' };
+
+    // 2. Lọc theo Tỉnh/Thành, Quận/Huyện, Loại phòng
+    // Dựa trên yêu cầu của bạn, mình sử dụng các query params tương tự province_id, district_id,...
+    const city = searchParams.get('city') || searchParams.get('province_id');
+    const district = searchParams.get('district') || searchParams.get('district_id');
+    const property_type = searchParams.get('property_type') || searchParams.get('room_type_id');
+    
+    if (city) query.city = city;
+    if (district) query.district = district;
+    if (property_type) query.property_type = property_type;
+
+    // 3. Lọc theo khoảng giá (min_price, max_price)
+    const minPrice = searchParams.get('min_price');
+    const maxPrice = searchParams.get('max_price');
+    
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    // 4. Lọc theo Định vị (GPS Near Me)
+    const lat = searchParams.get('lat');
+    const lng = searchParams.get('lng');
+    
+    if (lat && lng) {
+      const latitude = parseFloat(lat);
+      const longitude = parseFloat(lng);
+      if (!isNaN(latitude) && !isNaN(longitude)) {
+        query.location = {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [longitude, latitude] // Lưu ý: MongoDB yêu cầu [longitude, latitude]
+            },
+            $maxDistance: 10000 // Bán kính 10km
+          }
+        };
+      }
+    }
+
+    // 5. Tính toán Phân trang (Pagination)
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '20', 10);
+    const skip = (page - 1) * limit;
+
+    // 6. Thực thi truy vấn
+    let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone email');
+
+    // Mongoose tự động sort theo khoảng cách nếu có $near. Nếu không có $near, sort theo bài mới nhất/VIP
+    if (!query.location) {
+      mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
+    }
+
+    // Lấy tổng số lượng bản ghi (để FE làm nút Next/Prev)
+    const total = await Post.countDocuments(query);
+    
+    // Lấy dữ liệu của trang hiện tại
+    const posts = await mongooseQuery.skip(skip).limit(limit).lean();
+
+    // 7. Trả về kết quả JSON chuẩn API
+    return NextResponse.json({
+      success: true,
+      message: 'Lấy danh sách phòng trọ thành công',
+      data: posts,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      }
+    });
+
+  } catch (error: any) {
+    console.error("API /api/rooms/search error:", error);
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}

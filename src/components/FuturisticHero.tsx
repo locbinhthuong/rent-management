@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Home, DollarSign, Navigation } from 'lucide-react';
+import { Search, MapPin, Home, Navigation } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 
 export default function FuturisticHero() {
   const router = useRouter();
@@ -12,18 +13,23 @@ export default function FuturisticHero() {
   const [district, setDistrict] = useState('');
   const [propertyType, setPropertyType] = useState('');
   
-  const [config, setConfig] = useState({ propertyTypes: [], locations: [] });
+  const [config, setConfig] = useState({ propertyTypes: [] });
 
   useEffect(() => {
     fetch('/api/admin/settings')
       .then(res => res.json())
       .then(data => {
         if (data.config) {
-          setConfig({ propertyTypes: data.config.propertyTypes || [], locations: data.config.locations || [] });
+          setConfig({ propertyTypes: data.config.propertyTypes || [] });
         }
       })
       .catch(() => {});
   }, []);
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCity(e.target.value);
+    setDistrict(''); // Reset district khi đổi city
+  };
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -52,6 +58,10 @@ export default function FuturisticHero() {
       alert("Trình duyệt không hỗ trợ định vị.");
     }
   };
+
+  // Lấy danh sách Tỉnh/Thành và Quận/Huyện động
+  const provincesList = getAllProvinces();
+  const districtsList = city ? getDistrictsByProvince(city) : [];
 
   return (
     <div className="relative w-full h-[90vh] flex flex-col items-center justify-center overflow-hidden">
@@ -102,29 +112,30 @@ export default function FuturisticHero() {
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tỉnh/Thành</span>
                 <select 
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  onChange={handleCityChange}
                   className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
                 >
                   <option value="" className="bg-slate-800">Toàn quốc</option>
-                  <option value="Hồ Chí Minh" className="bg-slate-800">Hồ Chí Minh</option>
-                  <option value="Hà Nội" className="bg-slate-800">Hà Nội</option>
-                  <option value="Đà Nẵng" className="bg-slate-800">Đà Nẵng</option>
+                  {provincesList.map((p) => (
+                    <option key={p} value={p} className="bg-slate-800">{p}</option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            {/* Segment 2: Location */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative">
+            {/* Segment 2: Location (Dependent on City) */}
+            <div className={`flex items-center gap-3 px-6 py-4 md:py-3 w-full transition-colors group relative ${!city ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/5'}`}>
               <MapPin className="w-5 h-5 text-violet-400 shrink-0" />
               <div className="flex flex-col w-full">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Quận/Huyện</span>
                 <select 
                   value={district}
                   onChange={(e) => setDistrict(e.target.value)}
-                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                  disabled={!city}
+                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full disabled:cursor-not-allowed"
                 >
-                  <option value="" className="bg-slate-800">Tất cả khu vực</option>
-                  {config.locations.map((loc: string) => (
+                  <option value="" className="bg-slate-800">{city ? "Tất cả khu vực" : "Chọn Tỉnh/Thành trước"}</option>
+                  {districtsList.map((loc: string) => (
                     <option key={loc} value={loc} className="bg-slate-800">{loc}</option>
                   ))}
                 </select>

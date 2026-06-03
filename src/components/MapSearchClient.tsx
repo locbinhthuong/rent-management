@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter, useSearchParams } from 'next/navigation';
 import GlassPropertyCard from '@/components/GlassPropertyCard';
 
 // Dynamically import the MapComponent so Leaflet doesn't break SSR
@@ -15,19 +16,26 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
   ),
 });
 
-export default function MapSearchClient({ posts }: { posts: any[] }) {
+export default function MapSearchClient({ posts, pagination }: { posts: any[], pagination?: any }) {
   const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', newPage.toString());
+    router.push(`/?${params.toString()}#explore`);
+  };
 
   return (
     <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
       
-      {/* Left side: Map (Hidden on mobile, uses bottom sheet or tabs ideally, but we hide it for simplicity or make it 100% height and float cards) */}
+      {/* Left side: Map */}
       <div className="hidden md:block w-full md:w-3/5 h-full relative z-0">
         <MapComponent posts={posts} hoveredPostId={hoveredPostId} />
       </div>
 
       {/* Right side: Glassmorphism List */}
-      {/* On mobile, this takes full width. On desktop, it takes the right 2/5 */}
       <div className="w-full md:w-2/5 h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5">
         
         {/* Subtle glass effect behind the list */}
@@ -37,7 +45,7 @@ export default function MapSearchClient({ posts }: { posts: any[] }) {
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold text-white font-space tracking-tight">Khu vực Lân Cận</h1>
             <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded-full text-sm font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]">
-              {posts.length} kết quả
+              {pagination ? `${pagination.total} kết quả` : `${posts.length} kết quả`}
             </span>
           </div>
           
@@ -46,17 +54,42 @@ export default function MapSearchClient({ posts }: { posts: any[] }) {
               <p className="text-slate-400 font-space">Không tìm thấy không gian sống nào.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {posts.map((post) => (
-                <GlassPropertyCard 
-                  key={post._id} 
-                  post={post} 
-                  isActive={hoveredPostId === post._id}
-                  onMouseEnter={() => setHoveredPostId(post._id)}
-                  onMouseLeave={() => setHoveredPostId(null)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {posts.map((post) => (
+                  <GlassPropertyCard 
+                    key={post._id} 
+                    post={post} 
+                    isActive={hoveredPostId === post._id}
+                    onMouseEnter={() => setHoveredPostId(post._id)}
+                    onMouseLeave={() => setHoveredPostId(null)}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {pagination && pagination.totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-8 pb-4">
+                  <button 
+                    onClick={() => handlePageChange(pagination.page - 1)}
+                    disabled={pagination.page <= 1}
+                    className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg disabled:opacity-50 hover:bg-slate-700 transition"
+                  >
+                    Trước
+                  </button>
+                  <span className="text-slate-400 font-medium">
+                    Trang {pagination.page} / {pagination.totalPages}
+                  </span>
+                  <button 
+                    onClick={() => handlePageChange(pagination.page + 1)}
+                    disabled={pagination.page >= pagination.totalPages}
+                    className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg disabled:opacity-50 hover:bg-slate-700 transition"
+                  >
+                    Sau
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

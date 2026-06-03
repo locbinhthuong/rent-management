@@ -24,7 +24,16 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
     if (searchParams.district) query.district = searchParams.district;
     if (searchParams.property_type) query.property_type = searchParams.property_type;
     
-    // Xử lý GPS (near)
+    // 3. Xử lý Lọc theo Giá (Price)
+    const minPrice = searchParams.min_price;
+    const maxPrice = searchParams.max_price;
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+    
+    // 4. Xử lý GPS (near)
     if (searchParams.lat && searchParams.lng) {
       const lat = parseFloat(searchParams.lat as string);
       const lng = parseFloat(searchParams.lng as string);
@@ -42,22 +51,35 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
     }
   }
 
+  // Phân trang
+  const page = parseInt((searchParams?.page as string) || '1', 10);
+  const limit = 20;
+  const skip = (page - 1) * limit;
+
   // Nếu có GPS ($near) thì Mongoose sẽ tự động sort theo khoảng cách.
-  // Không nên ghi đè sort khác nếu có $near.
   let mongooseQuery = Post.find(query).populate('ctv_id', 'name phone');
   
   if (!query.location) {
     mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
   }
   
-  const posts = await mongooseQuery.limit(50).lean() as any[];
+  const total = await Post.countDocuments(query);
+  const posts = await mongooseQuery.skip(skip).limit(limit).lean() as any[];
 
   // Convert ObjectIds to strings to pass to client components safely
-  return posts.map(post => ({
-    ...post,
-    _id: post._id.toString(),
-    ctv_id: post.ctv_id ? { ...post.ctv_id, _id: post.ctv_id._id.toString() } : null
-  }));
+  return {
+    posts: posts.map(post => ({
+      ...post,
+      _id: post._id.toString(),
+      ctv_id: post.ctv_id ? { ...post.ctv_id, _id: post.ctv_id._id.toString() } : null
+    })),
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
 }
 
 export default async function CustomerHome({
@@ -65,7 +87,7 @@ export default async function CustomerHome({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const posts = await getActivePosts(searchParams);
+  const { posts, pagination } = await getActivePosts(searchParams);
   const session = await getServerSession(authOptions);
 
   return (
