@@ -14,10 +14,10 @@ export default function Footer() {
           {/* Về chúng tôi */}
           <div className="space-y-6">
             <h3 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">RentHome</span>
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">thuenhatro.com</span>
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Kênh thông tin Phòng Trọ số 1 Việt Nam. Chuyên trang cung cấp thông tin cho thuê phòng trọ, căn hộ, nhà nguyên căn nhanh chóng, an toàn và hiệu ứng 3D trực quan nhất.
+              Nền tảng tìm kiếm và cho thuê phòng trọ thông minh, hiện đại. Cung cấp thông tin trực quan, chính xác với giao diện 3D và hệ thống quản lý chuyên nghiệp.
             </p>
             <div className="flex gap-3 pt-2">
               <a href="#" className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-indigo-500 hover:text-white hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] transition-all duration-300 group">
@@ -72,7 +72,7 @@ export default function Footer() {
                 <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
                   <Mail className="w-4 h-4 text-violet-400" />
                 </div>
-                <span>hotro@renthome.vn</span>
+                <span>hotro@thuenhatro.com</span>
               </li>
             </ul>
             <div className="pt-4">
@@ -86,7 +86,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} <span className="text-white/80 font-medium">RentHome.vn</span>. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} <span className="text-white/80 font-medium">thuenhatro.com</span>. All rights reserved.</p>
           <div className="flex items-center gap-1.5">
             Thiết kế và phát triển với <span className="text-red-500 animate-pulse">❤️</span>
           </div>
