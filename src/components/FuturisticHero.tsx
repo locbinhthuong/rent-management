@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Home, Navigation } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 
 export default function FuturisticHero() {
