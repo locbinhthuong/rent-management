@@ -37,30 +37,9 @@ export default async function CTVCustomersPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
-        <div className="p-4 border-b border-slate-200">
-          <h1 className="text-xl font-bold flex items-center gap-2 text-indigo-600">
-            <Users className="w-5 h-5" />
-            CTV Portal
-          </h1>
-        </div>
-        <nav className="flex-1 p-4 space-y-2 text-sm font-medium">
-          <Link href="/ctv" className="flex items-center gap-3 text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-slate-50 transition">
-            <Home className="w-4 h-4" /> Bảng điều khiển
-          </Link>
-          <Link href="/ctv/post" className="flex items-center gap-3 text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-slate-50 transition">
-            <PlusCircle className="w-4 h-4" /> Đăng tin mới
-          </Link>
-          <Link href="/ctv/customers" className="flex items-center gap-3 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-md">
-            <MessageCircle className="w-4 h-4" /> Khách liên hệ
-          </Link>
-        </nav>
-      </aside>
-
+    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col h-full">
         <header className="bg-white p-4 md:p-5 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sticky top-0 z-10 shadow-sm">
           <h2 className="text-lg md:text-xl font-bold text-slate-800">Khách liên hệ</h2>
           <div className="flex gap-2 w-full md:w-auto items-center flex-wrap md:flex-nowrap">
