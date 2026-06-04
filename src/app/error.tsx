@@ -29,10 +29,10 @@ export default function RootError({
           </p>
         </div>
         <Button
-          onClick={() => reset()}
+          onClick={() => window.location.reload()}
           className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold"
         >
-          Thử Lại Ngay
+          Thử Lại Ngay (Tải lại trang)
         </Button>
       </div>
     </div>
