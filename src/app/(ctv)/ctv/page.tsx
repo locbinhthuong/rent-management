@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, PlusCircle, Users, Wallet, UploadCloud, MessageCircle, LogOut, Eye, CreditCard, Loader2, List, CheckCircle, MessageSquare, Plus, FileText, Megaphone, HelpCircle, BarChart2, TrendingUp } from 'lucide-react';
+import { Home, PlusCircle, Users, Wallet, UploadCloud, MessageCircle, LogOut, Eye, CreditCard, Loader2, List, CheckCircle, MessageSquare, Plus, FileText, Megaphone, HelpCircle, BarChart2, TrendingUp, Bell } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
@@ -8,6 +8,7 @@ import User from '@/models/User';
 import Lead from '@/models/Lead';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
+import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,15 +45,19 @@ async function CTVDashboardContent({ userId }: { userId: string }) {
 
   return (
     <div className="p-4 md:p-6 space-y-8 max-w-5xl mx-auto w-full">
+      {/* Mobile Top Header */}
+      {/* Mobile Top Header */}
+      <CTVMobileHeader />
+
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Tổng quan</h1>
           <p className="text-slate-400 text-sm mt-1">{dateString}</p>
         </div>
         <Link 
           href="/ctv/post"
-          className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full font-semibold text-sm flex items-center gap-1.5 transition-colors shadow-lg shadow-blue-600/20"
+          className="bg-blue-600 hover:bg-blue-500 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-colors shadow-lg shadow-blue-600/20 whitespace-nowrap"
         >
           <Plus className="w-4 h-4" />
           Đăng Phòng Mới

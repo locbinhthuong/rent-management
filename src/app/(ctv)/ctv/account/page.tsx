@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { User, Bell, HelpCircle, Star, LogOut, ChevronRight, FileText, MessageSquare } from 'lucide-react';
+import { User, Bell, HelpCircle, Star, LogOut, ChevronRight, FileText, MessageSquare, Home, CheckCircle, Wallet, Shield } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
@@ -7,6 +7,7 @@ import UserModel from '@/models/User';
 import Post from '@/models/Post';
 import Lead from '@/models/Lead';
 import { redirect } from 'next/navigation';
+import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,6 +30,7 @@ export default async function CTVAccountPage() {
   return (
     <main className="flex-1 bg-slate-950 min-h-screen overflow-y-auto pb-24 md:pb-12">
       <div className="max-w-3xl mx-auto px-4 mt-6 space-y-6">
+        <CTVMobileHeader title="Hồ sơ CTV" />
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Hồ sơ</h1>
@@ -36,86 +38,115 @@ export default async function CTVAccountPage() {
         </div>
 
         {/* Profile Card */}
-        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-sm">
-          <div className="flex flex-col items-center justify-center text-center">
-            <div className="w-20 h-20 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 shadow-lg shadow-blue-500/20 border-2 border-white/10">
-              {initial}
+        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-sm flex flex-col items-center">
+          <div className="relative mb-4">
+            <div className="w-24 h-24 rounded-full border-4 border-slate-800 overflow-hidden bg-slate-800">
+              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="avatar" className="w-full h-full object-cover" />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">{session.user.name}</h2>
-            <div className="mt-2 bg-slate-800 text-slate-300 text-xs font-bold px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5">
-              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              Cộng tác viên Bạc
+            <div className="absolute bottom-0 right-0 w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center border-2 border-slate-900 text-white">
+              <CheckCircle className="w-4 h-4" />
             </div>
           </div>
+          
+          <h2 className="text-2xl font-bold text-slate-100 mb-1">{session.user.name}</h2>
+          <p className="text-slate-400 text-sm mb-3">ID CTV: UD-84920</p>
+          
+          <div className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 mb-8">
+            <CheckCircle className="w-3.5 h-3.5" />
+            CTV Xác Thực
+          </div>
 
-          <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/5">
-            <div className="text-center">
-              <p className="text-slate-400 text-xs font-medium mb-1">Bài đăng</p>
-              <p className="text-xl font-bold text-slate-100 font-space">{totalPosts}</p>
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full">
+            <div className="bg-slate-800/50 border border-white/5 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-center text-center h-[90px]">
+              <Home className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 mb-2" />
+              <p className="text-lg sm:text-xl font-bold text-slate-100 font-space leading-tight">{totalPosts}</p>
+              <p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase leading-tight">Tổng bài đăng</p>
             </div>
-            <div className="text-center border-x border-white/5">
-              <p className="text-slate-400 text-xs font-medium mb-1 flex items-center justify-center gap-1">Đánh giá <Star className="w-3 h-3 text-amber-400 fill-amber-400" /></p>
-              <p className="text-xl font-bold text-slate-100 font-space">4.8</p>
+            <div className="bg-slate-800/50 border border-white/5 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-center text-center h-[90px]">
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 mb-2" />
+              <p className="text-lg sm:text-xl font-bold text-slate-100 font-space leading-tight">{totalLeads}</p>
+              <p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase leading-tight">Yêu cầu chờ</p>
             </div>
-            <div className="text-center">
-              <p className="text-slate-400 text-xs font-medium mb-1">Lượt tư vấn</p>
-              <p className="text-xl font-bold text-slate-100 font-space">{totalLeads}</p>
+            <div className="bg-slate-800/50 border border-white/5 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-center text-center h-[90px]">
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 mb-2" />
+              <p className="text-lg sm:text-xl font-bold text-slate-100 font-space leading-tight">4.9</p>
+              <p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase leading-tight">Đánh giá</p>
             </div>
           </div>
         </div>
 
         {/* Menu Items */}
         <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl overflow-hidden shadow-sm">
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors border-b border-white/5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-blue-400">
+          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors border-b border-white/5">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-300">
                 <User className="w-5 h-5" />
               </div>
-              <span className="font-bold text-slate-200 text-sm">Thông tin cá nhân</span>
+              <div>
+                <span className="font-bold text-slate-200 text-sm block">Thông tin cá nhân</span>
+                <span className="text-xs text-slate-400">Cập nhật liên hệ, Zalo link</span>
+              </div>
             </div>
             <ChevronRight className="w-5 h-5 text-slate-500" />
           </Link>
           
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors border-b border-white/5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-emerald-400">
+          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors border-b border-white/5">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-300">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="font-bold text-slate-200 text-sm block">Quản lý doanh thu</span>
+                <span className="text-xs text-slate-400">Tổng quan hoa hồng</span>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-slate-500" />
+          </Link>
+
+          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors border-b border-white/5">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-300">
                 <Bell className="w-5 h-5" />
               </div>
-              <span className="font-bold text-slate-200 text-sm">Cài đặt thông báo</span>
+              <div>
+                <span className="font-bold text-slate-200 text-sm block">Cài đặt thông báo</span>
+                <span className="text-xs text-slate-400">Lead mới, thông báo hệ thống</span>
+              </div>
             </div>
             <ChevronRight className="w-5 h-5 text-slate-500" />
           </Link>
 
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors border-b border-white/5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-amber-400">
+          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors border-b border-white/5">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-300">
+                <Shield className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="font-bold text-slate-200 text-sm block">Bảo mật & Đăng nhập</span>
+                <span className="text-xs text-slate-400">Mật khẩu, 2FA</span>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-slate-500" />
+          </Link>
+
+          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-300">
                 <HelpCircle className="w-5 h-5" />
               </div>
-              <span className="font-bold text-slate-200 text-sm">Hướng dẫn CTV</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-500" />
-          </Link>
-
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors border-b border-white/5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-purple-400">
-                <Star className="w-5 h-5" />
+              <div>
+                <span className="font-bold text-slate-200 text-sm block">Trợ giúp & Hướng dẫn CTV</span>
+                <span className="text-xs text-slate-400">FAQ, Hỗ trợ trực tuyến</span>
               </div>
-              <span className="font-bold text-slate-200 text-sm">Nâng cấp hạng</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-500" />
-          </Link>
-          
-          <Link href="/api/auth/signout" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-500/10 rounded-full flex items-center justify-center text-red-500">
-                <LogOut className="w-5 h-5" />
-              </div>
-              <span className="font-bold text-red-500 text-sm">Đăng xuất</span>
             </div>
             <ChevronRight className="w-5 h-5 text-slate-500" />
           </Link>
         </div>
+
+        <Link href="/api/auth/signout" className="flex items-center justify-center gap-2 p-4 mt-6 bg-slate-900/50 border border-white/5 rounded-full hover:bg-slate-800 transition-colors">
+          <LogOut className="w-5 h-5 text-red-500" />
+          <span className="font-bold text-red-500 text-sm">Đăng xuất</span>
+        </Link>
       </div>
     </main>
   );

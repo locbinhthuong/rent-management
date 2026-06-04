@@ -10,12 +10,14 @@ import Image from 'next/image';
 import { Suspense } from 'react';
 import BumpButton from '@/components/BumpButton';
 import PostActionButtons from '@/components/PostActionButtons';
+import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
 
 export const dynamic = 'force-dynamic';
 
 function PostsSkeleton() {
   return (
     <div className="p-4 space-y-6 max-w-5xl mx-auto w-full animate-pulse">
+      <CTVMobileHeader />
       <div className="h-20 bg-slate-800 rounded-2xl"></div>
       <div className="h-64 bg-slate-800 rounded-2xl"></div>
       <div className="h-64 bg-slate-800 rounded-2xl"></div>

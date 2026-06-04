@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
 const MapPicker = dynamic(() => import('@/components/MapPicker'), { ssr: false });
+import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
 
 export default function CreatePostPage() {
   const router = useRouter();
@@ -115,6 +116,7 @@ export default function CreatePostPage() {
   return (
     <main className="flex-1 bg-slate-950 h-screen overflow-y-auto pb-24 md:pb-12">
       <div className="max-w-3xl mx-auto px-4 mt-6">
+        <CTVMobileHeader />
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Đăng phòng mới</h2>
@@ -126,18 +128,18 @@ export default function CreatePostPage() {
         </header>
 
         {/* Fake Progress Bar */}
-        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-full p-2 mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-2 bg-blue-600 rounded-full py-1.5 px-4 text-white text-xs font-bold w-1/3 justify-center">
-            <span className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">1</span>
-            Thông tin
+        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-full p-1.5 sm:p-2 mb-8 flex items-center justify-between gap-1">
+          <div className="flex items-center gap-1 sm:gap-2 bg-blue-600 rounded-full py-1.5 px-2 sm:px-4 text-white text-[10px] sm:text-xs font-bold w-1/3 justify-center">
+            <span className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">1</span>
+            <span className="truncate">Thông tin</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold w-1/3 justify-center">
-            <span className="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center">2</span>
-            Tiện ích
+          <div className="flex items-center gap-1 sm:gap-2 text-slate-400 text-[10px] sm:text-xs font-bold w-1/3 justify-center">
+            <span className="w-4 h-4 sm:w-5 sm:h-5 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0">2</span>
+            <span className="truncate">Tiện ích</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold w-1/3 justify-center">
-            <span className="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center">3</span>
-            Hình ảnh
+          <div className="flex items-center gap-1 sm:gap-2 text-slate-400 text-[10px] sm:text-xs font-bold w-1/3 justify-center">
+            <span className="w-4 h-4 sm:w-5 sm:h-5 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0">3</span>
+            <span className="truncate">Hình ảnh</span>
           </div>
         </div>
 

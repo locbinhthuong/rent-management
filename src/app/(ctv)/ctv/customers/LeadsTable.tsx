@@ -147,26 +147,26 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
                 </div>
 
                 {/* Actions Bubbles */}
-                <div className="flex gap-2 justify-between mt-2">
-                  <div className="flex gap-2">
+                <div className="flex gap-2 justify-between mt-2 w-full">
+                  <div className="flex gap-2 flex-1">
                     <select 
                       value={lead.status}
                       onChange={(e) => handleUpdateStatus(lead._id, e.target.value)}
-                      className="bg-blue-900/40 text-blue-400 border border-blue-500/30 outline-none text-[11px] font-bold w-[60px] h-[60px] rounded-full text-center appearance-none cursor-pointer flex items-center justify-center hover:bg-blue-900/60 transition-colors"
+                      className="bg-blue-900/40 text-blue-400 border border-blue-500/30 outline-none text-[10px] sm:text-[11px] font-bold flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl text-center appearance-none cursor-pointer flex items-center justify-center hover:bg-blue-900/60 transition-colors p-1"
                     >
                       <option value="New">Mới</option>
                       <option value="Contacted">Đã xử lý</option>
                       <option value="Success">Chốt</option>
                       <option value="Failed">Hủy</option>
                     </select>
-                    <button className="bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-medium w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center hover:bg-slate-700 transition-colors">
+                    <button className="bg-slate-800 text-slate-300 border border-slate-700 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1">
                       <span className="text-center leading-tight">Cần<br/>phòng</span>
                     </button>
-                    <button className="bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-medium w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center hover:bg-slate-700 transition-colors">
+                    <button className="bg-slate-800 text-slate-300 border border-slate-700 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1">
                       <span className="text-center leading-tight">Hẹn<br/>xem</span>
                     </button>
                   </div>
-                  <button className="bg-blue-600 text-white text-[11px] font-bold w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center shadow-lg hover:bg-blue-500 transition-colors">
+                  <button className="bg-blue-600 text-white text-[10px] sm:text-[11px] font-bold flex-1 aspect-square max-w-[70px] max-h-[70px] rounded-2xl flex flex-col items-center justify-center shadow-lg hover:bg-blue-500 transition-colors p-1 ml-2">
                     <CornerDownRight className="w-4 h-4 mb-0.5" />
                     <span className="text-center leading-tight">Phản hồi</span>
                   </button>
