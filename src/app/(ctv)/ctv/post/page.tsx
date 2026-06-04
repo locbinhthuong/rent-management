@@ -113,27 +113,40 @@ export default function CreatePostPage() {
   const districtsList = formData.city ? getDistrictsByProvince(formData.city) : [];
 
   return (
-    <main className="flex-1 bg-transparent h-screen overflow-y-auto pb-24 md:pb-12">
-      <header className="bg-slate-900/50 backdrop-blur-xl p-4 border-b border-white/10 sticky top-0 z-10 shadow-sm flex items-center gap-4">
-        <Link href="/ctv" className="text-slate-400 hover:text-cyan-400 transition bg-slate-800 hover:bg-cyan-500/20 p-2 rounded-full border border-white/5 hover:border-cyan-500/30">
-          <ArrowLeft className="w-5 h-5" />
-        </Link>
-        <h2 className="text-xl font-bold text-slate-100">Tạo tin đăng phòng trọ</h2>
-      </header>
-
-      <div className="max-w-4xl mx-auto px-4 mt-8">
-        <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 overflow-hidden">
-          <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-6 text-white">
-            <h3 className="text-lg font-bold">Thông tin Rao vặt chi tiết</h3>
-            <p className="text-cyan-100 text-sm mt-1">Vui lòng điền thông tin thật chính xác để thu hút khách hàng.</p>
+    <main className="flex-1 bg-slate-950 h-screen overflow-y-auto pb-24 md:pb-12">
+      <div className="max-w-3xl mx-auto px-4 mt-6">
+        <header className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Đăng phòng mới</h2>
+            <p className="text-slate-400 text-sm mt-1">Điền thông tin chi tiết để tạo bài đăng cho thuê mới.</p>
           </div>
+          <Link href="/ctv" className="text-slate-400 hover:text-white transition bg-slate-900 p-2 rounded-full border border-white/10">
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+        </header>
 
-          <form onSubmit={handleSubmit} className="p-8 space-y-6">
-            {error && (
-              <div className="p-4 bg-red-500/10 text-red-400 rounded-xl border border-red-500/20 font-medium">
-                {error}
-              </div>
-            )}
+        {/* Fake Progress Bar */}
+        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-full p-2 mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-2 bg-blue-600 rounded-full py-1.5 px-4 text-white text-xs font-bold w-1/3 justify-center">
+            <span className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">1</span>
+            Thông tin
+          </div>
+          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold w-1/3 justify-center">
+            <span className="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center">2</span>
+            Tiện ích
+          </div>
+          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold w-1/3 justify-center">
+            <span className="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center">3</span>
+            Hình ảnh
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="p-4 bg-red-500/10 text-red-400 rounded-xl border border-red-500/20 font-medium text-sm">
+              {error}
+            </div>
+          )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Cột 1 */}
@@ -324,21 +337,19 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/10 flex justify-end gap-4">
-              <Link href="/ctv" className="px-6 py-3 font-bold text-slate-400 hover:bg-white/5 rounded-xl transition">
-                Hủy bỏ
+            <div className="pt-8 flex gap-4">
+              <Link href="/ctv" className="w-1/3 py-4 font-bold text-slate-300 bg-slate-900 border border-white/10 hover:bg-slate-800 rounded-full transition text-center flex items-center justify-center">
+                Hủy
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className={`px-8 py-3 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2 ${loading ? 'bg-cyan-900/50' : 'bg-cyan-600 hover:bg-cyan-700 shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:shadow-[0_0_25px_rgba(6,182,212,0.7)]'}`}
+                className={`w-2/3 py-4 text-white font-bold rounded-full transition flex items-center justify-center gap-2 ${loading ? 'bg-blue-900/50' : 'bg-blue-400 hover:bg-blue-500 shadow-lg shadow-blue-500/20'}`}
               >
-                <Send className="w-5 h-5" />
-                {loading ? 'Đang gửi...' : 'Đăng bài kiểm duyệt'}
+                {loading ? 'Đang xử lý...' : 'Đăng tin ngay'}
               </button>
             </div>
           </form>
-        </div>
       </div>
     </main>
   );

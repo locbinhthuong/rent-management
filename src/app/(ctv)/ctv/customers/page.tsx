@@ -20,10 +20,9 @@ export default async function CTVCustomersPage() {
 
   await connectDB();
   Post.init();
-  const user = await User.findById(session.user.id).lean();
 
   const leads = await Lead.find({ ctv_id: session.user.id })
-    .populate('post_id', 'title')
+    .populate('post_id', 'title property_type')
     .sort({ createdAt: -1 })
     .lean() as any[];
 
@@ -36,38 +35,49 @@ export default async function CTVCustomersPage() {
     updatedAt: l.updatedAt?.toISOString()
   }));
 
-  return (
-    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full">
-        <header className="bg-slate-900/50 backdrop-blur-xl p-4 md:p-5 border-b border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sticky top-0 z-10 shadow-sm">
-          <h2 className="text-lg md:text-xl font-bold text-slate-100">Khách liên hệ</h2>
-          <div className="flex gap-2 w-full md:w-auto items-center flex-wrap md:flex-nowrap">
-            <div className="flex items-center gap-2 bg-emerald-500/10 px-4 py-2 rounded-xl md:rounded-full border border-emerald-500/20 flex-1 md:flex-none justify-center">
-              <Wallet className="w-4 h-4 text-emerald-400" />
-              <span className="font-bold text-emerald-400 text-sm">
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(user?.wallet_balance || 0)}
-              </span>
-            </div>
-            <Link href="/" target="_blank" className="flex-1 md:flex-none text-center text-xs md:text-sm font-bold text-cyan-400 border-2 border-cyan-500/20 bg-cyan-500/10 px-3 py-2 rounded-lg hover:bg-cyan-500/20 transition">
-              Trang Khách
-            </Link>
-            <Link href="/api/auth/signout" className="flex-1 md:flex-none justify-center text-xs md:text-sm font-bold text-red-400 border-2 border-red-500/20 bg-red-500/10 px-3 py-2 rounded-lg hover:bg-red-500/20 transition flex items-center gap-2">
-              <LogOut className="w-4 h-4" /> <span className="hidden sm:inline">Đăng xuất</span>
-            </Link>
-          </div>
-        </header>
+  const newLeads = leads.filter(l => l.status === 'New').length;
+  const contactedLeads = leads.filter(l => l.status === 'Contacted').length;
+  const successLeads = leads.filter(l => l.status === 'Success').length;
 
-        <div className="p-4 md:p-8 pb-20 md:pb-8 max-w-5xl mx-auto w-full">
-          <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 overflow-hidden">
-            <div className="p-5 border-b border-white/10 bg-slate-800/50">
-              <h3 className="font-bold text-slate-100 text-lg flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-cyan-400" /> Danh sách Khách hàng quan tâm
-              </h3>
+  return (
+    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-950">
+      <main className="flex-1 flex flex-col h-full pb-24 md:pb-0">
+        <div className="p-4 md:p-6 max-w-5xl mx-auto w-full space-y-6">
+          {/* Header */}
+          <div>
+            <h1 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Yêu cầu Tư vấn</h1>
+            <p className="text-slate-400 text-sm mt-1">Quản lý và phản hồi các yêu cầu từ khách hàng cho các bài đăng của bạn.</p>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/20">
+              <div className="flex items-center gap-2 mb-1">
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-xs font-bold uppercase">Mới</span>
+              </div>
+              <span className="text-2xl font-black font-space">{newLeads}</span>
             </div>
             
-            <LeadsTable initialLeads={serializedLeads} />
+            <div className="bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-slate-300">
+              <div className="flex items-center gap-2 mb-1">
+                <MessageSquare className="w-5 h-5" />
+                <span className="text-xs font-bold uppercase text-center">Đã phản hồi</span>
+              </div>
+              <span className="text-2xl font-black font-space text-white">{contactedLeads}</span>
+            </div>
+
+            <div className="bg-slate-900/50 border border-emerald-500/30 rounded-2xl p-4 flex flex-col items-center justify-center text-emerald-400">
+              <div className="flex items-center gap-2 mb-1">
+                <CheckCircle className="w-5 h-5" />
+                <span className="text-xs font-bold uppercase text-center">Hoàn thành</span>
+              </div>
+              <span className="text-2xl font-black font-space text-emerald-400">{successLeads}</span>
+            </div>
           </div>
+
+          {/* Leads List Component */}
+          <LeadsTable initialLeads={serializedLeads} />
         </div>
       </main>
     </div>
