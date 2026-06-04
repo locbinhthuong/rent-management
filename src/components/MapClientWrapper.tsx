@@ -13,5 +13,5 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
 });
 
 export default function MapClientWrapper({ posts }: { posts: any[] }) {
-  return <MapComponent posts={posts} />;
+  return <MapComponent posts={posts} hoveredPostId={null} />;
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Plus, Search, Eye, MessageSquare, Clock, Edit2, Trash2, Rocket, Loader2 } from 'lucide-react';
+import { Plus, Search, Eye, MessageSquare, Clock, Edit2, Trash2, Rocket, Loader2, FileText } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';

@@ -6,7 +6,7 @@ import Post from '@/models/Post';
 import User from '@/models/User';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Home, Wallet, MessageCircle, PlusCircle, LogOut } from 'lucide-react';
+import { Users, Home, Wallet, MessageCircle, PlusCircle, LogOut, MessageSquare, CheckCircle } from 'lucide-react';
 import LeadsTable from './LeadsTable';
 
 export const dynamic = 'force-dynamic';

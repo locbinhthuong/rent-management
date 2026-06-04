@@ -82,7 +82,7 @@ export default function MessagesPage() {
                   </div>
                   
                   <p className="text-slate-400 text-xs md:text-sm line-clamp-2 leading-relaxed">
-                    "{msg.content}"
+                    &quot;{msg.content}&quot;
                   </p>
                   
                   <div className="mt-2 flex">
