@@ -1,38 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GlassPropertyCard from '@/components/GlassPropertyCard';
-
-// Dynamically import the MapComponent so Leaflet doesn't break SSR
-const MapComponent = dynamic(() => import('@/components/MapComponent'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mb-4 glow-cyan"></div>
-      <p className="text-cyan-400 font-medium font-space">Đang tải bản đồ...</p>
-    </div>
-  ),
-});
+import { Map, MapPin } from 'lucide-react';
+import Link from 'next/link';
 
 export default function MapSearchClient({ posts, pagination }: { posts: any[], pagination?: any }) {
-  const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
-  const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
-  const [showMapOnMobile, setShowMapOnMobile] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  useEffect(() => {
-    fetch('/api/admin/settings')
-      .then(res => res.json())
-      .then(data => {
-        if (data.config && data.config.propertyTypes) {
-          setPropertyTypes(data.config.propertyTypes);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -41,147 +17,94 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
   };
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <div className="w-full max-w-5xl mx-auto px-4 py-8 flex flex-col gap-6 relative z-10">
       
-      {/* Mobile Toggle Tabs */}
-      <div className="md:hidden flex p-3 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 z-[100] shrink-0 w-full sticky top-0">
-        <div className="flex w-full bg-slate-900 rounded-xl p-1 border border-white/5 shadow-inner">
-          <button
-            onClick={() => setShowMapOnMobile(false)}
-            className={`flex-1 py-2 text-center text-sm font-bold rounded-lg transition-all ${
-              !showMapOnMobile 
-                ? 'bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-cyan-400 border border-cyan-500/30 shadow-sm' 
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-              Danh sách
-            </div>
-          </button>
-          <button
-            onClick={() => setShowMapOnMobile(true)}
-            className={`flex-1 py-2 text-center text-sm font-bold rounded-lg transition-all ${
-              showMapOnMobile 
-                ? 'bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-cyan-400 border border-cyan-500/30 shadow-sm' 
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
-              Bản đồ
-            </div>
-          </button>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl md:text-2xl font-bold text-white font-space tracking-tight">Kết quả nổi bật</h2>
+        <Link 
+          href={`/map?${searchParams.toString()}`}
+          className="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+        >
+          <Map className="w-4 h-4" />
+          <span>Xem bản đồ</span>
+        </Link>
+      </div>
+      
+      {posts.length === 0 ? (
+        <div className="text-center py-20 bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-sm">
+          <p className="text-slate-400 font-space">Không tìm thấy không gian sống nào.</p>
         </div>
-      </div>
-
-      {/* Left side: Map */}
-      <div className={`${showMapOnMobile ? 'block' : 'hidden'} md:block w-full md:w-3/5 flex-1 md:h-full relative z-0`}>
-        <MapComponent posts={posts} hoveredPostId={hoveredPostId} />
-      </div>
-
-      {/* Right side: Glassmorphism List */}
-      <div className={`${showMapOnMobile ? 'hidden' : 'block'} md:block w-full md:w-2/5 flex-1 md:h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5 pb-20 md:pb-0`}>
-        
-        {/* Subtle glass effect behind the list */}
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md pointer-events-none z-[-1]"></div>
-        
-        <div className="p-4 md:p-6 space-y-5">
-          <div className="flex flex-col gap-4 mb-2">
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-white font-space tracking-tight">Khu vực Lân Cận</h1>
-              <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded-full text-sm font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)] whitespace-nowrap">
-                {pagination ? `${pagination.total} kết quả` : `${posts.length} kết quả`}
-              </span>
-            </div>
-            
-            {/* Quick Filter inside the list */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
-              <span className="text-sm font-medium text-slate-400 whitespace-nowrap">Lọc nhanh:</span>
-              <select 
-                className="bg-white/10 text-white border border-white/20 rounded-lg px-3 py-1.5 text-sm outline-none cursor-pointer focus:border-cyan-400 transition-colors"
-                value={searchParams.get('property_type') || ''}
-                onChange={(e) => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  if (e.target.value) {
-                    params.set('property_type', e.target.value);
-                  } else {
-                    params.delete('property_type');
-                  }
-                  params.set('page', '1'); // Reset page on filter change
-                  router.push(`/?${params.toString()}`, { scroll: false });
-                }}
-              >
-                <option value="" className="bg-slate-800">Tất cả loại phòng</option>
-                {propertyTypes.length > 0 ? (
-                  propertyTypes.map((type) => (
-                    <option key={type} value={type} className="bg-slate-800">{type}</option>
-                  ))
-                ) : (
-                  <>
-                    <option value="Phòng trọ" className="bg-slate-800">Phòng trọ</option>
-                    <option value="Chung cư mini" className="bg-slate-800">Chung cư mini</option>
-                  </>
-                )}
-              </select>
-            </div>
-          </div>
-          
-          {posts.length === 0 ? (
-            <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-sm">
-              <p className="text-slate-400 font-space">Không tìm thấy không gian sống nào.</p>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {posts.map((post) => (
-                  <GlassPropertyCard 
-                    key={post._id} 
-                    post={post} 
-                    isActive={hoveredPostId === post._id}
-                    onMouseEnter={() => setHoveredPostId(post._id)}
-                    onMouseLeave={() => setHoveredPostId(null)}
-                  />
-                ))}
+      ) : (
+        <>
+          {/* Horizontal scroll on mobile, grid on desktop */}
+          <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto pb-6 snap-x snap-mandatory custom-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+            {posts.map((post) => (
+              <div key={post._id} className="min-w-[85vw] sm:min-w-[300px] md:min-w-0 snap-center shrink-0">
+                <GlassPropertyCard 
+                  post={post} 
+                  isActive={false}
+                />
               </div>
+            ))}
+          </div>
 
-              {/* Pagination Controls */}
-              {pagination && pagination.totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-8 pb-4">
-                  <button 
-                    onClick={() => handlePageChange(pagination.page - 1)}
-                    disabled={pagination.page <= 1}
-                    className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg disabled:opacity-50 hover:bg-slate-700 transition"
-                  >
-                    Trước
-                  </button>
-                  <span className="text-slate-400 font-medium">
-                    Trang {pagination.page} / {pagination.totalPages}
-                  </span>
-                  <button 
-                    onClick={() => handlePageChange(pagination.page + 1)}
-                    disabled={pagination.page >= pagination.totalPages}
-                    className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg disabled:opacity-50 hover:bg-slate-700 transition"
-                  >
-                    Sau
-                  </button>
-                </div>
-              )}
-            </>
+          {/* Pagination Controls */}
+          {pagination && pagination.totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <button 
+                onClick={() => handlePageChange(pagination.page - 1)}
+                disabled={pagination.page <= 1}
+                className="px-4 py-2 bg-slate-800/80 text-slate-300 rounded-xl disabled:opacity-50 hover:bg-slate-700 transition"
+              >
+                Trước
+              </button>
+              <span className="text-slate-400 font-medium text-sm">
+                Trang {pagination.page} / {pagination.totalPages}
+              </span>
+              <button 
+                onClick={() => handlePageChange(pagination.page + 1)}
+                disabled={pagination.page >= pagination.totalPages}
+                className="px-4 py-2 bg-slate-800/80 text-slate-300 rounded-xl disabled:opacity-50 hover:bg-slate-700 transition"
+              >
+                Sau
+              </button>
+            </div>
           )}
+        </>
+      )}
+
+      {/* Map Banner */}
+      <Link href={`/map?${searchParams.toString()}`} className="mt-8 block relative rounded-3xl overflow-hidden group cursor-pointer border border-slate-800 shadow-lg h-40 md:h-48">
+        <div className="absolute inset-0 bg-slate-900">
+          {/* A dark stylized map background image */}
+          <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop")', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
         </div>
-      </div>
+        
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-transform group-hover:scale-105 duration-500">
+          <div className="w-12 h-12 bg-cyan-500 rounded-full flex items-center justify-center mb-3 shadow-[0_0_30px_rgba(6,182,212,0.5)] glow-cyan">
+            <MapPin className="w-6 h-6 text-slate-950" />
+          </div>
+          <h3 className="text-lg md:text-xl font-bold text-white font-space tracking-wide">Khám phá trên bản đồ</h3>
+        </div>
+      </Link>
       
       {/* CSS for custom scrollbar in the list */}
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
+          height: 0px; /* Hide scrollbar on mobile for cleaner look */
+        }
+        @media (min-width: 768px) {
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+          }
         }
         .custom-scrollbar::-webkit-scrollbar-track {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: rgba(156, 163, 175, 0.5);
+          background-color: rgba(156, 163, 175, 0.3);
           border-radius: 20px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {

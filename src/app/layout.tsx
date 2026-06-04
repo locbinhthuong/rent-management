@@ -42,7 +42,7 @@ export default function RootLayout({
         <AuthProvider>
           <ReactQueryProvider>
             <NextTopLoader color="#4f46e5" showSpinner={false} />
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col pb-[68px] md:pb-0">
               {children}
             </div>
             <MobileBottomNav />

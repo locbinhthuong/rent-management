@@ -80,12 +80,9 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
               src={images[currentImgIndex]}
               alt={post.title}
               fill
-              className="object-cover transition-transform duration-700 hover:scale-110"
+              className="object-cover transition-transform duration-700 hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
-            {/* Dark gradient overlay on image for cyberpunk feel */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80 pointer-events-none"></div>
-            
             {/* Carousel Controls */}
             {images.length > 1 && (
               <>
@@ -106,58 +103,60 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
                   {images.map((_: any, idx: number) => (
                     <div 
                       key={idx} 
-                      className={`h-1.5 rounded-full transition-all ${idx === currentImgIndex ? 'w-3 bg-cyan-400' : 'w-1.5 bg-white/50'}`}
+                      className={`h-1.5 rounded-full transition-all ${idx === currentImgIndex ? 'w-3 bg-white' : 'w-1.5 bg-white/50'}`}
                     />
                   ))}
                 </div>
               </>
             )}
 
-            <div className="absolute top-3 left-3 bg-slate-900/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-cyan-300 border border-white/10 shadow-[0_0_10px_rgba(6,182,212,0.3)] z-20">
-              {post.property_type || 'Phòng trọ'}
+            {/* Badges */}
+            <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white tracking-wide uppercase shadow-sm z-20">
+              {post.property_type || 'PHÒNG TRỌ'}
             </div>
+            
             {post.is_verified && (
-              <div className="absolute top-3 right-3 bg-emerald-500/20 backdrop-blur-md px-2 py-1 rounded-full flex items-center justify-center border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)] z-20">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm z-20">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[10px] font-bold text-slate-100 tracking-wide uppercase">ĐÃ XÁC THỰC</span>
               </div>
             )}
           </div>
 
           {/* Content Section */}
-          <div className="p-5 space-y-3 relative z-20 translate-z-[20px]" style={{ transform: "translateZ(30px)" }}>
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-bold text-slate-100 line-clamp-2 leading-snug text-lg font-space tracking-tight">
+          <div className="p-5 flex flex-col gap-3 relative z-20">
+            {/* Title & Location */}
+            <div>
+              <h3 className="font-bold text-slate-100 line-clamp-1 text-[16px] md:text-lg mb-1 tracking-tight">
                 {post.title}
               </h3>
-            </div>
-
-            <div className="flex items-end gap-2">
-              <div className="font-extrabold text-cyan-400 text-xl font-space glow-cyan-text">
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}
+              <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
+                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                <span className="line-clamp-1">{fullAddress}</span>
               </div>
-              <span className="text-slate-400 text-sm mb-1 font-medium">/tháng</span>
             </div>
 
-            <div className="flex items-start gap-1.5 text-slate-300 text-sm">
-              <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-violet-400" />
-              <span className="line-clamp-1">{fullAddress}</span>
+            {/* Price & View Button */}
+            <div className="flex items-end justify-between mt-1">
+              <div className="flex items-baseline gap-1">
+                <span className="font-extrabold text-cyan-400 text-[18px] md:text-[22px] tracking-tight">
+                  {new Intl.NumberFormat('vi-VN').format(price)}₫
+                </span>
+                <span className="text-slate-400 text-[11px] md:text-xs font-medium">/tháng</span>
+              </div>
             </div>
 
-            {/* Amenities Row */}
-            <div className="pt-3 flex items-center gap-4 border-t border-white/10 text-slate-400 text-sm">
+            {/* Amenities Tags */}
+            <div className="flex flex-wrap items-center gap-2 mt-1">
               {post.area_sqm && (
-                <div className="flex items-center gap-1.5">
-                  <Maximize className="w-4 h-4 text-slate-500" />
-                  <span className="font-medium">{post.area_sqm} m²</span>
+                <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/50 rounded-lg px-2.5 py-1.5 text-slate-300">
+                  <Maximize className="w-3.5 h-3.5 opacity-70" />
+                  <span className="font-medium text-[11px] md:text-xs">{post.area_sqm} m²</span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5">
-                <Home className="w-4 h-4 text-slate-500" />
-                <span className="font-medium">1 PN</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Bath className="w-4 h-4 text-slate-500" />
-                <span className="font-medium">1 WC</span>
+              <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/50 rounded-lg px-2.5 py-1.5 text-slate-300">
+                <Home className="w-3.5 h-3.5 opacity-70" />
+                <span className="font-medium text-[11px] md:text-xs">1 PN</span>
               </div>
             </div>
           </div>

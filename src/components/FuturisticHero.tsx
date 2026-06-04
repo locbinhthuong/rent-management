@@ -114,132 +114,130 @@ export default function FuturisticHero() {
           </p>
         </motion.div>
 
-        {/* Floating Pill Search Bar (Glassmorphism) */}
+        {/* App-style Search Box */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3, duration: 0.8, type: "spring", stiffness: 100 }}
-          className="glass-pill rounded-[2rem] p-2 w-full flex flex-col md:flex-row items-center justify-between mx-auto shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="w-full max-w-3xl bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-4 md:p-6"
         >
-          {/* Segments */}
-          <div className="flex-1 flex flex-col md:flex-row items-center w-full divide-y md:divide-y-0 md:divide-x divide-white/20">
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-x-6">
             
-            {/* Segment 0: Keyword */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors rounded-t-[1.5rem] md:rounded-l-full group relative">
-              <Search className="w-5 h-5 text-blue-400 shrink-0" />
-              <div className="flex flex-col w-full">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Từ khóa</span>
+            {/* Row 1: Keyword */}
+            <div className="flex items-center gap-4 py-3 md:py-4 border-b border-slate-800/80 md:col-span-2 group">
+              <Search className="w-5 h-5 text-blue-500 shrink-0" />
+              <div className="flex flex-col w-full flex-1">
+                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mb-0.5">Từ khóa</span>
                 <input 
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Tìm tên, địa chỉ..."
-                  className="bg-transparent text-slate-100 font-medium outline-none placeholder-slate-500 w-full"
+                  className="bg-transparent text-slate-100 font-semibold text-[15px] outline-none placeholder-slate-500 w-full"
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
             </div>
 
-            {/* Segment 1: City */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative">
-              <MapPin className="w-5 h-5 text-cyan-400 shrink-0" />
-              <div className="flex flex-col w-full">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tỉnh/Thành</span>
+            {/* Row 2: City */}
+            <div className="flex items-center gap-4 py-3 md:py-4 border-b border-slate-800/80 group">
+              <MapPin className="w-5 h-5 text-emerald-500 shrink-0" />
+              <div className="flex flex-col w-full flex-1">
+                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mb-0.5">Tỉnh/Thành</span>
                 <select 
                   value={city}
                   onChange={handleCityChange}
-                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                  className="bg-transparent text-slate-100 font-semibold text-[15px] outline-none appearance-none cursor-pointer w-full"
                 >
-                  <option value="" className="bg-slate-800">Toàn quốc</option>
+                  <option value="" className="bg-slate-900">Toàn quốc</option>
                   {provincesList.map((p) => (
-                    <option key={p} value={p} className="bg-slate-800">{p}</option>
+                    <option key={p} value={p} className="bg-slate-900">{p}</option>
                   ))}
                 </select>
               </div>
             </div>
 
-            {/* Segment 2: Location (Dependent on City) */}
-            <div className={`flex items-center gap-3 px-6 py-4 md:py-3 w-full transition-colors group relative ${!city ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/5'}`}>
-              <MapPin className="w-5 h-5 text-violet-400 shrink-0" />
-              <div className="flex flex-col w-full">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Quận/Huyện</span>
+            {/* Row 3: District */}
+            <div className={`flex items-center gap-4 py-3 md:py-4 border-b border-slate-800/80 group ${!city ? 'opacity-50' : ''}`}>
+              <div className="w-5 h-5 rounded-full border-2 border-violet-500 flex items-center justify-center shrink-0">
+                <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
+              </div>
+              <div className="flex flex-col w-full flex-1">
+                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mb-0.5">Quận/Huyện</span>
                 <select 
                   value={district}
                   onChange={(e) => setDistrict(e.target.value)}
                   disabled={!city}
-                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full disabled:cursor-not-allowed"
+                  className="bg-transparent text-slate-100 font-semibold text-[15px] outline-none appearance-none cursor-pointer w-full"
                 >
-                  <option value="" className="bg-slate-800">{city ? "Tất cả khu vực" : "Chọn Tỉnh/Thành trước"}</option>
+                  <option value="" className="bg-slate-900">{city ? "Chọn Quận/Huyện" : "Chọn Tỉnh/Thành trước"}</option>
                   {districtsList.map((loc: string) => (
-                    <option key={loc} value={loc} className="bg-slate-800">{loc}</option>
+                    <option key={loc} value={loc} className="bg-slate-900">{loc}</option>
                   ))}
                 </select>
               </div>
             </div>
 
-            {/* Segment 3: Property Type */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative">
-              <Home className="w-5 h-5 text-emerald-400 shrink-0" />
-              <div className="flex flex-col w-full">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Loại phòng</span>
+            {/* Row 4: Property Type */}
+            <div className="flex items-center gap-4 py-3 md:py-4 border-b border-slate-800/80 group">
+              <Home className="w-5 h-5 text-teal-400 shrink-0" />
+              <div className="flex flex-col w-full flex-1">
+                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mb-0.5">Loại phòng</span>
                 <select 
                   value={propertyType}
                   onChange={(e) => setPropertyType(e.target.value)}
-                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                  className="bg-transparent text-slate-100 font-semibold text-[15px] outline-none appearance-none cursor-pointer w-full"
                 >
-                  <option value="" className="bg-slate-800">Tất cả loại hình</option>
+                  <option value="" className="bg-slate-900">Tất cả loại hình</option>
                   {config.propertyTypes.map((type: string) => (
-                    <option key={type} value={type} className="bg-slate-800">{type}</option>
+                    <option key={type} value={type} className="bg-slate-900">{type}</option>
                   ))}
                 </select>
               </div>
             </div>
 
-            {/* Segment 4: Price */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 w-full hover:bg-white/5 transition-colors group relative md:rounded-r-none rounded-b-[1.5rem] md:rounded-b-none">
-              <div className="w-5 h-5 text-amber-400 shrink-0 font-bold flex items-center justify-center">₫</div>
-              <div className="flex flex-col w-full">
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mức giá</span>
+            {/* Row 5: Price */}
+            <div className="flex items-center gap-4 py-3 md:py-4 border-b border-slate-800/80 group md:border-b-0">
+              <div className="w-5 h-5 flex items-center justify-center bg-amber-500/20 text-amber-500 rounded shrink-0 font-bold text-xs border border-amber-500/50">
+                ₫
+              </div>
+              <div className="flex flex-col w-full flex-1">
+                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mb-0.5">Mức giá</span>
                 <select 
                   onChange={(e) => {
                     const val = e.target.value;
-                    if (!val) {
-                      setPriceRange('');
-                    } else {
-                      setPriceRange(val);
-                    }
+                    if (!val) setPriceRange('');
+                    else setPriceRange(val);
                   }}
                   value={priceRange}
-                  className="bg-transparent text-slate-100 font-medium outline-none appearance-none cursor-pointer w-full"
+                  className="bg-transparent text-slate-100 font-semibold text-[15px] outline-none appearance-none cursor-pointer w-full"
                 >
-                  <option value="" className="bg-slate-800">Mọi mức giá</option>
-                  <option value="0-2000000" className="bg-slate-800">Dưới 2 triệu</option>
-                  <option value="2000000-5000000" className="bg-slate-800">Từ 2 - 5 triệu</option>
-                  <option value="5000000-10000000" className="bg-slate-800">Từ 5 - 10 triệu</option>
-                  <option value="10000000-999999999" className="bg-slate-800">Trên 10 triệu</option>
+                  <option value="" className="bg-slate-900">Mọi mức giá</option>
+                  <option value="0-2000000" className="bg-slate-900">Dưới 2 triệu</option>
+                  <option value="2000000-5000000" className="bg-slate-900">Từ 2 - 5 triệu</option>
+                  <option value="5000000-10000000" className="bg-slate-900">Từ 5 - 10 triệu</option>
+                  <option value="10000000-999999999" className="bg-slate-900">Trên 10 triệu</option>
                 </select>
               </div>
             </div>
 
           </div>
 
-          <div className="flex gap-2 w-full md:w-auto p-2 md:p-0">
-            {/* Near Me Button */}
+          {/* Action Buttons */}
+          <div className="flex gap-3 mt-5 w-full">
             <button 
               onClick={handleNearMe}
-              title="Tìm quanh đây"
-              className="bg-violet-500/20 hover:bg-violet-500/40 border border-violet-500/50 flex-1 md:flex-none md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center transition-all glow-violet hover:scale-105 active:scale-95 shadow-lg"
+              className="flex-1 bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/30 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
             >
-              <Navigation className="w-6 h-6 text-violet-300" />
-              <span className="md:hidden ml-2 font-bold text-violet-300">Gần Tôi</span>
+              <Navigation className="w-4 h-4 text-violet-400" />
+              <span className="font-semibold text-[14px] text-violet-300">Gần Tôi</span>
             </button>
             
-            {/* Search Button */}
             <button 
               onClick={handleSearch}
-              className="bg-cyan-500 hover:bg-cyan-400 flex-1 md:flex-none md:w-14 h-14 shrink-0 rounded-xl md:rounded-full flex items-center justify-center md:ml-2 md:mr-1 transition-all glow-cyan hover:scale-105 active:scale-95 shadow-lg"
+              className="flex-[1.5] bg-cyan-500 hover:bg-cyan-400 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(6,182,212,0.3)]"
             >
-              <Search className="w-6 h-6 text-slate-900 shrink-0" />
-              <span className="md:hidden ml-2 font-bold text-slate-900">TÌM KIẾM</span>
+              <Search className="w-4 h-4 text-slate-950 font-bold" />
+              <span className="font-bold text-[14px] text-slate-950">TÌM KIẾM</span>
             </button>
           </div>
         </motion.div>
