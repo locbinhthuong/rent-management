@@ -129,13 +129,13 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
       >
         {mapType === 'street' ? (
           <TileLayer
-            attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            attribution='&copy; Google Maps'
+            url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
           />
         ) : (
           <TileLayer
-            attribution='Tiles &copy; Esri'
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            attribution='&copy; Google Maps'
+            url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
           />
         )}
         

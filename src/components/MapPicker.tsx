@@ -67,8 +67,8 @@ export default function MapPicker({ position, onPositionChange, city, district }
         style={{ height: '100%', width: '100%', background: '#e5e7eb' }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; Google Maps'
+          url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
         />
         <LocationMarker position={isPositionValid ? position : null} onPositionChange={onPositionChange} />
       </MapContainer>
