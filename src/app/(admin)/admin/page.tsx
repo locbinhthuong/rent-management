@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Users, FileText, Settings, DollarSign, TrendingUp, CheckCircle, Clock, LogOut, MessageCircle } from 'lucide-react';
+import { Home, Users, FileText, Settings, DollarSign, TrendingUp, CheckCircle, Clock, LogOut, MessageCircle, Loader2 } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
@@ -11,16 +11,30 @@ import Lead from '@/models/Lead';
 import DepositRequest from '@/models/DepositRequest';
 import { redirect } from 'next/navigation';
 import AdminCharts from './AdminCharts';
+import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminDashboard() {
-  const session = await getServerSession(authOptions);
-  
-  if (!session || session.user.role !== 'Admin') {
-    redirect('/login');
-  }
+function DashboardSkeleton() {
+  return (
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto w-full animate-pulse">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="bg-white/80 p-6 rounded-3xl border border-slate-100 shadow-sm h-36 flex flex-col justify-between">
+            <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+            <div className="h-8 bg-slate-200 rounded w-1/3"></div>
+            <div className="h-3 bg-slate-200 rounded w-2/3"></div>
+          </div>
+        ))}
+      </div>
+      <div className="bg-white/80 h-[400px] rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+      </div>
+    </div>
+  );
+}
 
+async function AdminDashboardContent() {
   await connectDB();
   
   // Fetch stats from DB
@@ -42,6 +56,71 @@ export default async function AdminDashboard() {
   const occupancyRate = totalRoomsCount > 0 ? Math.round((rentedRoomsCount / totalRoomsCount) * 100) : 0;
 
   return (
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(99,102,241,0.1)] transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-500 font-semibold">
+            <span>Doanh thu thu tiền</span>
+            <div className="bg-indigo-50 p-2.5 rounded-xl border border-indigo-100"><DollarSign className="w-5 h-5 text-indigo-600" /></div>
+          </div>
+          <div className="text-3xl font-black text-slate-800 tracking-tight">
+            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}
+          </div>
+          <div className="text-sm text-emerald-600 font-bold flex items-center gap-1.5"><TrendingUp className="w-4 h-4"/> Đã ghi nhận</div>
+        </div>
+        
+        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(16,185,129,0.1)] transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-500 font-semibold">
+            <span>Phòng đã thuê</span>
+            <div className="bg-emerald-50 p-2.5 rounded-xl border border-emerald-100"><CheckCircle className="w-5 h-5 text-emerald-600" /></div>
+          </div>
+          <div className="text-3xl font-black text-slate-800 tracking-tight">{rentedRoomsCount}/{totalRoomsCount}</div>
+          <div className="text-sm text-slate-500 font-medium">Tỷ lệ lấp đầy: <span className="text-emerald-600 font-bold">{occupancyRate}%</span></div>
+        </div>
+        
+        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(249,115,22,0.1)] transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-500 font-semibold">
+            <span>Bài chờ duyệt</span>
+            <div className="bg-orange-50 p-2.5 rounded-xl border border-orange-100"><Clock className="w-5 h-5 text-orange-600" /></div>
+          </div>
+          <div className="text-3xl font-black text-slate-800 tracking-tight">{pendingPostsCount}</div>
+          <div className="text-sm text-orange-500 font-bold">Cần kiểm tra ngay</div>
+        </div>
+        
+        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-500 font-semibold">
+            <span>Cộng tác viên</span>
+            <div className="bg-blue-50 p-2.5 rounded-xl border border-blue-100"><Users className="w-5 h-5 text-blue-600" /></div>
+          </div>
+          <div className="text-3xl font-black text-slate-800 tracking-tight">{ctvCount}</div>
+          <div className="text-sm text-slate-500 font-medium">Đang hoạt động</div>
+        </div>
+      </div>
+      
+      <div className="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white shadow-lg">
+        <h3 className="text-xl font-extrabold text-slate-800 mb-6">Thống kê dữ liệu</h3>
+        {leadStats.length > 0 ? (
+          <AdminCharts leadStats={leadStats} />
+        ) : (
+          <div className="bg-slate-50 border border-slate-100 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+            <FileText className="w-12 h-12 text-slate-300" />
+            <p className="text-slate-500 font-medium">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default async function AdminDashboard() {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || session.user.role !== 'Admin') {
+    redirect('/login');
+  }
+
+  return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0">
         {/* Header */}
         <header className="bg-white/70 backdrop-blur-md p-4 md:px-8 md:py-6 border-b border-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30">
@@ -58,60 +137,9 @@ export default async function AdminDashboard() {
           </div>
         </header>
 
-        <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(99,102,241,0.1)] transition-all duration-300">
-              <div className="flex items-center justify-between text-slate-500 font-semibold">
-                <span>Doanh thu thu tiền</span>
-                <div className="bg-indigo-50 p-2.5 rounded-xl border border-indigo-100"><DollarSign className="w-5 h-5 text-indigo-600" /></div>
-              </div>
-              <div className="text-3xl font-black text-slate-800 tracking-tight">
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}
-              </div>
-              <div className="text-sm text-emerald-600 font-bold flex items-center gap-1.5"><TrendingUp className="w-4 h-4"/> Đã ghi nhận</div>
-            </div>
-            
-            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(16,185,129,0.1)] transition-all duration-300">
-              <div className="flex items-center justify-between text-slate-500 font-semibold">
-                <span>Phòng đã thuê</span>
-                <div className="bg-emerald-50 p-2.5 rounded-xl border border-emerald-100"><CheckCircle className="w-5 h-5 text-emerald-600" /></div>
-              </div>
-              <div className="text-3xl font-black text-slate-800 tracking-tight">{rentedRoomsCount}/{totalRoomsCount}</div>
-              <div className="text-sm text-slate-500 font-medium">Tỷ lệ lấp đầy: <span className="text-emerald-600 font-bold">{occupancyRate}%</span></div>
-            </div>
-            
-            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(249,115,22,0.1)] transition-all duration-300">
-              <div className="flex items-center justify-between text-slate-500 font-semibold">
-                <span>Bài chờ duyệt</span>
-                <div className="bg-orange-50 p-2.5 rounded-xl border border-orange-100"><Clock className="w-5 h-5 text-orange-600" /></div>
-              </div>
-              <div className="text-3xl font-black text-slate-800 tracking-tight">{pendingPostsCount}</div>
-              <div className="text-sm text-orange-500 font-bold">Cần kiểm tra ngay</div>
-            </div>
-            
-            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] transition-all duration-300">
-              <div className="flex items-center justify-between text-slate-500 font-semibold">
-                <span>Cộng tác viên</span>
-                <div className="bg-blue-50 p-2.5 rounded-xl border border-blue-100"><Users className="w-5 h-5 text-blue-600" /></div>
-              </div>
-              <div className="text-3xl font-black text-slate-800 tracking-tight">{ctvCount}</div>
-              <div className="text-sm text-slate-500 font-medium">Đang hoạt động</div>
-            </div>
-          </div>
-          
-          <div className="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white shadow-lg">
-            <h3 className="text-xl font-extrabold text-slate-800 mb-6">Thống kê dữ liệu</h3>
-            {leadStats.length > 0 ? (
-              <AdminCharts leadStats={leadStats} />
-            ) : (
-              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
-                <FileText className="w-12 h-12 text-slate-300" />
-                <p className="text-slate-500 font-medium">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <Suspense fallback={<DashboardSkeleton />}>
+          <AdminDashboardContent />
+        </Suspense>
       </main>
   );
 }

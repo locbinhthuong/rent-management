@@ -15,12 +15,24 @@ export default function PostActionButtons({ postId }: { postId: string }) {
       return;
     }
 
+    // Optimistic UI: Hide the post element instantly
+    const postElement = document.getElementById(`post-${postId}`);
+    if (postElement) {
+      postElement.style.opacity = '0.3';
+      postElement.style.pointerEvents = 'none';
+    }
+
     startTransition(async () => {
       const res = await deletePostAction(postId);
       if (res.success) {
         toast.success(res.message);
+        if (postElement) postElement.style.display = 'none';
       } else {
         toast.error(res.message);
+        if (postElement) {
+          postElement.style.opacity = '1';
+          postElement.style.pointerEvents = 'auto';
+        }
       }
     });
   };
