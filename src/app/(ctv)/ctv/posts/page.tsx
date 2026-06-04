@@ -29,8 +29,10 @@ async function CTVPostsContent({ userId }: { userId: string }) {
   
   const leads = await Lead.find({ ctv_id: userId }).select('post_id').lean();
   const leadsMap = leads.reduce((acc: any, lead: any) => {
-    const postId = lead.post_id.toString();
-    acc[postId] = (acc[postId] || 0) + 1;
+    if (lead.post_id) {
+      const postId = lead.post_id.toString();
+      acc[postId] = (acc[postId] || 0) + 1;
+    }
     return acc;
   }, {});
 
