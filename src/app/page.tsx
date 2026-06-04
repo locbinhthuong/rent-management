@@ -159,7 +159,7 @@ export default async function CustomerHome(props: {
         <FuturisticHero />
         
         {/* Split Content: Map & List */}
-        <section id="explore" className="w-full h-[90vh] relative flex flex-col border-t border-white/10 shadow-[0_-20px_50px_rgba(6,182,212,0.1)]">
+        <section id="explore" className="w-full h-[calc(100svh-4rem)] md:h-[calc(100vh-4rem)] relative flex flex-col border-t border-white/10 shadow-[0_-20px_50px_rgba(6,182,212,0.1)]">
           <MapSearchClient posts={posts} />
         </section>
       </main>

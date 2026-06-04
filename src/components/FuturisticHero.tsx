@@ -82,7 +82,7 @@ export default function FuturisticHero() {
   const districtsList = city ? getDistrictsByProvince(city) : [];
 
   return (
-    <div className="relative w-full h-[90vh] flex flex-col items-center justify-center overflow-hidden">
+    <div className="relative w-full min-h-[100svh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden py-24 md:py-0">
       {/* Hyper-realistic Background */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -97,18 +97,19 @@ export default function FuturisticHero() {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 flex flex-col items-center mt-[-10vh]">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 flex flex-col items-center mt-4 md:mt-[-10vh]">
         
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-12"
         >
-          <h1 className="font-space text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-4 drop-shadow-2xl">
-            Tương lai của <span className="text-cyan-400 font-space glow-cyan">Không Gian Sống</span>
+          <h1 className="font-space text-4xl sm:text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-3 md:mb-4 drop-shadow-2xl leading-tight">
+            Tương lai của <br className="md:hidden" />
+            <span className="text-cyan-400 font-space glow-cyan">Không Gian Sống</span>
           </h1>
-          <p className="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+          <p className="text-slate-300 text-base md:text-xl max-w-2xl mx-auto font-medium px-2">
             Khám phá trải nghiệm thuê nhà đẳng cấp với hệ thống tìm kiếm đa chiều.
           </p>
         </motion.div>

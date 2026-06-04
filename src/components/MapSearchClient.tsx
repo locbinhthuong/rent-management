@@ -76,12 +76,12 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
       </div>
 
       {/* Left side: Map */}
-      <div className={`${showMapOnMobile ? 'block' : 'hidden'} md:block w-full md:w-3/5 h-full relative z-0`}>
+      <div className={`${showMapOnMobile ? 'block' : 'hidden'} md:block w-full md:w-3/5 flex-1 md:h-full relative z-0`}>
         <MapComponent posts={posts} hoveredPostId={hoveredPostId} />
       </div>
 
       {/* Right side: Glassmorphism List */}
-      <div className={`${showMapOnMobile ? 'hidden' : 'block'} md:block w-full md:w-2/5 h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5 pb-20 md:pb-0`}>
+      <div className={`${showMapOnMobile ? 'hidden' : 'block'} md:block w-full md:w-2/5 flex-1 md:h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5 pb-20 md:pb-0`}>
         
         {/* Subtle glass effect behind the list */}
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md pointer-events-none z-[-1]"></div>
