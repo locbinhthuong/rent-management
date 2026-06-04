@@ -20,15 +20,15 @@ function DashboardSkeleton() {
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto w-full animate-pulse">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-white/80 p-6 rounded-3xl border border-slate-100 shadow-sm h-36 flex flex-col justify-between">
-            <div className="h-4 bg-slate-200 rounded w-1/2"></div>
-            <div className="h-8 bg-slate-200 rounded w-1/3"></div>
-            <div className="h-3 bg-slate-200 rounded w-2/3"></div>
+          <div key={i} className="bg-slate-900/50 p-6 rounded-3xl border border-white/10 shadow-sm h-36 flex flex-col justify-between">
+            <div className="h-4 bg-slate-700/50 rounded w-1/2"></div>
+            <div className="h-8 bg-slate-700/50 rounded w-1/3"></div>
+            <div className="h-3 bg-slate-700/50 rounded w-2/3"></div>
           </div>
         ))}
       </div>
-      <div className="bg-white/80 h-[400px] rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+      <div className="bg-slate-900/50 h-[400px] rounded-3xl border border-white/10 shadow-sm flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
       </div>
     </div>
   );
@@ -59,53 +59,53 @@ async function AdminDashboardContent() {
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(99,102,241,0.1)] transition-all duration-300">
-          <div className="flex items-center justify-between text-slate-500 font-semibold">
+        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col gap-4 hover:-translate-y-1 hover:border-cyan-500/30 transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-400 font-semibold">
             <span>Doanh thu thu tiền</span>
-            <div className="bg-indigo-50 p-2.5 rounded-xl border border-indigo-100"><DollarSign className="w-5 h-5 text-indigo-600" /></div>
+            <div className="bg-cyan-500/10 p-2.5 rounded-xl border border-cyan-500/20"><DollarSign className="w-5 h-5 text-cyan-400" /></div>
           </div>
-          <div className="text-3xl font-black text-slate-800 tracking-tight">
+          <div className="text-3xl font-black text-slate-100 tracking-tight">
             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}
           </div>
-          <div className="text-sm text-emerald-600 font-bold flex items-center gap-1.5"><TrendingUp className="w-4 h-4"/> Đã ghi nhận</div>
+          <div className="text-sm text-cyan-400 font-bold flex items-center gap-1.5"><TrendingUp className="w-4 h-4"/> Đã ghi nhận</div>
         </div>
         
-        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(16,185,129,0.1)] transition-all duration-300">
-          <div className="flex items-center justify-between text-slate-500 font-semibold">
+        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col gap-4 hover:-translate-y-1 hover:border-emerald-500/30 transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-400 font-semibold">
             <span>Phòng đã thuê</span>
-            <div className="bg-emerald-50 p-2.5 rounded-xl border border-emerald-100"><CheckCircle className="w-5 h-5 text-emerald-600" /></div>
+            <div className="bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20"><CheckCircle className="w-5 h-5 text-emerald-400" /></div>
           </div>
-          <div className="text-3xl font-black text-slate-800 tracking-tight">{rentedRoomsCount}/{totalRoomsCount}</div>
-          <div className="text-sm text-slate-500 font-medium">Tỷ lệ lấp đầy: <span className="text-emerald-600 font-bold">{occupancyRate}%</span></div>
+          <div className="text-3xl font-black text-slate-100 tracking-tight">{rentedRoomsCount}/{totalRoomsCount}</div>
+          <div className="text-sm text-slate-400 font-medium">Tỷ lệ lấp đầy: <span className="text-emerald-400 font-bold">{occupancyRate}%</span></div>
         </div>
         
-        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(249,115,22,0.1)] transition-all duration-300">
-          <div className="flex items-center justify-between text-slate-500 font-semibold">
+        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col gap-4 hover:-translate-y-1 hover:border-orange-500/30 transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-400 font-semibold">
             <span>Bài chờ duyệt</span>
-            <div className="bg-orange-50 p-2.5 rounded-xl border border-orange-100"><Clock className="w-5 h-5 text-orange-600" /></div>
+            <div className="bg-orange-500/10 p-2.5 rounded-xl border border-orange-500/20"><Clock className="w-5 h-5 text-orange-400" /></div>
           </div>
-          <div className="text-3xl font-black text-slate-800 tracking-tight">{pendingPostsCount}</div>
-          <div className="text-sm text-orange-500 font-bold">Cần kiểm tra ngay</div>
+          <div className="text-3xl font-black text-slate-100 tracking-tight">{pendingPostsCount}</div>
+          <div className="text-sm text-orange-400 font-bold">Cần kiểm tra ngay</div>
         </div>
         
-        <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-lg flex flex-col gap-4 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] transition-all duration-300">
-          <div className="flex items-center justify-between text-slate-500 font-semibold">
+        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col gap-4 hover:-translate-y-1 hover:border-blue-500/30 transition-all duration-300">
+          <div className="flex items-center justify-between text-slate-400 font-semibold">
             <span>Cộng tác viên</span>
-            <div className="bg-blue-50 p-2.5 rounded-xl border border-blue-100"><Users className="w-5 h-5 text-blue-600" /></div>
+            <div className="bg-blue-500/10 p-2.5 rounded-xl border border-blue-500/20"><Users className="w-5 h-5 text-blue-400" /></div>
           </div>
-          <div className="text-3xl font-black text-slate-800 tracking-tight">{ctvCount}</div>
-          <div className="text-sm text-slate-500 font-medium">Đang hoạt động</div>
+          <div className="text-3xl font-black text-slate-100 tracking-tight">{ctvCount}</div>
+          <div className="text-sm text-slate-400 font-medium">Đang hoạt động</div>
         </div>
       </div>
       
-      <div className="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white shadow-lg">
-        <h3 className="text-xl font-extrabold text-slate-800 mb-6">Thống kê dữ liệu</h3>
+      <div className="bg-slate-900/50 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+        <h3 className="text-xl font-extrabold text-slate-100 mb-6">Thống kê dữ liệu</h3>
         {leadStats.length > 0 ? (
           <AdminCharts leadStats={leadStats} />
         ) : (
-          <div className="bg-slate-50 border border-slate-100 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
-            <FileText className="w-12 h-12 text-slate-300" />
-            <p className="text-slate-500 font-medium">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
+          <div className="bg-slate-800/50 border border-white/5 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+            <FileText className="w-12 h-12 text-slate-600" />
+            <p className="text-slate-400 font-medium">Chưa có dữ liệu Khách hàng để hiển thị biểu đồ.</p>
           </div>
         )}
       </div>
@@ -123,15 +123,15 @@ export default async function AdminDashboard() {
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0">
         {/* Header */}
-        <header className="bg-white/70 backdrop-blur-md p-4 md:px-8 md:py-6 border-b border-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30">
-          <h2 className="text-lg md:text-2xl font-extrabold text-slate-800 tracking-tight">
+        <header className="bg-slate-900/50 backdrop-blur-md p-4 md:px-8 md:py-6 border-b border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30">
+          <h2 className="text-lg md:text-2xl font-extrabold text-slate-100 tracking-tight">
             Xin chào, {session?.user?.name?.split(' ').pop() || 'Admin'}
           </h2>
           <div className="flex gap-3 w-full md:w-auto">
-            <Link href="/" target="_blank" className="flex-1 md:flex-none text-center text-sm font-bold text-indigo-600 bg-indigo-50 px-5 py-2.5 rounded-xl hover:bg-indigo-100 transition-colors shadow-sm border border-indigo-100">
+            <Link href="/" target="_blank" className="flex-1 md:flex-none text-center text-sm font-bold text-cyan-400 bg-cyan-500/10 px-5 py-2.5 rounded-xl hover:bg-cyan-500/20 transition-colors border border-cyan-500/20">
               Trang Khách
             </Link>
-            <Link href="/api/auth/signout" className="flex-1 md:flex-none justify-center text-sm font-bold text-red-600 bg-red-50 px-5 py-2.5 rounded-xl hover:bg-red-100 transition-colors flex items-center gap-2 shadow-sm border border-red-100">
+            <Link href="/api/auth/signout" className="flex-1 md:flex-none justify-center text-sm font-bold text-red-400 bg-red-500/10 px-5 py-2.5 rounded-xl hover:bg-red-500/20 transition-colors flex items-center gap-2 border border-red-500/20">
               <LogOut className="w-4 h-4" /> Đăng xuất
             </Link>
           </div>

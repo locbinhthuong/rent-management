@@ -16,10 +16,10 @@ export default function AdminSidebar() {
   ];
 
   return (
-    <aside className="w-72 bg-slate-900 text-white hidden md:flex flex-col relative z-20 shadow-2xl shrink-0 h-screen sticky top-0">
+    <aside className="w-72 bg-slate-900/50 border-r border-white/10 hidden md:flex flex-col relative z-20 shadow-2xl backdrop-blur-2xl shrink-0 h-screen sticky top-0 text-slate-100">
       <div className="p-6 border-b border-white/10">
         <h1 className="text-2xl font-black flex items-center gap-3">
-          <Settings className="w-7 h-7 text-indigo-400" />
+          <Settings className="w-7 h-7 text-cyan-400" />
           Admin Portal
         </h1>
       </div>
@@ -35,9 +35,9 @@ export default function AdminSidebar() {
             <Link 
               key={link.href}
               href={link.href} 
-              className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all ${
+              className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 ${
                 isActive 
-                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' 
+                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 shadow-sm' 
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >

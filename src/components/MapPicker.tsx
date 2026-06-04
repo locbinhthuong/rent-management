@@ -16,6 +16,16 @@ interface MapPickerProps {
 
 const defaultCenter: [number, number] = [10.762622, 106.660172]; // HCM Center
 
+function MapUpdater({ center }: { center: [number, number] | null }) {
+  const map = useMapEvents({});
+  useEffect(() => {
+    if (center && Array.isArray(center) && !isNaN(center[0]) && !isNaN(center[1])) {
+      map.setView(center, map.getZoom());
+    }
+  }, [center, map]);
+  return null;
+}
+
 function LocationMarker({ position, onPositionChange }: { position: [number, number] | null, onPositionChange: (pos: [number, number]) => void }) {
   const map = useMapEvents({
     click(e) {
@@ -41,7 +51,9 @@ export default function MapPicker({ position, onPositionChange, city, district }
           if (data && data.length > 0) {
             const lat = parseFloat(data[0].lat);
             const lon = parseFloat(data[0].lon);
-            setCenter([lat, lon]);
+            if (!isNaN(lat) && !isNaN(lon) && Number.isFinite(lat) && Number.isFinite(lon)) {
+              setCenter([lat, lon]);
+            }
           }
         })
         .catch(console.error);
@@ -56,16 +68,19 @@ export default function MapPicker({ position, onPositionChange, city, district }
                           !isNaN(position[0]) && 
                           !isNaN(position[1]);
 
-  const mapCenter = isPositionValid ? position : center;
+  const mapCenter = isPositionValid ? position : (
+    (Array.isArray(center) && center.length === 2 && !isNaN(center[0]) && !isNaN(center[1])) ? center : defaultCenter
+  );
 
   return (
-    <div className="w-full h-[300px] rounded-xl overflow-hidden border border-slate-300 relative z-0">
+    <div className="w-full h-[300px] rounded-xl overflow-hidden border border-white/20 relative z-0 shadow-inner bg-slate-900">
       <MapContainer 
         center={mapCenter} 
         zoom={13} 
         scrollWheelZoom={true} 
-        style={{ height: '100%', width: '100%', background: '#e5e7eb' }}
+        style={{ height: '100%', width: '100%', background: '#0f172a' }}
       >
+        <MapUpdater center={mapCenter} />
         <TileLayer
           attribution='&copy; Google Maps'
           url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"

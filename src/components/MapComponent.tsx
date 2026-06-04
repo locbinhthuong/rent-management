@@ -42,7 +42,10 @@ const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null,
     if (hoveredPostId) {
       const post = posts.find(p => p._id.toString() === hoveredPostId);
       if (post) {
-        map.flyTo(getCoordinates(post), 14, { animate: true, duration: 1 });
+        const coords = getCoordinates(post);
+        if (coords && Array.isArray(coords) && !isNaN(coords[0]) && !isNaN(coords[1])) {
+          map.flyTo(coords, 14, { animate: true, duration: 1 });
+        }
       }
     }
   }, [hoveredPostId, map, posts]);
