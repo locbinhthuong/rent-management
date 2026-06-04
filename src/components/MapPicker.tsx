@@ -48,10 +48,20 @@ export default function MapPicker({ position, onPositionChange, city, district }
     }
   }, [city, district, position]);
 
+  const isPositionValid = position && 
+                          Array.isArray(position) && 
+                          position.length === 2 && 
+                          Number.isFinite(position[0]) && 
+                          Number.isFinite(position[1]) && 
+                          !isNaN(position[0]) && 
+                          !isNaN(position[1]);
+
+  const mapCenter = isPositionValid ? position : center;
+
   return (
     <div className="w-full h-[300px] rounded-xl overflow-hidden border border-slate-300 relative z-0">
       <MapContainer 
-        center={position || center} 
+        center={mapCenter} 
         zoom={13} 
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%', background: '#e5e7eb' }}
@@ -60,7 +70,7 @@ export default function MapPicker({ position, onPositionChange, city, district }
           attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         />
-        <LocationMarker position={position} onPositionChange={onPositionChange} />
+        <LocationMarker position={isPositionValid ? position : null} onPositionChange={onPositionChange} />
       </MapContainer>
     </div>
   );

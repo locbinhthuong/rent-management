@@ -16,11 +16,23 @@ interface MapComponentProps {
 
 // Function to safely extract coordinates from a post
 const getCoordinates = (post: any): [number, number] => {
-  if (post.location && post.location.coordinates && post.location.coordinates.length === 2) {
-    return [post.location.coordinates[1], post.location.coordinates[0]];
-  }
-  const hanoiCenter = [21.0285, 105.8542];
+  const hanoiCenter: [number, number] = [21.0285, 105.8542];
   const randOffset = () => (Math.random() - 0.5) * 0.05;
+  
+  try {
+    if (post?.location?.coordinates && Array.isArray(post.location.coordinates) && post.location.coordinates.length >= 2) {
+      const lng = Number(post.location.coordinates[0]);
+      const lat = Number(post.location.coordinates[1]);
+      
+      // Check if they are valid finite numbers
+      if (Number.isFinite(lat) && Number.isFinite(lng) && !isNaN(lat) && !isNaN(lng)) {
+        return [lat, lng];
+      }
+    }
+  } catch (e) {
+    // Ignore and fallback
+  }
+  
   return [hanoiCenter[0] + randOffset(), hanoiCenter[1] + randOffset()];
 };
 
@@ -42,7 +54,13 @@ const DeviceLocationPanner = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => map.setView([position.coords.latitude, position.coords.longitude], 13),
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          if (Number.isFinite(lat) && Number.isFinite(lng) && !isNaN(lat) && !isNaN(lng)) {
+            map.setView([lat, lng], 13);
+          }
+        },
         (error) => console.error("Geolocation error:", error),
         { enableHighAccuracy: true, timeout: 5000 }
       );
