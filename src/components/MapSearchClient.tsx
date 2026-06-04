@@ -19,6 +19,7 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
 export default function MapSearchClient({ posts, pagination }: { posts: any[], pagination?: any }) {
   const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
+  const [showMapOnMobile, setShowMapOnMobile] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -42,13 +43,31 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
   return (
     <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
       
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setShowMapOnMobile(!showMapOnMobile)}
+        className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] bg-gradient-to-r from-cyan-500 to-violet-500 text-white px-6 py-3 rounded-full font-bold shadow-[0_10px_25px_rgba(6,182,212,0.4)] flex items-center gap-2 border border-white/20 transition-transform active:scale-95"
+      >
+        {showMapOnMobile ? (
+          <>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            Hiển thị Danh sách
+          </>
+        ) : (
+          <>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+            Hiển thị Bản đồ
+          </>
+        )}
+      </button>
+
       {/* Left side: Map */}
-      <div className="hidden md:block w-full md:w-3/5 h-full relative z-0">
+      <div className={`${showMapOnMobile ? 'block' : 'hidden'} md:block w-full md:w-3/5 h-full relative z-0`}>
         <MapComponent posts={posts} hoveredPostId={hoveredPostId} />
       </div>
 
       {/* Right side: Glassmorphism List */}
-      <div className="w-full md:w-2/5 h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5">
+      <div className={`${showMapOnMobile ? 'hidden' : 'block'} md:block w-full md:w-2/5 h-full overflow-y-auto bg-slate-950/70 relative z-10 custom-scrollbar border-l border-white/5 pb-20 md:pb-0`}>
         
         {/* Subtle glass effect behind the list */}
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md pointer-events-none z-[-1]"></div>
