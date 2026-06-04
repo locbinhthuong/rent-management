@@ -3,17 +3,7 @@ import Post from '@/models/Post';
 import User from '@/models/User';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const MapComponent = dynamic(() => import('@/components/MapComponent'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mb-4 glow-cyan"></div>
-      <p className="text-cyan-400 font-medium font-space">Đang tải bản đồ...</p>
-    </div>
-  ),
-});
+import MapClientWrapper from '@/components/MapClientWrapper';
 
 export const revalidate = 60;
 
@@ -82,7 +72,7 @@ export default async function MapPage(props: {
       </Link>
 
       <div className="w-full h-full z-0">
-        <MapComponent posts={posts} />
+        <MapClientWrapper posts={posts} />
       </div>
     </div>
   );
