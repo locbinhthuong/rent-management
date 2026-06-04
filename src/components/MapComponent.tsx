@@ -40,11 +40,18 @@ const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null,
   const map = useMap();
   useEffect(() => {
     if (hoveredPostId) {
+      // Bỏ qua nếu map đang bị ẩn (display: none) trên mobile, dẫn đến size = 0 và gây lỗi NaN
+      if (!map || map.getSize().x === 0 || map.getSize().y === 0) return;
+      
       const post = posts.find(p => p._id.toString() === hoveredPostId);
       if (post) {
         const coords = getCoordinates(post);
         if (coords && Array.isArray(coords) && !isNaN(coords[0]) && !isNaN(coords[1])) {
-          map.flyTo(coords, 14, { animate: true, duration: 1 });
+          try {
+            map.flyTo(coords, 14, { animate: true, duration: 1 });
+          } catch (error) {
+            console.error("Lỗi Leaflet flyTo:", error);
+          }
         }
       }
     }
@@ -58,10 +65,15 @@ const DeviceLocationPanner = () => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          if (!map || map.getSize().x === 0 || map.getSize().y === 0) return;
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
           if (Number.isFinite(lat) && Number.isFinite(lng) && !isNaN(lat) && !isNaN(lng)) {
-            map.setView([lat, lng], 13);
+            try {
+              map.setView([lat, lng], 13);
+            } catch (error) {
+              console.error("Lỗi Leaflet setView:", error);
+            }
           }
         },
         (error) => console.error("Geolocation error:", error),
