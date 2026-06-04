@@ -36,16 +36,16 @@ export default function UserActionButtons({ userId, currentStatus }: { userId: s
         <button 
           onClick={() => handleUpdate('Active')}
           disabled={loading}
-          className="flex items-center gap-1 px-3 py-1.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-lg text-xs font-bold transition"
+          className="flex items-center gap-1 px-3 py-1.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-lg text-xs font-bold transition disabled:opacity-50"
         >
-          <Check className="w-4 h-4" /> Duyệt
+          {loading ? <ShieldAlert className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />} Duyệt
         </button>
         <button 
           onClick={() => handleUpdate('Rejected')}
           disabled={loading}
-          className="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-bold transition"
+          className="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-bold transition disabled:opacity-50"
         >
-          <X className="w-4 h-4" /> Từ chối
+          {loading ? <ShieldAlert className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />} Từ chối
         </button>
       </div>
     );
