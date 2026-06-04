@@ -43,23 +43,37 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
   return (
     <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
       
-      {/* Mobile Toggle Button */}
-      <button
-        onClick={() => setShowMapOnMobile(!showMapOnMobile)}
-        className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] bg-gradient-to-r from-cyan-500 to-violet-500 text-white px-6 py-3 rounded-full font-bold shadow-[0_10px_25px_rgba(6,182,212,0.4)] flex items-center gap-2 border border-white/20 transition-transform active:scale-95"
-      >
-        {showMapOnMobile ? (
-          <>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-            Hiển thị Danh sách
-          </>
-        ) : (
-          <>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
-            Hiển thị Bản đồ
-          </>
-        )}
-      </button>
+      {/* Mobile Toggle Tabs */}
+      <div className="md:hidden flex p-3 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 z-[100] shrink-0 w-full sticky top-0">
+        <div className="flex w-full bg-slate-900 rounded-xl p-1 border border-white/5 shadow-inner">
+          <button
+            onClick={() => setShowMapOnMobile(false)}
+            className={`flex-1 py-2 text-center text-sm font-bold rounded-lg transition-all ${
+              !showMapOnMobile 
+                ? 'bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-cyan-400 border border-cyan-500/30 shadow-sm' 
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              Danh sách
+            </div>
+          </button>
+          <button
+            onClick={() => setShowMapOnMobile(true)}
+            className={`flex-1 py-2 text-center text-sm font-bold rounded-lg transition-all ${
+              showMapOnMobile 
+                ? 'bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-cyan-400 border border-cyan-500/30 shadow-sm' 
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+              Bản đồ
+            </div>
+          </button>
+        </div>
+      </div>
 
       {/* Left side: Map */}
       <div className={`${showMapOnMobile ? 'block' : 'hidden'} md:block w-full md:w-3/5 h-full relative z-0`}>
