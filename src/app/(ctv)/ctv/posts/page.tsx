@@ -11,6 +11,8 @@ import { Suspense } from 'react';
 import BumpButton from '@/components/BumpButton';
 import PostActionButtons from '@/components/PostActionButtons';
 import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
+import CTVPostsFilter from '@/components/ctv/CTVPostsFilter';
+import CTVPostActions from '@/components/ctv/CTVPostActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,9 +27,26 @@ function PostsSkeleton() {
   );
 }
 
-async function CTVPostsContent({ userId }: { userId: string }) {
+async function CTVPostsContent({ userId, searchParams }: { userId: string, searchParams: any }) {
   await connectDB();
-  const posts = await Post.find({ ctv_id: userId }).sort({ createdAt: -1 }).lean() as any[];
+  
+  let query: any = { ctv_id: userId };
+  
+  if (searchParams?.status && searchParams.status !== 'All') {
+    if (searchParams.status === 'Active') query.status = 'Active';
+    else if (searchParams.status === 'Pending') query.status = 'Pending';
+    else if (searchParams.status === 'Expired') query.status = { $in: ['Expired', 'Rejected'] };
+  }
+  
+  if (searchParams?.q) {
+    query.$or = [
+      { title: { $regex: searchParams.q, $options: 'i' } },
+      { address: { $regex: searchParams.q, $options: 'i' } },
+      { district: { $regex: searchParams.q, $options: 'i' } }
+    ];
+  }
+
+  const posts = await Post.find(query).sort({ createdAt: -1 }).lean() as any[];
   
   const leads = await Lead.find({ ctv_id: userId }).select('post_id').lean();
   const leadsMap = leads.reduce((acc: any, lead: any) => {
@@ -55,25 +74,7 @@ async function CTVPostsContent({ userId }: { userId: string }) {
       </Link>
 
       {/* Filter and Search Container */}
-      <div className="bg-slate-900/50 backdrop-blur border border-white/5 rounded-2xl p-4 space-y-4">
-        {/* Tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          <button className="px-4 py-1.5 bg-orange-400 text-white text-sm font-bold rounded-full whitespace-nowrap">Tất cả</button>
-          <button className="px-4 py-1.5 text-slate-400 hover:bg-white/5 text-sm font-bold rounded-full whitespace-nowrap">Đang hoạt động</button>
-          <button className="px-4 py-1.5 text-slate-400 hover:bg-white/5 text-sm font-bold rounded-full whitespace-nowrap">Chờ duyệt</button>
-          <button className="px-4 py-1.5 text-slate-400 hover:bg-white/5 text-sm font-bold rounded-full whitespace-nowrap">Hết hạn</button>
-        </div>
-
-        {/* Search */}
-        <div className="relative">
-          <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input 
-            type="text" 
-            placeholder="Tìm theo tên đường, quận, mã tin..." 
-            className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-cyan-500/50"
-          />
-        </div>
-      </div>
+      <CTVPostsFilter />
 
       {/* Posts List */}
       <div className="space-y-4">
@@ -148,16 +149,8 @@ async function CTVPostsContent({ userId }: { userId: string }) {
                       <Link href={`/ctv/post/${post._id}/edit`} className="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center text-slate-300 hover:bg-slate-700 transition">
                         <Edit2 className="w-4 h-4" />
                       </Link>
-                      <button className="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500/20 transition">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <CTVPostActions postId={post._id.toString()} isExpired={isExpired} />
                     </div>
-                    {isExpired && (
-                      <button className="bg-blue-600/20 text-blue-400 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-blue-500/20">
-                        <Rocket className="w-3.5 h-3.5" />
-                        Gia hạn
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
@@ -169,7 +162,7 @@ async function CTVPostsContent({ userId }: { userId: string }) {
   );
 }
 
-export default async function CTVPostsPage() {
+export default async function CTVPostsPage({ searchParams }: { searchParams: any }) {
   const session = await getServerSession(authOptions);
   
   if (!session || session.user.role !== 'CTV') {
@@ -179,7 +172,7 @@ export default async function CTVPostsPage() {
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0 bg-slate-950">
         <Suspense fallback={<PostsSkeleton />}>
-          <CTVPostsContent userId={session.user.id} />
+          <CTVPostsContent userId={session.user.id} searchParams={searchParams} />
         </Suspense>
       </main>
   );

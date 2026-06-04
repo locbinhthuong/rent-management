@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { PhoneCall, Search, Clock, Home, CornerDownRight, CheckCircle, MessageSquare } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function LeadsTable({ initialLeads, isAdmin = false }: { initialLeads: any[], isAdmin?: boolean }) {
   const [leads, setLeads] = useState(initialLeads);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('All');
   const router = useRouter();
 
   useEffect(() => {
@@ -45,6 +47,11 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
     }
   };
 
+  const handleQuickNote = (id: string, currentNote: string, addition: string) => {
+    const newNote = currentNote ? `${currentNote}\n- ${addition}` : `- ${addition}`;
+    handleUpdateStatus(id, undefined, newNote);
+  };
+
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -53,11 +60,29 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffMins < 60) return `${diffMins} phút trước`;
+    if (diffMins < 60) return `${diffMins || 1} phút trước`;
     if (diffHours < 24) return `${diffHours} giờ trước`;
     if (diffDays === 1) return `Hôm qua`;
     return `${diffDays} ngày trước`;
   };
+
+  const filteredLeads = useMemo(() => {
+    return leads.filter((lead) => {
+      // Lọc theo Tab
+      if (activeTab === 'New' && lead.status !== 'New') return false;
+      if (activeTab === 'Pending' && (lead.status === 'Success' || lead.status === 'Failed')) return false;
+
+      // Lọc theo từ khóa
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const nameMatch = lead.name?.toLowerCase().includes(query);
+        const phoneMatch = lead.phone?.toLowerCase().includes(query);
+        const postMatch = lead.post_id?.title?.toLowerCase().includes(query);
+        return nameMatch || phoneMatch || postMatch;
+      }
+      return true;
+    });
+  }, [leads, activeTab, searchQuery]);
 
   return (
     <div className="space-y-4">
@@ -67,25 +92,42 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
           <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input 
             type="text" 
-            placeholder="Tìm kiếm khách hàng, bài đăng..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tìm kiếm khách hàng, SĐT, bài đăng..." 
             className="w-full bg-transparent border-b border-white/10 py-3 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-cyan-500 transition-colors"
           />
         </div>
         <div className="flex gap-4 overflow-x-auto pb-1 scrollbar-hide">
-          <button className="px-5 py-2 bg-orange-400 text-white text-sm font-bold rounded-full whitespace-nowrap">Tất cả</button>
-          <button className="px-5 py-2 text-slate-400 hover:bg-white/5 text-sm font-bold rounded-full whitespace-nowrap">Mới nhất</button>
-          <button className="px-5 py-2 text-slate-400 hover:bg-white/5 text-sm font-bold rounded-full whitespace-nowrap">Cần xử lý</button>
+          <button 
+            onClick={() => setActiveTab('All')}
+            className={`px-5 py-2 text-sm font-bold rounded-full whitespace-nowrap transition ${activeTab === 'All' ? 'bg-orange-400 text-white shadow-lg shadow-orange-500/20' : 'text-slate-400 hover:bg-white/5'}`}
+          >
+            Tất cả
+          </button>
+          <button 
+            onClick={() => setActiveTab('New')}
+            className={`px-5 py-2 text-sm font-bold rounded-full whitespace-nowrap transition ${activeTab === 'New' ? 'bg-orange-400 text-white shadow-lg shadow-orange-500/20' : 'text-slate-400 hover:bg-white/5'}`}
+          >
+            Mới nhất
+          </button>
+          <button 
+            onClick={() => setActiveTab('Pending')}
+            className={`px-5 py-2 text-sm font-bold rounded-full whitespace-nowrap transition ${activeTab === 'Pending' ? 'bg-orange-400 text-white shadow-lg shadow-orange-500/20' : 'text-slate-400 hover:bg-white/5'}`}
+          >
+            Cần xử lý
+          </button>
         </div>
       </div>
 
       {/* Cards List */}
       <div className="space-y-4">
-        {leads.length === 0 ? (
+        {filteredLeads.length === 0 ? (
           <div className="p-8 text-center text-slate-400 bg-slate-900/50 rounded-3xl border border-white/5">
-            Chưa có yêu cầu tư vấn nào.
+            Không tìm thấy kết quả nào phù hợp.
           </div>
         ) : (
-          leads.map((lead) => {
+          filteredLeads.map((lead) => {
             const isNew = lead.status === 'New';
             const isContacted = lead.status === 'Contacted';
             const isSuccess = lead.status === 'Success';
@@ -134,9 +176,13 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
                     <MessageSquare className="w-4 h-4" />
                   </div>
                   <textarea 
-                    defaultValue={lead.note || ''}
+                    value={lead.note || ''}
+                    onChange={(e) => {
+                      setLeads(leads.map(l => l._id === lead._id ? { ...l, note: e.target.value } : l));
+                    }}
                     onBlur={(e) => {
-                      if (e.target.value !== lead.note) {
+                      const originalLead = initialLeads.find(l => l._id === lead._id);
+                      if (e.target.value !== originalLead?.note) {
                         handleUpdateStatus(lead._id, undefined, e.target.value);
                       }
                     }}
@@ -159,17 +205,33 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
                       <option value="Success">Chốt</option>
                       <option value="Failed">Hủy</option>
                     </select>
-                    <button className="bg-slate-800 text-slate-300 border border-slate-700 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1">
+                    <button 
+                      onClick={() => handleQuickNote(lead._id, lead.note || '', 'Khách báo đang cần tìm phòng gấp.')}
+                      className="bg-slate-800 text-slate-300 border border-slate-700 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1"
+                    >
                       <span className="text-center leading-tight">Cần<br/>phòng</span>
                     </button>
-                    <button className="bg-slate-800 text-slate-300 border border-slate-700 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1">
+                    <button 
+                      onClick={() => handleQuickNote(lead._id, lead.note || '', 'Khách đã hẹn lịch qua xem thực tế.')}
+                      className="bg-slate-800 text-slate-300 border border-slate-700 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1"
+                    >
                       <span className="text-center leading-tight">Hẹn<br/>xem</span>
                     </button>
                   </div>
-                  <button className="bg-blue-600 text-white text-[10px] sm:text-[11px] font-bold flex-1 aspect-square max-w-[70px] max-h-[70px] rounded-2xl flex flex-col items-center justify-center shadow-lg hover:bg-blue-500 transition-colors p-1 ml-2">
+                  <a 
+                    href={`https://zalo.me/${lead.phone}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      if (lead.status === 'New') {
+                        handleUpdateStatus(lead._id, 'Contacted');
+                      }
+                    }}
+                    className="bg-blue-600 text-white text-[10px] sm:text-[11px] font-bold flex-1 aspect-square max-w-[70px] max-h-[70px] rounded-2xl flex flex-col items-center justify-center shadow-lg hover:bg-blue-500 transition-colors p-1 ml-2"
+                  >
                     <CornerDownRight className="w-4 h-4 mb-0.5" />
-                    <span className="text-center leading-tight">Phản hồi</span>
-                  </button>
+                    <span className="text-center leading-tight">Zalo</span>
+                  </a>
                 </div>
               </div>
             );

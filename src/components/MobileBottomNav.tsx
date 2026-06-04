@@ -43,6 +43,9 @@ export default function MobileBottomNav() {
   // Avoid showing anything if pending
   if (isPending) return null;
 
+  // Disable on CTV routes because CTV has its own MobileNav (CTVMobileNav)
+  if (pathname.startsWith('/ctv')) return null;
+
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 flex justify-between items-center z-[100] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] pb-safe px-2 h-[68px]">
       {links.map((link) => {
