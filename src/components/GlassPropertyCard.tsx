@@ -73,16 +73,19 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
             : 'border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-white/30 hover:shadow-[0_8px_32px_0_rgba(139,92,246,0.3)]'
         }`}
       >
-        <Link href={`/p/${post._id}`} className="block h-full w-full">
+        <div className="block h-full w-full">
           {/* Image Section */}
           <div className="relative aspect-[4/3] w-full overflow-hidden group/slider">
-            <Image
-              src={images[currentImgIndex]}
-              alt={post.title}
-              fill
-              className="object-cover transition-transform duration-700 hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+            <Link href={`/p/${post._id || post.id}`} className="absolute inset-0 z-0">
+              <Image
+                src={images[currentImgIndex]}
+                alt={post.title}
+                fill
+                className="object-cover transition-transform duration-700 hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            </Link>
+            
             {/* Carousel Controls */}
             {images.length > 1 && (
               <>
@@ -111,12 +114,12 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
             )}
 
             {/* Badges */}
-            <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white tracking-wide uppercase shadow-sm z-20">
+            <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white tracking-wide uppercase shadow-sm z-20 pointer-events-none">
               {post.property_type || 'PHÒNG TRỌ'}
             </div>
             
             {post.is_verified && (
-              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm z-20">
+              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm z-20 pointer-events-none">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span className="text-[10px] font-bold text-slate-100 tracking-wide uppercase">ĐÃ XÁC THỰC</span>
               </div>
@@ -124,7 +127,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
           </div>
 
           {/* Content Section */}
-          <div className="p-5 flex flex-col gap-3 relative z-20">
+          <Link href={`/p/${post._id || post.id}`} className="block p-5 flex flex-col gap-3 relative z-20">
             {/* Title & Location */}
             <div>
               <h3 className="font-bold text-slate-100 line-clamp-1 text-[16px] md:text-lg mb-1 tracking-tight">
@@ -159,8 +162,8 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
                 <span className="font-medium text-[11px] md:text-xs">1 PN</span>
               </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </motion.div>
     </motion.div>
   );
