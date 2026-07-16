@@ -8,13 +8,14 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
   const [posts, setPosts] = useState(initialPosts);
   const router = useRouter();
 
-  const handleUpdateStatus = async (id: string, status?: string, is_verified?: boolean) => {
-    let confirmMsg = status ? `Bạn có chắc muốn chuyển sang trạng thái ${status}?` : `Bạn có chắc muốn thay đổi trạng thái xác thực?`;
+  const handleUpdateStatus = async (id: string, approval_status?: string, rental_status?: string, is_verified?: boolean) => {
+    let confirmMsg = approval_status ? `Bạn có chắc muốn chuyển sang trạng thái ${approval_status}?` : `Bạn có chắc muốn thay đổi trạng thái xác thực?`;
     if (!confirm(confirmMsg)) return;
 
     try {
       const bodyData: any = {};
-      if (status) bodyData.status = status;
+      if (approval_status) bodyData.approval_status = approval_status;
+      if (rental_status) bodyData.rental_status = rental_status;
       if (is_verified !== undefined) bodyData.is_verified = is_verified;
 
       const res = await fetch(`/api/ctv/posts/${id}`, {
@@ -91,11 +92,11 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                 </td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                    post.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                    post.status === 'Rejected' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                    post.approval_status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                    post.approval_status === 'Rejected' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
                     'bg-orange-500/10 text-orange-400 border-orange-500/20'
                   }`}>
-                    {post.status}
+                    {post.approval_status === 'Approved' ? 'Đã duyệt' : post.approval_status === 'Rejected' ? 'Từ chối' : 'Chờ duyệt'}
                   </span>
                   {post.is_verified && (
                     <span className="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold">
@@ -104,7 +105,7 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                   )}
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
-                  {post.status === 'Active' && (
+                  {post.approval_status === 'Approved' && (
                     <>
                       <a href={`/p/${post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
                         <Eye className="w-5 h-5" />
@@ -113,7 +114,7 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                         <Edit className="w-5 h-5" />
                       </a>
                       <button 
-                        onClick={() => handleUpdateStatus(post._id, undefined, !post.is_verified)} 
+                        onClick={() => handleUpdateStatus(post._id, undefined, undefined, !post.is_verified)} 
                         className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-400 hover:bg-blue-500/20' : 'text-slate-600 hover:text-blue-400 hover:bg-slate-200/50'}`} 
                         title={post.is_verified ? "Bỏ xác thực" : "Cấp tích xanh xác thực"}
                       >
@@ -121,12 +122,12 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                       </button>
                     </>
                   )}
-                  {post.status !== 'Active' && (
-                    <button onClick={() => handleUpdateStatus(post._id, 'Active')} className="text-emerald-400 hover:bg-emerald-500/20 p-2 rounded-lg transition" title="Duyệt bài">
+                  {post.approval_status !== 'Approved' && (
+                    <button onClick={() => handleUpdateStatus(post._id, 'Approved', 'Available')} className="text-emerald-400 hover:bg-emerald-500/20 p-2 rounded-lg transition" title="Duyệt bài">
                       <CheckCircle className="w-5 h-5" />
                     </button>
                   )}
-                  {post.status !== 'Rejected' && (
+                  {post.approval_status !== 'Rejected' && (
                     <button onClick={() => handleUpdateStatus(post._id, 'Rejected')} className="text-orange-400 hover:bg-orange-500/20 p-2 rounded-lg transition" title="Từ chối">
                       <XCircle className="w-5 h-5" />
                     </button>

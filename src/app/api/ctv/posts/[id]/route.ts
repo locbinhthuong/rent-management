@@ -50,11 +50,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     await connectDB();
     const resolvedParams = await params;
     const postId = resolvedParams.id;
-    const { status, is_verified } = await req.json();
+    const { approval_status, rental_status, is_verified } = await req.json();
     
     const updateData: any = {};
-    if (status && ['Active', 'Rejected', 'Pending'].includes(status)) {
-      updateData.status = status;
+    if (approval_status && ['Pending', 'Approved', 'Rejected'].includes(approval_status)) {
+      updateData.approval_status = approval_status;
+    }
+    if (rental_status && ['Available', 'OnHold', 'Rented', 'Maintenance'].includes(rental_status)) {
+      updateData.rental_status = rental_status;
     }
     if (typeof is_verified === 'boolean') {
       updateData.is_verified = is_verified;
