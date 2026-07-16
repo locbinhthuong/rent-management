@@ -281,13 +281,12 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
               </div>
               
               <div className="space-y-4 relative z-10">
-                <div className="[&>button]:w-full [&>button]:py-4 [&>button]:rounded-xl [&>button]:font-bold [&>button]:text-lg">
-                  <ContactButton 
-                    postId={post._id.toString()} 
-                    ctvId={post.ctv_id?._id?.toString() || ''}
-                    postTitle={post.title}
-                  />
-                </div>
+                <ContactButton 
+                  postId={post._id.toString()} 
+                  ctvId={post.ctv_id?._id?.toString() || ''}
+                  postTitle={post.title}
+                  ctvPhone={ctvPhone}
+                />
               </div>
               
               <div className="mt-8 pt-5 border-t border-slate-200 flex items-start gap-3 bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10 relative z-10">
