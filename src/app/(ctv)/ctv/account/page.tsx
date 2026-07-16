@@ -77,31 +77,20 @@ export default async function CTVAccountPage() {
 
         {/* Menu Items */}
         <div className="bg-white/80 backdrop-blur-xl border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
+          <Link href="/ctv/account/profile" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-700">
                 <User className="w-5 h-5" />
               </div>
               <div>
                 <span className="font-bold text-slate-800 text-sm block">Thông tin cá nhân</span>
-                <span className="text-xs text-slate-600">Cập nhật liên hệ, Zalo link</span>
+                <span className="text-xs text-slate-600">Cập nhật liên hệ, Mật khẩu</span>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-slate-500" />
           </Link>
           
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-700">
-                <Wallet className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="font-bold text-slate-800 text-sm block">Quản lý doanh thu</span>
-                <span className="text-xs text-slate-600">Tổng quan hoa hồng</span>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-500" />
-          </Link>
+
 
           <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
             <div className="flex items-center gap-4">

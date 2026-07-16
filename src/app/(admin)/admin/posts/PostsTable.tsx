@@ -115,7 +115,7 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                 <td className="px-6 py-4 text-right space-x-2">
                   {post.approval_status === 'Approved' && (
                     <>
-                      <Link href={`/p/${post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
+                      <Link href={`/p/${post.slug || post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
                         <Eye className="w-5 h-5" />
                       </Link>
                       <Link href={`/ctv/post/${post._id}/edit`} className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Sửa bài đăng">

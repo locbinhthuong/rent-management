@@ -11,6 +11,7 @@ export default function CTVMobileNav() {
     { href: '/ctv', label: 'Tổng quan', icon: LayoutDashboard, exact: true },
     { href: '/ctv/posts', label: 'Tin đăng', icon: FileText, exact: false },
     { href: '/ctv/customers', label: 'Tư vấn', icon: MessageSquare, exact: false },
+    { href: '/ctv/contracts', label: 'Hợp đồng', icon: FileText, exact: false },
     { href: '/ctv/account', label: 'Hồ sơ', icon: User, exact: false },
   ];
 

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight, Bath, Maximize } from 'lucide-react';
 import connectDB from '@/lib/db';
+import mongoose from 'mongoose';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import ContactButton from '@/components/ContactButton';
@@ -12,17 +13,21 @@ import PostImageGallery from '@/components/PostImageGallery';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
-async function getPostDetail(id: string) {
+async function getPostDetail(identifier: string) {
   try {
     await connectDB();
     User.init();
     
-    const post = await Post.findById(id).populate('ctv_id', 'name phone').lean();
-    
-    // Tăng views bất đồng bộ (không block quá trình render)
-    Post.findByIdAndUpdate(id, { $inc: { views: 1 } }).exec().catch(() => {});
+    const query = mongoose.isValidObjectId(identifier) 
+      ? { _id: identifier } 
+      : { slug: identifier };
+      
+    const post = await Post.findOne(query).populate('ctv_id', 'name phone').lean();
     
     if (!post) return null;
+
+    // Tăng views bất đồng bộ (không block quá trình render)
+    Post.findByIdAndUpdate(post._id, { $inc: { views: 1 } }).exec().catch(() => {});
     
     // Tìm các phòng tương tự cùng loại hoặc cùng khu vực
     const similarPosts = await Post.find({
@@ -55,11 +60,12 @@ async function getPostDetail(id: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   try {
     await connectDB();
-    const post = await Post.findById(resolvedParams.id).lean();
+    const query = mongoose.isValidObjectId(resolvedParams.slug) ? { _id: resolvedParams.slug } : { slug: resolvedParams.slug };
+    const post = await Post.findOne(query).lean();
     if (!post) return { title: 'Không tìm thấy - thuenhatro.com' };
     return {
       title: `${post.title} | thuenhatro.com`,
@@ -73,9 +79,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const data = await getPostDetail(resolvedParams.id);
+  const data = await getPostDetail(resolvedParams.slug);
   
   if (!data || !data.post) {
     notFound();

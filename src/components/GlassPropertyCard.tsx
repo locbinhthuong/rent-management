@@ -76,7 +76,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
         <div className="block h-full w-full">
           {/* Image Section */}
           <div className="relative aspect-[4/3] w-full overflow-hidden group/slider">
-            <Link href={`/p/${post._id || post.id}`} className="absolute inset-0 z-0">
+            <Link href={`/p/${post.slug || post._id || post.id}`} className="absolute inset-0 z-0">
               <Image
                 src={images[currentImgIndex]}
                 alt={post.title}
@@ -127,7 +127,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
           </div>
 
           {/* Content Section */}
-          <Link href={`/p/${post._id || post.id}`} className="block p-5 flex flex-col gap-3 relative z-20">
+          <Link href={`/p/${post.slug || post._id || post.id}`} className="block p-5 flex flex-col gap-3 relative z-20">
             {/* Title & Location */}
             <div>
               <h3 className="font-bold text-slate-900 line-clamp-1 text-[16px] md:text-lg mb-1 tracking-tight">
