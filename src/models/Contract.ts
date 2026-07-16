@@ -7,11 +7,10 @@ export interface IContract extends Document {
   customer_name: string;
   customer_phone: string;
   start_date: Date;
-  end_date?: Date;
+  end_date: Date;
   deposit_amount: number;
-  rent_amount: number;
-  status: 'Active' | 'Completed' | 'Cancelled';
-  notes?: string;
+  monthly_rent: number;
+  status: 'Active' | 'Expired' | 'Cancelled';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,11 +23,10 @@ const ContractSchema: Schema = new Schema(
     customer_name: { type: String, required: true },
     customer_phone: { type: String, required: true },
     start_date: { type: Date, required: true },
-    end_date: { type: Date },
-    deposit_amount: { type: Number, required: true, default: 0 },
-    rent_amount: { type: Number, required: true, default: 0 },
-    status: { type: String, enum: ['Active', 'Completed', 'Cancelled'], default: 'Active' },
-    notes: { type: String },
+    end_date: { type: Date, required: true },
+    deposit_amount: { type: Number, required: true },
+    monthly_rent: { type: Number, required: true },
+    status: { type: String, enum: ['Active', 'Expired', 'Cancelled'], default: 'Active' },
   },
   { timestamps: true }
 );

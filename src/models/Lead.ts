@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface ILead extends Document {
   post_id: mongoose.Types.ObjectId;
   ctv_id: mongoose.Types.ObjectId;
+  customer_id?: mongoose.Types.ObjectId;
   name: string;
   phone: string;
   message?: string;
@@ -16,6 +17,7 @@ const LeadSchema: Schema = new Schema(
   {
     post_id: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
     ctv_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    customer_id: { type: Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     phone: { type: String, required: true },
     message: { type: String },

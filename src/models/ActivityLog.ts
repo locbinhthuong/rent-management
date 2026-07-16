@@ -3,10 +3,10 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IActivityLog extends Document {
   user_id: mongoose.Types.ObjectId;
   action: string;
-  entity_type: string;
-  entity_id?: mongoose.Types.ObjectId;
-  details?: any;
+  target_collection: string;
+  target_id?: mongoose.Types.ObjectId;
   ip_address?: string;
+  description: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -14,11 +14,11 @@ export interface IActivityLog extends Document {
 const ActivityLogSchema: Schema = new Schema(
   {
     user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    action: { type: String, required: true }, // e.g., 'CREATE_POST', 'UPDATE_POST', 'DELETE_POST', 'LOGIN'
-    entity_type: { type: String, required: true }, // e.g., 'Post', 'User', 'Contract'
-    entity_id: { type: Schema.Types.ObjectId },
-    details: { type: Schema.Types.Mixed }, // JSON lưu thay đổi (before/after)
+    action: { type: String, required: true }, // e.g., 'CREATE_POST', 'UPDATE_STATUS'
+    target_collection: { type: String, required: true }, // e.g., 'Post', 'User'
+    target_id: { type: Schema.Types.ObjectId },
     ip_address: { type: String },
+    description: { type: String, required: true },
   },
   { timestamps: true }
 );
