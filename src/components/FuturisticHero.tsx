@@ -119,7 +119,7 @@ export default function FuturisticHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="w-full max-w-3xl bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-4 md:p-6"
+          className="w-full max-w-3xl bg-white/95 backdrop-blur-xl rounded-3xl border border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.4)] p-4 md:p-6"
         >
           <div className="flex flex-col md:grid md:grid-cols-2 gap-x-6">
             

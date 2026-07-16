@@ -69,8 +69,8 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
         whileHover={{ scale: 1.02 }}
         className={`relative rounded-2xl overflow-hidden backdrop-blur-xl bg-white/40 border transition-all duration-300 ${
           isActive 
-            ? 'border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.4)]' 
-            : 'border-slate-200 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-white/30 hover:shadow-[0_8px_32px_0_rgba(139,92,246,0.3)]'
+            ? 'border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.5)]' 
+            : 'border-emerald-400/60 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]'
         }`}
       >
         <div className="block h-full w-full">
