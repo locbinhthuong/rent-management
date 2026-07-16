@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { CheckCircle, XCircle, Trash2, Eye, ShieldCheck, ShieldAlert, Edit } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
   const [posts, setPosts] = useState(initialPosts);
@@ -107,12 +108,12 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                 <td className="px-6 py-4 text-right space-x-2">
                   {post.approval_status === 'Approved' && (
                     <>
-                      <a href={`/p/${post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
+                      <Link href={`/p/${post._id}`} target="_blank" rel="noreferrer" className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Xem chi tiết bài đăng">
                         <Eye className="w-5 h-5" />
-                      </a>
-                      <a href={`/ctv/post/${post._id}/edit`} className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Sửa bài đăng">
+                      </Link>
+                      <Link href={`/ctv/post/${post._id}/edit`} className="inline-flex text-cyan-400 hover:bg-cyan-500/20 p-2 rounded-lg transition" title="Sửa bài đăng">
                         <Edit className="w-5 h-5" />
-                      </a>
+                      </Link>
                       <button 
                         onClick={() => handleUpdateStatus(post._id, undefined, undefined, !post.is_verified)} 
                         className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-400 hover:bg-blue-500/20' : 'text-slate-600 hover:text-blue-400 hover:bg-slate-200/50'}`} 
