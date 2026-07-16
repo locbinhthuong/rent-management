@@ -27,7 +27,8 @@ async function getPostDetail(id: string) {
     // Tìm các phòng tương tự cùng loại hoặc cùng khu vực
     const similarPosts = await Post.find({
       _id: { $ne: post._id },
-      status: 'Active',
+      approval_status: 'Approved',
+      rental_status: 'Available',
       $or: [
         { property_type: post.property_type },
         // Lấy 1 phần của địa chỉ để tìm (ví dụ: Quận 1)
@@ -51,6 +52,24 @@ async function getPostDetail(id: string) {
     };
   } catch (err) {
     return null;
+  }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  try {
+    await connectDB();
+    const post = await Post.findById(resolvedParams.id).lean();
+    if (!post) return { title: 'Không tìm thấy - thuenhatro.com' };
+    return {
+      title: `${post.title} | thuenhatro.com`,
+      description: post.description.slice(0, 150) + '...',
+      openGraph: {
+        images: post.images && post.images.length > 0 ? [post.images[0]] : [],
+      },
+    };
+  } catch (e) {
+    return { title: 'thuenhatro.com' };
   }
 }
 
@@ -210,6 +229,23 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                 )}
               </div>
             </div>
+
+            {/* Tiện ích có sẵn */}
+            {post.amenities && post.amenities.length > 0 && (
+              <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 relative overflow-hidden mt-8">
+                <h2 className="text-2xl font-bold text-slate-900 mb-6 font-space flex items-center gap-3">
+                  <Bolt className="w-6 h-6 text-cyan-400" /> Tiện ích có sẵn
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {post.amenities.map((amenity: string, idx: number) => (
+                    <span key={idx} className="px-4 py-2 bg-white/60 border border-slate-200 rounded-xl text-slate-700 font-medium shadow-sm flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                      {amenity}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Mô tả */}
             <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200">

@@ -21,14 +21,14 @@ export default function FuturisticHero() {
   const initialPriceRange = (minPrice && maxPrice) ? `${minPrice}-${maxPrice}` : '';
   const [priceRange, setPriceRange] = useState(initialPriceRange);
   
-  const [config, setConfig] = useState({ propertyTypes: [] });
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch('/api/admin/settings')
+    fetch('/api/admin/categories')
       .then(res => res.json())
       .then(data => {
-        if (data.config) {
-          setConfig({ propertyTypes: data.config.propertyTypes || [] });
+        if (Array.isArray(data)) {
+          setCategories(data.filter((c: any) => c.isActive));
         }
       })
       .catch(() => {});
@@ -188,8 +188,8 @@ export default function FuturisticHero() {
                   className="bg-transparent text-slate-900 font-semibold text-[15px] outline-none appearance-none cursor-pointer w-full"
                 >
                   <option value="" className="bg-white">Tất cả loại hình</option>
-                  {config.propertyTypes.map((type: string) => (
-                    <option key={type} value={type} className="bg-white">{type}</option>
+                  {categories.map((cat: any) => (
+                    <option key={cat._id} value={cat.name} className="bg-white">{cat.name}</option>
                   ))}
                 </select>
               </div>

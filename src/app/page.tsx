@@ -16,8 +16,10 @@ export const revalidate = 60;
 async function getActivePosts(searchParams?: { [key: string]: string | string[] | undefined }) {
   await connectDB();
   User.init(); // Ensure user model is registered
-
-  const query: any = { status: 'Active' };
+  const query: any = { 
+    approval_status: 'Approved',
+    rental_status: 'Available'
+  };
 
   if (searchParams) {
     if (searchParams.city) query.city = searchParams.city;

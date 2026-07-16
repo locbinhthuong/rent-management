@@ -11,17 +11,37 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     
     // 1. Khởi tạo Object query cho MongoDB
-    const query: any = { status: 'Active' };
+    const query: any = { 
+      approval_status: 'Approved',
+      rental_status: 'Available' 
+    };
 
-    // 2. Lọc theo Tỉnh/Thành, Quận/Huyện, Loại phòng
-    // Dựa trên yêu cầu của bạn, mình sử dụng các query params tương tự province_id, district_id,...
+    // 2. Lọc theo Text Search (Tiêu đề, Địa chỉ)
+    const q = searchParams.get('q');
+    if (q) {
+      query.$or = [
+        { title: { $regex: q, $options: 'i' } },
+        { address: { $regex: q, $options: 'i' } },
+        { district: { $regex: q, $options: 'i' } }
+      ];
+    }
+
+    // 3. Lọc theo Tỉnh/Thành, Quận/Huyện, Loại phòng, Tiện ích
     const city = searchParams.get('city') || searchParams.get('province_id');
     const district = searchParams.get('district') || searchParams.get('district_id');
     const property_type = searchParams.get('property_type') || searchParams.get('room_type_id');
+    const amenitiesParam = searchParams.get('amenities');
     
     if (city) query.city = city;
     if (district) query.district = district;
     if (property_type) query.property_type = property_type;
+    
+    if (amenitiesParam) {
+      const amenitiesList = amenitiesParam.split(',');
+      if (amenitiesList.length > 0) {
+        query.amenities = { $all: amenitiesList };
+      }
+    }
 
     // 3. Lọc theo khoảng giá (min_price, max_price)
     const minPrice = searchParams.get('min_price');
