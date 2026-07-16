@@ -55,6 +55,25 @@ const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null,
   return null;
 };
 
+const MapBoundsFitter = ({ posts }: { posts: any[] }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (!posts || posts.length === 0) return;
+    if (!map || map.getSize().x === 0 || map.getSize().y === 0) return;
+
+    const validCoords = posts.map(getCoordinates).filter(c => c !== null) as [number, number][];
+    if (validCoords.length > 0) {
+      const bounds = L.latLngBounds(validCoords);
+      try {
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+      } catch (error) {
+        console.error("Lỗi Leaflet fitBounds:", error);
+      }
+    }
+  }, [posts, map]);
+  return null;
+};
+
 const DeviceLocationPanner = () => {
   const map = useMap();
   useEffect(() => {
@@ -154,6 +173,7 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
         
         <DeviceLocationPanner />
         <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
+        <MapBoundsFitter posts={posts} />
 
         {posts.map((post) => {
           const isActive = hoveredPostId === post._id.toString();
