@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Send, Lock, Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -13,6 +13,13 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
   const [success, setSuccess] = useState(false);
   const [ctvInfo, setCtvInfo] = useState<{ phone: string, name: string } | null>(null);
   const { data: session, status } = useSession();
+
+  // Tự động điền nếu đã đăng nhập
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.name && !name) setName(session.user.name);
+    }
+  }, [session]);
 
   if (!isOpen) return null;
 
@@ -51,60 +58,65 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
             <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <Send className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">Kết nối thành công!</h3>
-            <p className="text-slate-500 text-sm mb-4">Bạn có thể liên hệ trực tiếp với Cộng tác viên qua số điện thoại bên dưới:</p>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Gửi yêu cầu thành công!</h3>
+            <p className="text-slate-500 text-sm mb-4">Bạn có thể liên hệ trực tiếp với chuyên viên tư vấn qua số điện thoại bên dưới:</p>
             
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6">
-              <p className="text-sm text-slate-500">Cộng tác viên: <span className="font-medium text-slate-700">{ctvInfo.name}</span></p>
+              <p className="text-sm text-slate-500">Chuyên viên tư vấn: <span className="font-medium text-slate-700">{ctvInfo.name}</span></p>
               <p className="text-2xl font-bold text-indigo-600 mt-2">{ctvInfo.phone}</p>
             </div>
             
             <a href={`tel:${ctvInfo.phone}`} className="block w-full flex items-center justify-center bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md">
-              Gọi ngay
+              Gọi điện ngay
             </a>
           </div>
-        ) : session ? (
+        ) : (
           <>
-            <h3 className="text-xl font-bold text-slate-800 mb-1">Xác nhận gửi yêu cầu tư vấn</h3>
+            <h3 className="text-xl font-bold text-slate-800 mb-1">Yêu cầu gọi lại tư vấn</h3>
             <p className="text-sm text-slate-500 mb-6 truncate" title={postTitle}>Phòng quan tâm: <span className="font-medium">{postTitle}</span></p>
 
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
-              <p className="text-sm text-blue-800 mb-2">Hệ thống sẽ tự động sử dụng thông tin từ tài khoản của bạn để gửi cho Cộng tác viên.</p>
-              <p className="font-bold text-blue-900">Tên: {session.user?.name}</p>
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Họ và tên <span className="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Nhập họ tên của bạn"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                />
+              </div>
 
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Lời nhắn bổ sung (tùy chọn)</label>
-              <textarea 
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="VD: Tôi muốn đến xem phòng vào chiều nay lúc 5h..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
-                rows={3}
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Số điện thoại <span className="text-red-500">*</span></label>
+                <input 
+                  type="tel" 
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Nhập số điện thoại để CTV gọi lại"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                />
+              </div>
 
-            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2 disabled:opacity-50">
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-              {loading ? 'Đang xử lý...' : 'Xác nhận & Nhận số điện thoại'}
-            </button>
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-slate-700 mb-1">Lời nhắn bổ sung (tùy chọn)</label>
+                <textarea 
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="VD: Tôi muốn đến xem phòng vào chiều nay lúc 17h..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                  rows={3}
+                />
+              </div>
+
+              <button disabled={loading} type="submit" className="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2 disabled:opacity-50">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                {loading ? 'Đang gửi yêu cầu...' : 'Gửi yêu cầu ngay'}
+              </button>
+            </form>
           </>
-        ) : (
-          <div className="text-center py-6">
-            <div className="w-16 h-16 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">Yêu cầu đăng nhập</h3>
-            <p className="text-slate-500 text-sm mb-6 leading-relaxed">
-              Vui lòng đăng nhập hoặc tạo tài khoản miễn phí để nhận thông tin liên hệ của Cộng tác viên đăng bài này.
-            </p>
-            
-            <div className="flex gap-3">
-              <Link href="/login" className="flex-1 text-center bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
-                Đăng nhập ngay
-              </Link>
-            </div>
-          </div>
         )}
       </div>
     </div>
