@@ -1,18 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, XCircle, Trash2, Eye, ShieldCheck, ShieldAlert, Edit } from 'lucide-react';
+import { CheckCircle, XCircle, Trash2, Eye, ShieldCheck, ShieldAlert, Edit, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
   const [posts, setPosts] = useState(initialPosts);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const router = useRouter();
 
   const handleUpdateStatus = async (id: string, approval_status?: string, rental_status?: string, is_verified?: boolean) => {
     let confirmMsg = approval_status ? `Bạn có chắc muốn chuyển sang trạng thái ${approval_status}?` : `Bạn có chắc muốn thay đổi trạng thái xác thực?`;
     if (!confirm(confirmMsg)) return;
 
+    setLoadingId(id);
     try {
       const bodyData: any = {};
       if (approval_status) bodyData.approval_status = approval_status;
@@ -32,12 +34,15 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
       }
     } catch (error) {
       alert('Lỗi hệ thống');
+    } finally {
+      setLoadingId(null);
     }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Bạn có chắc chắn muốn XÓA bài đăng này? Mọi dữ liệu Khách hàng liên quan cũng sẽ bị xóa sạch!')) return;
 
+    setLoadingId(id);
     try {
       const res = await fetch(`/api/ctv/posts/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -48,6 +53,8 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
       }
     } catch (error) {
       alert('Lỗi hệ thống');
+    } finally {
+      setLoadingId(null);
     }
   };
 
@@ -116,25 +123,26 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                       </Link>
                       <button 
                         onClick={() => handleUpdateStatus(post._id, undefined, undefined, !post.is_verified)} 
-                        className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-400 hover:bg-blue-500/20' : 'text-slate-600 hover:text-blue-400 hover:bg-slate-200/50'}`} 
+                        disabled={loadingId === post._id}
+                        className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-400 hover:bg-blue-500/20' : 'text-slate-600 hover:text-blue-400 hover:bg-slate-200/50'} disabled:opacity-50`} 
                         title={post.is_verified ? "Bỏ xác thực" : "Cấp tích xanh xác thực"}
                       >
-                        {post.is_verified ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
+                        {loadingId === post._id ? <Loader2 className="w-5 h-5 animate-spin" /> : (post.is_verified ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />)}
                       </button>
                     </>
                   )}
                   {post.approval_status !== 'Approved' && (
-                    <button onClick={() => handleUpdateStatus(post._id, 'Approved', 'Available')} className="text-emerald-400 hover:bg-emerald-500/20 p-2 rounded-lg transition" title="Duyệt bài">
-                      <CheckCircle className="w-5 h-5" />
+                    <button onClick={() => handleUpdateStatus(post._id, 'Approved', 'Available')} disabled={loadingId === post._id} className="text-emerald-400 hover:bg-emerald-500/20 p-2 rounded-lg transition disabled:opacity-50" title="Duyệt bài">
+                      {loadingId === post._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle className="w-5 h-5" />}
                     </button>
                   )}
                   {post.approval_status !== 'Rejected' && (
-                    <button onClick={() => handleUpdateStatus(post._id, 'Rejected')} className="text-orange-400 hover:bg-orange-500/20 p-2 rounded-lg transition" title="Từ chối">
-                      <XCircle className="w-5 h-5" />
+                    <button onClick={() => handleUpdateStatus(post._id, 'Rejected')} disabled={loadingId === post._id} className="text-orange-400 hover:bg-orange-500/20 p-2 rounded-lg transition disabled:opacity-50" title="Từ chối">
+                      {loadingId === post._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <XCircle className="w-5 h-5" />}
                     </button>
                   )}
-                  <button onClick={() => handleDelete(post._id)} className="text-red-400 hover:bg-red-500/20 p-2 rounded-lg transition" title="Xóa bài & Toàn bộ khách hàng">
-                    <Trash2 className="w-5 h-5" />
+                  <button onClick={() => handleDelete(post._id)} disabled={loadingId === post._id} className="text-red-400 hover:bg-red-500/20 p-2 rounded-lg transition disabled:opacity-50" title="Xóa bài & Toàn bộ khách hàng">
+                    {loadingId === post._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
                   </button>
                 </td>
               </tr>

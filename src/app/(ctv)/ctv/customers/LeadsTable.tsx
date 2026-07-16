@@ -8,6 +8,7 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
   const [leads, setLeads] = useState(initialLeads);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('All');
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
   }, []);
 
   const handleUpdateStatus = async (id: string, status?: string, note?: string) => {
+    setLoadingId(id);
     try {
       const body: any = {};
       if (status) body.status = status;
@@ -44,6 +46,8 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
       }
     } catch(err) {
       alert('Lỗi hệ thống');
+    } finally {
+      setLoadingId(null);
     }
   };
 
@@ -134,7 +138,7 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
             const initial = lead.name ? lead.name.charAt(0).toUpperCase() : 'U';
 
             return (
-              <div key={lead._id} className="bg-white/80 backdrop-blur rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
+              <div key={lead._id} className={`bg-white/80 backdrop-blur rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden transition-all ${loadingId === lead._id ? 'opacity-50 pointer-events-none' : ''}`}>
                 {/* Header */}
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">

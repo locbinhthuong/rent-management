@@ -1,0 +1,1 @@
+const fs=require('fs');const path=require('path');function walk(dir){let results=[];const list=fs.readdirSync(dir);list.forEach(file==path.join(dir,file);const stat=fs.statSync(file);if(stat

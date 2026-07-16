@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Send, Lock } from 'lucide-react';
+import { X, Send, Lock, Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -72,9 +72,9 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
               <p className="font-bold text-blue-900">Tên: {session.user?.name}</p>
             </div>
 
-            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2">
-              <Send className="w-5 h-5" />
-              {loading ? 'Đang gửi...' : 'Xác nhận & Nhận số điện thoại'}
+            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2 disabled:opacity-50">
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+              {loading ? 'Đang xử lý...' : 'Xác nhận & Nhận số điện thoại'}
             </button>
           </>
         ) : (
