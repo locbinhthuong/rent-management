@@ -73,12 +73,10 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
         </>
       )}
 
-      {/* Map Banner */}
       <Link href={`/map?${searchParams.toString()}`} className="mt-8 block relative rounded-3xl overflow-hidden group cursor-pointer border border-slate-200 shadow-lg h-40 md:h-48">
-        <div className="absolute inset-0 bg-white">
-          {/* A dark stylized map background image */}
-          <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop")', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-slate-900">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950"></div>
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+PC9zdmc+')] opacity-50"></div>
         </div>
         
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-transform group-hover:scale-105 duration-500">

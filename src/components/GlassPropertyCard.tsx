@@ -18,7 +18,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
   const fullAddress = [post.address, post.district, post.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
   const images = post.images && post.images.length > 0 
     ? post.images 
-    : ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop'];
+    : ['data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlNWU3ZWIiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DaMawYSBjw7MgaMOsbmgg4bqjbmg8L3RleHQ+PC9zdmc+'];
   
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
@@ -157,10 +157,6 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
                   <span className="font-medium text-[11px] md:text-xs">{post.area_sqm} m²</span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5 bg-slate-100/80 border border-slate-300/50 rounded-lg px-2.5 py-1.5 text-slate-700">
-                <Home className="w-3.5 h-3.5 opacity-70" />
-                <span className="font-medium text-[11px] md:text-xs">1 PN</span>
-              </div>
             </div>
           </Link>
         </div>

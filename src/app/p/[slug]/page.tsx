@@ -179,14 +179,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
                        <span className="font-semibold">{post.area_sqm} m²</span>
                      </div>
                    )}
-                   <div className="flex flex-col items-center gap-1">
-                     <Home className="w-6 h-6 text-slate-600" />
-                     <span className="font-semibold">1 PN</span>
-                   </div>
-                   <div className="flex flex-col items-center gap-1">
-                     <Bath className="w-6 h-6 text-slate-600" />
-                     <span className="font-semibold">1 WC</span>
-                   </div>
                 </div>
               </div>
             </div>

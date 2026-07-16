@@ -14,11 +14,7 @@ interface MapComponentProps {
   hoveredPostId: string | null;
 }
 
-// Function to safely extract coordinates from a post
-const getCoordinates = (post: any): [number, number] => {
-  const hanoiCenter: [number, number] = [21.0285, 105.8542];
-  const randOffset = () => (Math.random() - 0.5) * 0.05;
-  
+const getCoordinates = (post: any): [number, number] | null => {
   try {
     if (post?.location?.coordinates && Array.isArray(post.location.coordinates) && post.location.coordinates.length >= 2) {
       const lng = Number(post.location.coordinates[0]);
@@ -33,7 +29,7 @@ const getCoordinates = (post: any): [number, number] => {
     // Ignore and fallback
   }
   
-  return [hanoiCenter[0] + randOffset(), hanoiCenter[1] + randOffset()];
+  return null;
 };
 
 const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null, posts: any[] }) => {
@@ -112,7 +108,9 @@ const createCustomIcon = (isActive: boolean) => {
 };
 
 export default function MapComponent({ posts, hoveredPostId }: MapComponentProps) {
-  const defaultCenter: [number, number] = posts.length > 0 ? getCoordinates(posts[0]) : [21.0285, 105.8542];
+  // Find first valid coordinates for default center
+  const firstValidCoords = posts.map(getCoordinates).find(c => c !== null);
+  const defaultCenter: [number, number] = firstValidCoords || [14.0583, 108.2772]; // Vietnam center
   const [mapType, setMapType] = useState<'street' | 'satellite'>('street');
 
   return (
@@ -160,10 +158,11 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
         {posts.map((post) => {
           const isActive = hoveredPostId === post._id.toString();
           const coords = getCoordinates(post);
+          if (!coords) return null; // Do not render if no valid coordinates
           const price = post.price || 0;
           const imageUrl = post.images && post.images.length > 0 
             ? post.images[0] 
-            : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop';
+            : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlNWU3ZWIiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DaMawYSBjw7MgaMOsbmgg4bqjbmg8L3RleHQ+PC9zdmc+';
 
           return (
             <Marker 
