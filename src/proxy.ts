@@ -20,8 +20,8 @@ export default withAuth(
       if (token?.role !== "CTV" && token?.role !== "Admin") {
         response = NextResponse.redirect(new URL("/login", req.url));
       } else if (token?.status === "Pending") {
-        if (path !== "/ctv/pending") {
-          response = NextResponse.redirect(new URL("/ctv/pending", req.url));
+        if (path !== "/pending") {
+          response = NextResponse.redirect(new URL("/pending", req.url));
         }
       }
     }
