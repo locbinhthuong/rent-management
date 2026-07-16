@@ -33,9 +33,12 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
   let query: any = { ctv_id: userId };
   
   if (searchParams?.status && searchParams.status !== 'All') {
-    if (searchParams.status === 'Active') query.status = 'Active';
-    else if (searchParams.status === 'Pending') query.status = 'Pending';
-    else if (searchParams.status === 'Expired') query.status = { $in: ['Expired', 'Rejected'] };
+    if (searchParams.status === 'Active') {
+      query.approval_status = 'Approved';
+      query.rental_status = 'Available';
+    }
+    else if (searchParams.status === 'Pending') query.approval_status = 'Pending';
+    else if (searchParams.status === 'Expired') query.approval_status = 'Rejected';
   }
   
   if (searchParams?.q) {
@@ -85,9 +88,9 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
           </div>
         ) : (
           posts.map((post) => {
-            const isExpired = post.status === 'Rejected' || post.status === 'Expired';
-            const isPending = post.status === 'Pending';
-            const isActive = post.status === 'Active';
+            const isExpired = post.approval_status === 'Rejected' || post.rental_status === 'Maintenance';
+            const isPending = post.approval_status === 'Pending';
+            const isActive = post.approval_status === 'Approved' && post.rental_status === 'Available';
 
             const badgeConfig = isActive 
               ? { bg: 'bg-emerald-500', text: 'ĐÃ XUẤT BẢN' } 

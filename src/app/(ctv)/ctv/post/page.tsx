@@ -15,15 +15,22 @@ export default function CreatePostPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [config, setConfig] = useState({ propertyTypes: [] });
+  const [categories, setCategories] = useState([]);
+  const [amenities, setAmenities] = useState([]);
 
   useEffect(() => {
-    fetch('/api/admin/settings')
+    // Fetch Categories
+    fetch('/api/admin/categories')
       .then(res => res.json())
       .then(data => {
-        if (data.config) {
-          setConfig({ propertyTypes: data.config.propertyTypes || [] });
-        }
+        if (Array.isArray(data)) setCategories(data.filter((c: any) => c.isActive));
+      });
+      
+    // Fetch Amenities
+    fetch('/api/admin/amenities')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setAmenities(data.filter((a: any) => a.isActive));
       });
   }, []);
 
@@ -32,7 +39,7 @@ export default function CreatePostPage() {
     address: '',
     city: 'Hồ Chí Minh',
     price: '',
-    property_type: 'Phòng trọ sinh viên',
+    property_type: '',
     utility_costs: 'Điện 3.5k/kwh - Nước 100k/người',
     contract_terms: 'Cọc 1 tháng - Hợp đồng 6 tháng',
     target_audience: 'Sinh viên, Người đi làm',
@@ -40,6 +47,7 @@ export default function CreatePostPage() {
     description: '',
     location: null as [number, number] | null,
     district: '',
+    amenities: [] as string[],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -259,12 +267,38 @@ export default function CreatePostPage() {
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium"
                     >
-                      {config.propertyTypes.map((type: string) => (
-                        <option key={type} value={type}>{type}</option>
+                      {categories.map((cat: any) => (
+                        <option key={cat._id} value={cat.name}>{cat.name}</option>
                       ))}
-                      {config.propertyTypes.length === 0 && <option value="Phòng trọ sinh viên">Phòng trọ sinh viên</option>}
+                      {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
                     </select>
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <Bolt className="w-4 h-4 text-cyan-400" /> Tiện ích có sẵn
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {amenities.map((amenity: any) => (
+                      <label key={amenity._id} className="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                        <input 
+                          type="checkbox" 
+                          className="w-4 h-4 text-cyan-500 rounded border-slate-300 focus:ring-cyan-500"
+                          checked={formData.amenities.includes(amenity.name)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData(prev => ({ ...prev, amenities: [...prev.amenities, amenity.name] }));
+                            } else {
+                              setFormData(prev => ({ ...prev, amenities: prev.amenities.filter(a => a !== amenity.name) }));
+                            }
+                          }}
+                        />
+                        <span className="text-sm font-medium text-slate-700">{amenity.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {amenities.length === 0 && <p className="text-xs text-slate-500">Đang tải tiện ích...</p>}
                 </div>
 
                 <div>

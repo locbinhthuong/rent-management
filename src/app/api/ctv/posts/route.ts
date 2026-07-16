@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
+import { postService } from '@/services/post.service';
 
 export async function POST(req: Request) {
   try {
@@ -34,15 +35,17 @@ export async function POST(req: Request) {
       contract_terms: data.contract_terms,
       target_audience: data.target_audience,
       images: Array.isArray(data.images) ? data.images : [data.images].filter(Boolean),
-      status: 'Pending', // Mặc định phải chờ Admin duyệt
+      amenities: data.amenities || [],
+      approval_status: 'Pending', // Mặc định phải chờ Admin duyệt
+      rental_status: 'Available',
     };
 
     if (data.location && Array.isArray(data.location.coordinates)) {
       postPayload.location = data.location;
     }
 
-    // Tạo Post mới
-    const newPost = await Post.create(postPayload);
+    // Tạo Post mới thông qua Service
+    const newPost = await postService.createPost(postPayload);
 
     return NextResponse.json({ message: 'Tạo bài đăng thành công', post: newPost }, { status: 201 });
   } catch (error: any) {
