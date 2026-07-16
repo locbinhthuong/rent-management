@@ -41,11 +41,11 @@ export default function LoginPage() {
       } else {
         const session = await getSession();
         if (session?.user?.role === 'Admin') {
-          window.location.href = '/admin';
+          router.push('/admin');
         } else if (session?.user?.role === 'CTV') {
-          window.location.href = '/ctv';
+          router.push('/ctv');
         } else {
-          window.location.href = '/';
+          router.push('/');
         }
       }
     } catch (err) {
