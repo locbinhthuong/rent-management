@@ -8,6 +8,7 @@ import Link from 'next/link';
 export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose }: { postId: string, ctvId: string, postTitle: string, isOpen: boolean, onClose: () => void }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [ctvInfo, setCtvInfo] = useState<{ phone: string, name: string } | null>(null);
@@ -23,7 +24,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ post_id: postId, ctv_id: ctvId })
+        body: JSON.stringify({ post_id: postId, ctv_id: ctvId, message })
       });
       if (res.ok) {
         const data = await res.json();
@@ -58,7 +59,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
               <p className="text-2xl font-bold text-indigo-600 mt-2">{ctvInfo.phone}</p>
             </div>
             
-            <a href={`tel:${ctvInfo.phone}`} className="block w-full bg-indigo-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md">
+            <a href={`tel:${ctvInfo.phone}`} className="block w-full flex items-center justify-center bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md">
               Gọi ngay
             </a>
           </div>
@@ -67,12 +68,23 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
             <h3 className="text-xl font-bold text-slate-800 mb-1">Xác nhận gửi yêu cầu tư vấn</h3>
             <p className="text-sm text-slate-500 mb-6 truncate" title={postTitle}>Phòng quan tâm: <span className="font-medium">{postTitle}</span></p>
 
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
               <p className="text-sm text-blue-800 mb-2">Hệ thống sẽ tự động sử dụng thông tin từ tài khoản của bạn để gửi cho Cộng tác viên.</p>
               <p className="font-bold text-blue-900">Tên: {session.user?.name}</p>
             </div>
 
-            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2 disabled:opacity-50">
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Lời nhắn bổ sung (tùy chọn)</label>
+              <textarea 
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="VD: Tôi muốn đến xem phòng vào chiều nay lúc 5h..."
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                rows={3}
+              />
+            </div>
+
+            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2 disabled:opacity-50">
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
               {loading ? 'Đang xử lý...' : 'Xác nhận & Nhận số điện thoại'}
             </button>
@@ -88,7 +100,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
             </p>
             
             <div className="flex gap-3">
-              <Link href="/login" className="flex-1 bg-indigo-600 text-slate-900 font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
+              <Link href="/login" className="flex-1 text-center bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
                 Đăng nhập ngay
               </Link>
             </div>

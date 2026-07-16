@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     const newLead = await Lead.create({
       post_id: data.post_id,
       ctv_id: data.ctv_id,
+      customer_id: session.user.id,
       name: customer.name,
       phone: customer.phone || 'Chưa cập nhật',
       message: data.message || '',

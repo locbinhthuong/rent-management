@@ -11,7 +11,7 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
   await connectDB();
   User.init(); 
 
-  const query: any = { status: 'Active' };
+  const query: any = { approval_status: 'Approved', rental_status: 'Available' };
 
   if (searchParams) {
     if (searchParams.city) query.city = searchParams.city;

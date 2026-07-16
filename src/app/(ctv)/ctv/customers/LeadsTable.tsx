@@ -164,14 +164,20 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
                 </div>
 
                 {/* Post Info */}
-                <div className="bg-indigo-900/20 rounded-xl p-3 mb-4 border border-indigo-500/20">
+                <div className="bg-indigo-50/50 rounded-xl p-3 mb-4 border border-indigo-100">
                   <p className="text-[10px] font-bold text-slate-500 mb-1">QUAN TÂM ĐẾN</p>
                   <p className="font-bold text-slate-800 text-sm line-clamp-1">{lead.post_id?.title || 'Bài viết đã bị xóa'}</p>
                   <div className="flex gap-2 mt-2">
-                    <div className="flex items-center gap-1 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded text-xs text-slate-700">
-                      <Home className="w-3 h-3" /> {lead.post_id?.property_type === 'Căn hộ chung cư' ? 'Căn hộ' : 'Phòng trọ'}
+                    <div className="flex items-center gap-1 bg-white border border-slate-200 px-2 py-0.5 rounded text-xs text-slate-700">
+                      <Home className="w-3 h-3 text-indigo-500" /> {lead.post_id?.property_type === 'Căn hộ chung cư' ? 'Căn hộ' : 'Phòng trọ'}
                     </div>
                   </div>
+                  {lead.message && (
+                    <div className="mt-3 pt-3 border-t border-indigo-100">
+                      <p className="text-[10px] font-bold text-slate-500 mb-1">LỜI NHẮN TỪ KHÁCH HÀNG</p>
+                      <p className="text-sm text-slate-700 italic">"{lead.message}"</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Internal Note */}
@@ -211,13 +217,13 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
                     </select>
                     <button 
                       onClick={() => handleQuickNote(lead._id, lead.note || '', 'Khách báo đang cần tìm phòng gấp.')}
-                      className="bg-slate-100 text-slate-700 border border-slate-300 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1"
+                      className="bg-slate-100 text-slate-700 border border-slate-300 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 hover:text-white transition-colors p-1"
                     >
                       <span className="text-center leading-tight">Cần<br/>phòng</span>
                     </button>
                     <button 
                       onClick={() => handleQuickNote(lead._id, lead.note || '', 'Khách đã hẹn lịch qua xem thực tế.')}
-                      className="bg-slate-100 text-slate-700 border border-slate-300 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 transition-colors p-1"
+                      className="bg-slate-100 text-slate-700 border border-slate-300 text-[10px] sm:text-[11px] font-medium flex-1 aspect-square max-w-[60px] max-h-[60px] rounded-2xl flex flex-col items-center justify-center hover:bg-slate-700 hover:text-white transition-colors p-1"
                     >
                       <span className="text-center leading-tight">Hẹn<br/>xem</span>
                     </button>

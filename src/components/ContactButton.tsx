@@ -10,7 +10,7 @@ export default function ContactButton({ postId, ctvId, postTitle }: { postId: st
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-slate-900 font-bold py-2.5 rounded-xl hover:bg-indigo-700 transition shadow-sm"
+        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white font-bold py-2.5 rounded-xl hover:bg-indigo-700 transition shadow-sm"
       >
         <MessageSquare className="w-4 h-4" />
         Nhận tư vấn
