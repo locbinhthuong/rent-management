@@ -6,7 +6,9 @@ export interface IPost extends Document {
   title: string;
   description: string;
   images: string[];
-  status: 'Pending' | 'Active' | 'Rejected';
+  slug?: string;
+  approval_status: 'Pending' | 'Approved' | 'Rejected';
+  rental_status: 'Available' | 'OnHold' | 'Rented' | 'Maintenance';
   commission_rate?: number; // % hoa hồng
   
   // Các trường mới cho bài đăng chi tiết (Rao vặt)
@@ -41,7 +43,10 @@ const PostSchema: Schema = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     images: [{ type: String }],
-    status: { type: String, enum: ['Pending', 'Active', 'Rejected'], default: 'Pending' },
+    slug: { type: String, unique: true, sparse: true },
+    approval_status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+    rental_status: { type: String, enum: ['Available', 'OnHold', 'Rented', 'Maintenance'], default: 'Available' },
+    video: { type: String },
     commission_rate: { type: Number },
     
     // Thêm các trường mới
