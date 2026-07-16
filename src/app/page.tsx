@@ -8,7 +8,8 @@ import { Heart, Home } from 'lucide-react';
 import Image from 'next/image';
 
 // Client components
-import SplitScreenSearch from '@/components/SplitScreenSearch';
+import FuturisticHero from '@/components/FuturisticHero';
+import MapSearchClient from '@/components/MapSearchClient';
 
 export const revalidate = 60;
 
@@ -155,9 +156,14 @@ export default async function CustomerHome(props: {
         </nav>
       </header>
 
-      {/* Main Split Screen Area */}
-      <main className="w-full">
-        <SplitScreenSearch posts={posts} pagination={pagination} />
+      {/* Futuristic Hero Section */}
+      <main className="pt-16">
+        <FuturisticHero posts={posts} />
+        
+        {/* Featured Content: List & Map Banner */}
+        <section id="explore" className="w-full relative flex flex-col mt-4">
+          <MapSearchClient posts={posts} pagination={pagination} />
+        </section>
       </main>
     </div>
   );
