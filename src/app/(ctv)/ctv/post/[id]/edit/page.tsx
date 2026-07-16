@@ -118,12 +118,12 @@ export default function EditPostPage() {
   if (success) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center h-screen bg-transparent">
-        <div className="bg-slate-900/50 backdrop-blur-xl p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 text-center max-w-md w-full">
+        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 text-center max-w-md w-full">
           <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4">
             <Send className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-100 mb-2">Cập nhật thành công!</h2>
-          <p className="text-slate-400 mb-6">Bài đăng của bạn đã được thay đổi.</p>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Cập nhật thành công!</h2>
+          <p className="text-slate-600 mb-6">Bài đăng của bạn đã được thay đổi.</p>
           <p className="text-sm text-slate-500">Đang quay lại bảng điều khiển...</p>
         </div>
       </div>
@@ -135,16 +135,16 @@ export default function EditPostPage() {
 
   return (
     <main className="flex-1 bg-transparent h-screen overflow-y-auto pb-24 md:pb-12">
-      <header className="bg-slate-900/50 backdrop-blur-xl p-4 border-b border-white/10 sticky top-0 z-10 shadow-sm flex items-center gap-4">
-        <Link href="/ctv" className="text-slate-400 hover:text-cyan-400 transition bg-slate-800 hover:bg-cyan-500/20 p-2 rounded-full border border-white/5 hover:border-cyan-500/30">
+      <header className="bg-white/80 backdrop-blur-xl p-4 border-b border-slate-200 sticky top-0 z-10 shadow-sm flex items-center gap-4">
+        <Link href="/ctv" className="text-slate-600 hover:text-cyan-400 transition bg-slate-100 hover:bg-cyan-500/20 p-2 rounded-full border border-slate-200 hover:border-cyan-500/30">
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h2 className="text-xl font-bold text-slate-100">Chỉnh sửa tin đăng phòng trọ</h2>
+        <h2 className="text-xl font-bold text-slate-900">Chỉnh sửa tin đăng phòng trọ</h2>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 mt-8">
-        <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 overflow-hidden">
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 overflow-hidden">
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-slate-900">
             <h3 className="text-lg font-bold">Cập nhật thông tin Rao vặt</h3>
             <p className="text-emerald-100 text-sm mt-1">Sửa đổi thông tin bài đăng của bạn.</p>
           </div>
@@ -160,7 +160,7 @@ export default function EditPostPage() {
               {/* Cột 1 */}
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <FileText className="w-4 h-4 text-emerald-400" /> Tiêu đề bài đăng *
                   </label>
                   <input
@@ -169,12 +169,12 @@ export default function EditPostPage() {
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-emerald-400" /> Địa chỉ chi tiết *
                   </label>
                   <input
@@ -183,13 +183,13 @@ export default function EditPostPage() {
                     required
                     value={formData.address}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-emerald-400" /> Tỉnh/Thành *
                     </label>
                     <select
@@ -197,7 +197,7 @@ export default function EditPostPage() {
                       required
                       value={formData.city}
                       onChange={handleCityChange}
-                      className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                     >
                       <option value="">Chọn Tỉnh/Thành</option>
                       {provincesList.map((p) => (
@@ -209,7 +209,7 @@ export default function EditPostPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-emerald-400" /> Khu vực (Quận/Huyện) *
                     </label>
                     <select
@@ -218,7 +218,7 @@ export default function EditPostPage() {
                       value={formData.district || ''}
                       onChange={handleChange}
                       disabled={!formData.city}
-                      className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-slate-100 font-medium"
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-slate-900 font-medium"
                     >
                       <option value="">{formData.city ? "Chọn khu vực" : "Chọn Tỉnh/Thành trước"}</option>
                       {districtsList.map((loc: string) => (
@@ -233,7 +233,7 @@ export default function EditPostPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-emerald-400" /> Giá / Tháng *
                     </label>
                     <input
@@ -242,18 +242,18 @@ export default function EditPostPage() {
                       required
                       value={formData.price}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <Home className="w-4 h-4 text-emerald-400" /> Loại nhà trọ
                     </label>
                     <select
                       name="property_type"
                       value={formData.property_type}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                     >
                       {config.propertyTypes.map((type: string) => (
                         <option key={type} value={type}>{type}</option>
@@ -266,7 +266,7 @@ export default function EditPostPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <ImageIcon className="w-4 h-4 text-emerald-400" /> Hình ảnh phòng trọ *
                   </label>
                   <ImageUpload 
@@ -274,14 +274,14 @@ export default function EditPostPage() {
                     onChange={handleImageUpload}
                     onRemove={handleImageRemove}
                   />
-                  <p className="text-xs text-slate-400 mt-2">Upload ít nhất 1 ảnh (khuyến khích tỉ lệ ngang 4:3).</p>
+                  <p className="text-xs text-slate-600 mt-2">Upload ít nhất 1 ảnh (khuyến khích tỉ lệ ngang 4:3).</p>
                 </div>
               </div>
 
               {/* Cột 2 */}
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <Bolt className="w-4 h-4 text-emerald-400" /> Chính sách Điện - Nước - Dịch vụ
                   </label>
                   <input
@@ -289,12 +289,12 @@ export default function EditPostPage() {
                     name="utility_costs"
                     value={formData.utility_costs}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <FileText className="w-4 h-4 text-emerald-400" /> Điều khoản hợp đồng
                   </label>
                   <input
@@ -302,12 +302,12 @@ export default function EditPostPage() {
                     name="contract_terms"
                     value={formData.contract_terms}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <Users className="w-4 h-4 text-emerald-400" /> Đối tượng phù hợp
                   </label>
                   <input
@@ -315,32 +315,32 @@ export default function EditPostPage() {
                     name="target_audience"
                     value={formData.target_audience}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-100 font-medium"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-200 mb-2">Mô tả chi tiết *</label>
+                  <label className="block text-sm font-bold text-slate-800 mb-2">Mô tả chi tiết *</label>
                   <textarea
                     name="description"
                     required
                     value={formData.description}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full px-4 py-3 bg-slate-900 border border-white/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none resize-none text-slate-100 font-medium"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none resize-none text-slate-900 font-medium"
                   ></textarea>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/10 flex justify-end gap-4">
-              <Link href="/ctv" className="px-6 py-3 font-bold text-slate-400 hover:bg-white/5 rounded-xl transition">
+            <div className="pt-6 border-t border-slate-200 flex justify-end gap-4">
+              <Link href="/ctv" className="px-6 py-3 font-bold text-slate-600 hover:bg-slate-200/50 rounded-xl transition">
                 Hủy bỏ
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className={`px-8 py-3 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2 ${loading ? 'bg-emerald-900/50' : 'bg-emerald-600 hover:bg-emerald-700 shadow-[0_0_15px_rgba(16,185,129,0.5)]'}`}
+                className={`px-8 py-3 text-slate-900 font-bold rounded-xl shadow-md transition flex items-center gap-2 ${loading ? 'bg-emerald-900/50' : 'bg-emerald-600 hover:bg-emerald-700 shadow-[0_0_15px_rgba(16,185,129,0.5)]'}`}
               >
                 <Send className="w-5 h-5" />
                 {loading ? 'Đang cập nhật...' : 'Cập nhật bài đăng'}

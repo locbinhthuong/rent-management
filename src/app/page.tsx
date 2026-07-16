@@ -112,21 +112,21 @@ export default async function CustomerHome(props: {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="w-full flex flex-col bg-slate-950 overflow-x-hidden text-slate-100">
+    <div className="w-full flex flex-col bg-slate-50 overflow-x-hidden text-slate-900">
       {/* Glassmorphism Header (Fixed) */}
-      <header className="fixed top-0 inset-x-0 h-16 bg-slate-950/50 backdrop-blur-xl z-50 border-b border-white/10 shadow-lg flex items-center justify-between px-4 lg:px-8">
+      <header className="fixed top-0 inset-x-0 h-16 bg-slate-50/50 backdrop-blur-xl z-50 border-b border-slate-200 shadow-lg flex items-center justify-between px-4 lg:px-8">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2 group">
             <div className="bg-cyan-500/20 p-2 rounded-lg border border-cyan-500/30 group-hover:glow-cyan transition-all">
               <Home className="w-5 h-5 text-cyan-400" />
             </div>
             {/* If there's a dark mode logo, use it. Otherwise use text */}
-            <span className="font-space font-bold text-xl tracking-tight text-white hidden sm:block">thuenhatro<span className="text-cyan-400">.com</span></span>
+            <span className="font-space font-bold text-xl tracking-tight text-slate-900 hidden sm:block">thuenhatro<span className="text-cyan-400">.com</span></span>
           </Link>
         </div>
         
         <nav className="flex items-center gap-4">
-          <Link href="/saved" className="flex items-center gap-2 text-slate-300 hover:text-cyan-400 transition-colors font-medium text-sm">
+          <Link href="/saved" className="flex items-center gap-2 text-slate-700 hover:text-cyan-400 transition-colors font-medium text-sm">
             <Heart className="w-5 h-5" />
             <span className="hidden sm:inline">Đã lưu</span>
           </Link>
@@ -137,7 +137,7 @@ export default async function CustomerHome(props: {
             <div className="flex items-center gap-3">
               <Link 
                 href={session.user?.role === 'Admin' ? '/admin' : session.user?.role === 'CTV' ? '/ctv' : '/'}
-                className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-500 text-white flex items-center justify-center font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)] border border-white/20 hover:scale-105 transition-transform"
+                className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-500 text-slate-900 flex items-center justify-center font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)] border border-slate-300 hover:scale-105 transition-transform"
                 title="Bảng điều khiển"
               >
                 {session.user?.name?.charAt(0).toUpperCase() || 'U'}
@@ -146,7 +146,7 @@ export default async function CustomerHome(props: {
           ) : (
             <Link 
               href="/login" 
-              className="px-5 py-2 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all shadow-[0_0_15px_rgba(37,99,235,0.5)] text-sm"
+              className="px-5 py-2 bg-blue-600 text-slate-900 font-bold rounded-xl hover:bg-blue-500 transition-all shadow-[0_0_15px_rgba(37,99,235,0.5)] text-sm"
             >
               Đăng Nhập
             </Link>

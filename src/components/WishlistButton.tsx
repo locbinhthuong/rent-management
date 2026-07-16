@@ -81,7 +81,7 @@ export default function WishlistButton({ post }: { post: any }) {
   return (
     <button 
       onClick={toggleWishlist}
-      className={`absolute top-3 left-3 p-2 rounded-full backdrop-blur-sm shadow-md transition z-10 ${optimisticIsSaved ? 'bg-red-50 text-red-500' : 'bg-white/80 text-slate-400 hover:text-red-500 hover:bg-white'}`}
+      className={`absolute top-3 left-3 p-2 rounded-full backdrop-blur-sm shadow-md transition z-10 ${optimisticIsSaved ? 'bg-red-50 text-red-500' : 'bg-white/80 text-slate-600 hover:text-red-500 hover:bg-white'}`}
       title={optimisticIsSaved ? 'Bỏ lưu' : 'Lưu tin'}
     >
       <Heart className={`w-5 h-5 ${optimisticIsSaved ? 'fill-current' : ''}`} />

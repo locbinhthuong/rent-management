@@ -39,14 +39,14 @@ export default async function AdminLeadsPage() {
 
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
-        <header className="bg-slate-900/50 backdrop-blur-xl p-4 md:p-5 border-b border-white/10 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-          <h2 className="text-lg md:text-xl font-bold text-slate-100">Quản lý Khách hàng (Leads)</h2>
+        <header className="bg-white/80 backdrop-blur-xl p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+          <h2 className="text-lg md:text-xl font-bold text-slate-900">Quản lý Khách hàng (Leads)</h2>
         </header>
 
         <div className="p-4 md:p-8 pb-20 md:pb-8">
-          <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 overflow-hidden">
-            <div className="p-4 md:p-5 border-b border-white/10 bg-slate-800/50">
-              <h3 className="font-bold text-slate-100 flex items-center gap-2">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 overflow-hidden">
+            <div className="p-4 md:p-5 border-b border-slate-200 bg-slate-100/80">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-cyan-400" /> Tất cả khách hàng trong hệ thống ({leads.length})
               </h3>
             </div>

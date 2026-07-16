@@ -173,12 +173,12 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
               zIndexOffset={isActive ? 1000 : 0}
             >
               <Popup className="glass-popup" closeButton={false}>
-                <div className="w-48 overflow-hidden rounded-xl bg-slate-900 border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] p-0 m-[-14px]">
+                <div className="w-48 overflow-hidden rounded-xl bg-white border border-slate-200 shadow-[0_0_20px_rgba(0,0,0,0.8)] p-0 m-[-14px]">
                   <div className="relative h-24 w-full">
                     <Image src={imageUrl} alt="Room" fill className="object-cover" />
                   </div>
                   <div className="p-3">
-                    <div className="font-bold text-slate-100 line-clamp-1 mb-1 font-space">{post.title}</div>
+                    <div className="font-bold text-slate-900 line-clamp-1 mb-1 font-space">{post.title}</div>
                     <div className="font-extrabold text-cyan-400 font-space glow-cyan-text">
                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}/tháng
                     </div>

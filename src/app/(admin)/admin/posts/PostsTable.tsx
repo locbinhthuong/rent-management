@@ -52,7 +52,7 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
-        <thead className="bg-slate-800/50 text-slate-300 border-b border-white/10">
+        <thead className="bg-slate-100/80 text-slate-700 border-b border-slate-200">
           <tr>
             <th className="px-6 py-4 font-medium">Người đăng (CTV)</th>
             <th className="px-6 py-4 font-medium">Tiêu đề bài đăng</th>
@@ -70,22 +70,22 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
             </tr>
           ) : (
             posts.map((post) => (
-              <tr key={post._id} className="hover:bg-white/5 transition">
+              <tr key={post._id} className="hover:bg-slate-200/50 transition">
                 <td className="px-6 py-4">
-                  <div className="font-bold text-slate-100">{post.ctv_id?.name || 'Ẩn danh'}</div>
-                  <div className="text-xs text-slate-400">{post.ctv_id?.phone}</div>
+                  <div className="font-bold text-slate-900">{post.ctv_id?.name || 'Ẩn danh'}</div>
+                  <div className="text-xs text-slate-600">{post.ctv_id?.phone}</div>
                 </td>
                 <td className="px-6 py-4">
-                  <div className="font-medium text-slate-100 line-clamp-2 max-w-xs" title={post.title}>
+                  <div className="font-medium text-slate-900 line-clamp-2 max-w-xs" title={post.title}>
                     {post.title}
                   </div>
-                  <div className="text-xs text-slate-400 mt-1">{post.property_type}</div>
+                  <div className="text-xs text-slate-600 mt-1">{post.property_type}</div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="font-bold text-emerald-400">
                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(post.price || 0)}
                   </div>
-                  <div className="text-xs text-slate-400 mt-1 truncate max-w-[150px]" title={post.address}>
+                  <div className="text-xs text-slate-600 mt-1 truncate max-w-[150px]" title={post.address}>
                     {post.address}
                   </div>
                 </td>
@@ -114,7 +114,7 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
                       </a>
                       <button 
                         onClick={() => handleUpdateStatus(post._id, undefined, !post.is_verified)} 
-                        className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-400 hover:bg-blue-500/20' : 'text-slate-400 hover:text-blue-400 hover:bg-white/5'}`} 
+                        className={`p-2 rounded-lg transition tooltip ${post.is_verified ? 'text-blue-400 hover:bg-blue-500/20' : 'text-slate-600 hover:text-blue-400 hover:bg-slate-200/50'}`} 
                         title={post.is_verified ? "Bỏ xác thực" : "Cấp tích xanh xác thực"}
                       >
                         {post.is_verified ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}

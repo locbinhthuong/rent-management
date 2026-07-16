@@ -48,9 +48,9 @@ export default function SavedPostsPage() {
   }, [session]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* App Header */}
-      <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 h-16 flex items-center justify-center px-4">
+      <header className="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200 h-16 flex items-center justify-center px-4">
         <h1 className="text-lg font-space font-bold tracking-wide">Yêu thích</h1>
       </header>
 
@@ -63,7 +63,7 @@ export default function SavedPostsPage() {
         {savedPosts.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center py-20 opacity-60">
             <Heart className="w-16 h-16 text-slate-600 mb-4 stroke-[1.5]" />
-            <p className="text-slate-400 font-medium">Bạn chưa lưu không gian sống nào</p>
+            <p className="text-slate-600 font-medium">Bạn chưa lưu không gian sống nào</p>
             <Link href="/" className="mt-6 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 px-6 py-2 rounded-full font-bold transition-all border border-cyan-500/30">
               Khám phá ngay
             </Link>

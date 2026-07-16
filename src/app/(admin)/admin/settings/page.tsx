@@ -75,8 +75,8 @@ export default function SettingsPage() {
 
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
-        <header className="bg-slate-900/50 backdrop-blur-xl p-4 md:p-5 border-b border-white/10 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-          <h2 className="text-lg md:text-xl font-bold text-slate-100">Cấu hình Hệ thống</h2>
+        <header className="bg-white/80 backdrop-blur-xl p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+          <h2 className="text-lg md:text-xl font-bold text-slate-900">Cấu hình Hệ thống</h2>
           <Link href="/" target="_blank" className="text-sm font-bold text-cyan-400 border-2 border-cyan-500/20 bg-cyan-500/10 px-3 py-2 rounded-lg hover:bg-cyan-500/20 transition">
             Trang Khách
           </Link>
@@ -84,7 +84,7 @@ export default function SettingsPage() {
 
         <div className="p-4 md:p-8 max-w-5xl mx-auto w-full">
           <div className="flex justify-between items-center mb-6">
-            <p className="text-slate-400">Quản lý giao diện Trang chủ và Bộ lọc tìm kiếm</p>
+            <p className="text-slate-600">Quản lý giao diện Trang chủ và Bộ lọc tìm kiếm</p>
             <Button onClick={handleSave} disabled={updateMutation.isPending} className="flex items-center gap-2">
               {updateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Lưu thay đổi
@@ -93,7 +93,7 @@ export default function SettingsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Banner Thông Báo */}
-            <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10">
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
               <div className="flex items-center gap-3 mb-4 text-cyan-400 font-bold text-lg">
                 <Megaphone className="w-5 h-5" /> Thông báo nổi bật (Banner)
               </div>
@@ -105,26 +105,26 @@ export default function SettingsPage() {
                     onChange={(e) => setAnnouncementActive(e.target.checked)}
                     className="w-5 h-5 accent-cyan-500"
                   />
-                  <span className="font-medium text-slate-200">Kích hoạt thông báo trên trang chủ</span>
+                  <span className="font-medium text-slate-800">Kích hoạt thông báo trên trang chủ</span>
                 </label>
                 <div>
-                  <label className="block text-sm font-medium text-slate-200 mb-2">Nội dung thông báo</label>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">Nội dung thông báo</label>
                   <textarea 
                     value={announcementText}
                     onChange={(e) => setAnnouncementText(e.target.value)}
                     placeholder="VD: Khuyến mãi tháng 5 giảm 50% tiền cọc..."
-                    className="w-full px-4 py-2 bg-slate-900 border border-white/20 text-slate-100 rounded-lg outline-none focus:border-cyan-500/50 placeholder:text-slate-500 min-h-[100px]"
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-cyan-500/50 placeholder:text-slate-500 min-h-[100px]"
                   />
                 </div>
               </div>
             </div>
 
             {/* Danh mục Loại phòng */}
-            <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10">
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
               <div className="flex items-center gap-3 mb-4 text-emerald-400 font-bold text-lg">
                 <Home className="w-5 h-5" /> Bộ lọc Loại phòng
               </div>
-              <p className="text-sm text-slate-400 mb-4">Các loại phòng sẽ hiển thị trên thanh tìm kiếm và form đăng bài.</p>
+              <p className="text-sm text-slate-600 mb-4">Các loại phòng sẽ hiển thị trên thanh tìm kiếm và form đăng bài.</p>
               
               <div className="flex gap-2 mb-4">
                 <input 
@@ -132,27 +132,27 @@ export default function SettingsPage() {
                   value={newPropertyType}
                   onChange={(e) => setNewPropertyType(e.target.value)}
                   placeholder="Nhập loại phòng mới..."
-                  className="flex-1 px-4 py-2 bg-slate-900 border border-white/20 text-slate-100 rounded-lg outline-none focus:border-emerald-500/50 placeholder:text-slate-500"
+                  className="flex-1 px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-emerald-500/50 placeholder:text-slate-500"
                 />
                 <Button onClick={addPropertyType} variant="secondary"><Plus className="w-4 h-4" /></Button>
               </div>
 
               <div className="flex flex-wrap gap-2">
                 {propertyTypes.map((type) => (
-                  <div key={type} className="bg-slate-800/80 text-slate-200 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 border border-white/10">
+                  <div key={type} className="bg-slate-100/80 text-slate-800 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 border border-slate-200">
                     {type}
-                    <button onClick={() => setPropertyTypes(propertyTypes.filter(t => t !== type))} className="text-slate-400 hover:text-red-400"><X className="w-3 h-3" /></button>
+                    <button onClick={() => setPropertyTypes(propertyTypes.filter(t => t !== type))} className="text-slate-600 hover:text-red-400"><X className="w-3 h-3" /></button>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Danh mục Khu vực */}
-            <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 lg:col-span-2">
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 lg:col-span-2">
               <div className="flex items-center gap-3 mb-4 text-rose-400 font-bold text-lg">
                 <MapPin className="w-5 h-5" /> Bộ lọc Khu vực (Quận/Huyện)
               </div>
-              <p className="text-sm text-slate-400 mb-4">Quản lý danh sách các khu vực cho phép tìm kiếm và đăng bài.</p>
+              <p className="text-sm text-slate-600 mb-4">Quản lý danh sách các khu vực cho phép tìm kiếm và đăng bài.</p>
               
               <div className="flex gap-2 mb-6 max-w-md">
                 <input 
@@ -160,13 +160,13 @@ export default function SettingsPage() {
                   value={newLocation}
                   onChange={(e) => setNewLocation(e.target.value)}
                   placeholder="Nhập khu vực mới (VD: Quận 1)..."
-                  className="flex-1 px-4 py-2 bg-slate-900 border border-white/20 text-slate-100 rounded-lg outline-none focus:border-rose-500/50 placeholder:text-slate-500"
+                  className="flex-1 px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-rose-500/50 placeholder:text-slate-500"
                 />
                 <Button onClick={() => addLocation(newLocation)} variant="secondary"><Plus className="w-4 h-4" /></Button>
               </div>
 
               <div className="mb-6">
-                <h4 className="text-sm font-bold text-slate-200 mb-3">Khu vực đang hoạt động:</h4>
+                <h4 className="text-sm font-bold text-slate-800 mb-3">Khu vực đang hoạt động:</h4>
                 <div className="flex flex-wrap gap-2">
                   {locations.length === 0 && <span className="text-slate-500 text-sm italic">Chưa có khu vực nào</span>}
                   {locations.map((loc) => (
@@ -189,7 +189,7 @@ export default function SettingsPage() {
                       <button 
                         key={loc}
                         onClick={() => addLocation(loc)}
-                        className="bg-slate-800 text-amber-400 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1 border border-amber-500/30 hover:bg-amber-500/20 transition shadow-sm"
+                        className="bg-slate-100 text-amber-400 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1 border border-amber-500/30 hover:bg-amber-500/20 transition shadow-sm"
                       >
                         <Plus className="w-3 h-3" /> {loc}
                       </button>

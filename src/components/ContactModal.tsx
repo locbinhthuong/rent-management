@@ -41,7 +41,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div className="bg-white rounded-2xl w-full max-w-md p-6 relative animate-in fade-in zoom-in-95 duration-200">
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+        <button onClick={onClose} className="absolute top-4 right-4 text-slate-600 hover:text-slate-600">
           <X className="w-5 h-5" />
         </button>
         
@@ -58,7 +58,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
               <p className="text-2xl font-bold text-indigo-600 mt-2">{ctvInfo.phone}</p>
             </div>
             
-            <a href={`tel:${ctvInfo.phone}`} className="block w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md">
+            <a href={`tel:${ctvInfo.phone}`} className="block w-full bg-indigo-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md">
               Gọi ngay
             </a>
           </div>
@@ -72,7 +72,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
               <p className="font-bold text-blue-900">Tên: {session.user?.name}</p>
             </div>
 
-            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2">
+            <button disabled={loading} onClick={handleSubmit} className="w-full bg-indigo-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center gap-2">
               <Send className="w-5 h-5" />
               {loading ? 'Đang gửi...' : 'Xác nhận & Nhận số điện thoại'}
             </button>
@@ -88,7 +88,7 @@ export default function ContactModal({ postId, ctvId, postTitle, isOpen, onClose
             </p>
             
             <div className="flex gap-3">
-              <Link href="/login" className="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
+              <Link href="/login" className="flex-1 bg-indigo-600 text-slate-900 font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
                 Đăng nhập ngay
               </Link>
             </div>

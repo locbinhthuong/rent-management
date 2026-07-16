@@ -16,11 +16,11 @@ export default function CTVSidebar() {
   ];
 
   return (
-    <aside className="w-72 bg-slate-900/50 border-r border-white/10 hidden md:flex flex-col relative z-20 shadow-2xl backdrop-blur-2xl shrink-0 h-screen sticky top-0 text-slate-100">
-      <div className="p-6 border-b border-white/10">
-        <h1 className="text-2xl font-black flex items-center gap-3 text-slate-100">
+    <aside className="w-72 bg-white/80 border-r border-slate-200 hidden md:flex flex-col relative z-20 shadow-2xl backdrop-blur-2xl shrink-0 h-screen sticky top-0 text-slate-900">
+      <div className="p-6 border-b border-slate-200">
+        <h1 className="text-2xl font-black flex items-center gap-3 text-slate-900">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-            <Users className="w-5 h-5 text-white" />
+            <Users className="w-5 h-5 text-slate-900" />
           </div>
           Bảng điều khiển
         </h1>
@@ -40,7 +40,7 @@ export default function CTVSidebar() {
               className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 ${
                 isActive 
                   ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 shadow-sm' 
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
               <Icon className="w-5 h-5" /> {link.label}

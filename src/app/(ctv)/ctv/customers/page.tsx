@@ -41,19 +41,19 @@ export default async function CTVCustomersPage() {
   const successLeads = leads.filter(l => l.status === 'Success').length;
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-950">
+    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
       <main className="flex-1 flex flex-col h-full pb-24 md:pb-0">
         <div className="p-4 md:p-6 max-w-5xl mx-auto w-full space-y-6">
           <CTVMobileHeader />
           {/* Header */}
           <div>
-            <h1 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Yêu cầu Tư vấn</h1>
-            <p className="text-slate-400 text-sm mt-1">Quản lý và phản hồi các yêu cầu từ khách hàng cho các bài đăng của bạn.</p>
+            <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Yêu cầu Tư vấn</h1>
+            <p className="text-slate-600 text-sm mt-1">Quản lý và phản hồi các yêu cầu từ khách hàng cho các bài đăng của bạn.</p>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-3">
-            <div className="bg-blue-600 rounded-2xl p-2 sm:p-4 flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/20">
+            <div className="bg-blue-600 rounded-2xl p-2 sm:p-4 flex flex-col items-center justify-center text-slate-900 shadow-lg shadow-blue-600/20">
               <div className="flex flex-col items-center gap-1 mb-1">
                 <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="text-[9px] sm:text-[10px] font-bold uppercase text-center leading-tight">Mới</span>
@@ -61,15 +61,15 @@ export default async function CTVCustomersPage() {
               <span className="text-xl sm:text-2xl font-black font-space">{newLeads}</span>
             </div>
             
-            <div className="bg-slate-800 rounded-2xl p-2 sm:p-4 flex flex-col items-center justify-center text-slate-300">
+            <div className="bg-slate-100 rounded-2xl p-2 sm:p-4 flex flex-col items-center justify-center text-slate-700">
               <div className="flex flex-col items-center gap-1 mb-1">
                 <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase text-center leading-tight text-slate-400">Đã xử lý</span>
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase text-center leading-tight text-slate-600">Đã xử lý</span>
               </div>
-              <span className="text-xl sm:text-2xl font-black font-space text-white">{contactedLeads}</span>
+              <span className="text-xl sm:text-2xl font-black font-space text-slate-900">{contactedLeads}</span>
             </div>
 
-            <div className="bg-slate-900/50 border border-emerald-500/30 rounded-2xl p-2 sm:p-4 flex flex-col items-center justify-center text-emerald-400">
+            <div className="bg-white/80 border border-emerald-500/30 rounded-2xl p-2 sm:p-4 flex flex-col items-center justify-center text-emerald-400">
               <div className="flex flex-col items-center gap-1 mb-1">
                 <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="text-[9px] sm:text-[10px] font-bold uppercase text-center leading-tight">Xong</span>

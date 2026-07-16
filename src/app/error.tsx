@@ -17,14 +17,14 @@ export default function RootError({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-slate-100 p-4">
-      <div className="flex flex-col items-center space-y-6 max-w-md text-center p-8 rounded-2xl bg-slate-900 border border-white/10 shadow-2xl">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900 p-4">
+      <div className="flex flex-col items-center space-y-6 max-w-md text-center p-8 rounded-2xl bg-white border border-slate-200 shadow-2xl">
         <div className="p-4 bg-red-500/10 rounded-full">
           <AlertCircle className="w-12 h-12 text-red-500" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold font-space text-white">Đã xảy ra lỗi!</h2>
-          <p className="text-slate-400">
+          <h2 className="text-2xl font-bold font-space text-slate-900">Đã xảy ra lỗi!</h2>
+          <p className="text-slate-600">
             Hệ thống gặp sự cố ngoài ý muốn. Vui lòng thử lại sau.
           </p>
         </div>

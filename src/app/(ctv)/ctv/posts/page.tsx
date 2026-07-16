@@ -20,9 +20,9 @@ function PostsSkeleton() {
   return (
     <div className="p-4 space-y-6 max-w-5xl mx-auto w-full animate-pulse">
       <CTVMobileHeader />
-      <div className="h-20 bg-slate-800 rounded-2xl"></div>
-      <div className="h-64 bg-slate-800 rounded-2xl"></div>
-      <div className="h-64 bg-slate-800 rounded-2xl"></div>
+      <div className="h-20 bg-slate-100 rounded-2xl"></div>
+      <div className="h-64 bg-slate-100 rounded-2xl"></div>
+      <div className="h-64 bg-slate-100 rounded-2xl"></div>
     </div>
   );
 }
@@ -61,13 +61,13 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
     <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto w-full">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-100 font-space tracking-wide">Quản lý tin đăng</h1>
-        <p className="text-slate-400 text-sm mt-1">Xem, chỉnh sửa và cập nhật trạng thái các phòng bạn đã đăng.</p>
+        <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Quản lý tin đăng</h1>
+        <p className="text-slate-600 text-sm mt-1">Xem, chỉnh sửa và cập nhật trạng thái các phòng bạn đã đăng.</p>
       </div>
 
       <Link 
         href="/ctv/post"
-        className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-blue-600/20"
+        className="w-full bg-blue-600 hover:bg-blue-500 text-slate-900 py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-blue-600/20"
       >
         <Plus className="w-5 h-5" />
         Đăng tin mới
@@ -79,9 +79,9 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
       {/* Posts List */}
       <div className="space-y-4">
         {posts.length === 0 ? (
-          <div className="p-8 text-center flex flex-col items-center justify-center gap-4 bg-slate-900/50 rounded-2xl border border-white/5">
-            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center"><FileText className="w-8 h-8 text-slate-500" /></div>
-            <p className="text-slate-400 font-medium text-sm">Bạn chưa có bài đăng nào.</p>
+          <div className="p-8 text-center flex flex-col items-center justify-center gap-4 bg-white/80 rounded-2xl border border-slate-200">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center"><FileText className="w-8 h-8 text-slate-500" /></div>
+            <p className="text-slate-600 font-medium text-sm">Bạn chưa có bài đăng nào.</p>
           </div>
         ) : (
           posts.map((post) => {
@@ -96,7 +96,7 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
               : { bg: 'bg-red-500', text: 'ĐÃ HẾT HẠN' };
 
             return (
-              <div key={post._id.toString()} className="bg-slate-900/50 backdrop-blur border border-white/5 rounded-2xl overflow-hidden shadow-sm">
+              <div key={post._id.toString()} className="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                 {/* Image */}
                 <div className="relative h-48 w-full">
                   <Image 
@@ -105,12 +105,12 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
                     fill
                     className="object-cover"
                   />
-                  <div className={`absolute top-3 left-3 px-2 py-1 ${badgeConfig.bg} text-white text-[10px] font-bold rounded`}>
+                  <div className={`absolute top-3 left-3 px-2 py-1 ${badgeConfig.bg} text-slate-900 text-[10px] font-bold rounded`}>
                     {badgeConfig.text}
                   </div>
                   {isExpired && (
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <div className="px-4 py-2 bg-red-500/90 text-white font-bold rounded-full text-sm">
+                      <div className="px-4 py-2 bg-red-500/90 text-slate-900 font-bold rounded-full text-sm">
                         Đã hết hạn
                       </div>
                     </div>
@@ -120,19 +120,19 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
                 {/* Content */}
                 <div className="p-4 space-y-3">
                   <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-bold text-slate-100 text-[15px] line-clamp-1">{post.title}</h3>
+                    <h3 className="font-bold text-slate-900 text-[15px] line-clamp-1">{post.title}</h3>
                     <p className="text-blue-400 font-bold text-[15px] whitespace-nowrap">
                       {(post.price / 1000000).toString().replace('.', ',')}tr/th
                     </p>
                   </div>
-                  <p className="text-slate-400 text-xs line-clamp-1">{post.district}, {post.city}</p>
+                  <p className="text-slate-600 text-xs line-clamp-1">{post.district}, {post.city}</p>
                   
-                  <div className="flex gap-4 text-slate-300 text-xs font-medium">
+                  <div className="flex gap-4 text-slate-700 text-xs font-medium">
                     <div className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5" /> {post.views || 0} lượt xem</div>
                     <div className="flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5" /> {leadsMap[post._id.toString()] || 0} yêu cầu</div>
                   </div>
                   
-                  <div className="flex items-center gap-1.5 text-slate-400 text-xs">
+                  <div className="flex items-center gap-1.5 text-slate-600 text-xs">
                     <Clock className="w-3.5 h-3.5" /> 
                     <span>Hết hạn: 30/12/2026</span>
                   </div>
@@ -144,9 +144,9 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
                     </div>
                   ) : null}
 
-                  <div className="flex items-center justify-between pt-3 border-t border-white/5 mt-2">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-200 mt-2">
                     <div className="flex gap-2">
-                      <Link href={`/ctv/post/${post._id}/edit`} className="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center text-slate-300 hover:bg-slate-700 transition">
+                      <Link href={`/ctv/post/${post._id}/edit`} className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-700 transition">
                         <Edit2 className="w-4 h-4" />
                       </Link>
                       <CTVPostActions postId={post._id.toString()} isExpired={isExpired} />
@@ -170,7 +170,7 @@ export default async function CTVPostsPage({ searchParams }: { searchParams: any
   }
 
   return (
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0 bg-slate-950">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0 bg-slate-50">
         <Suspense fallback={<PostsSkeleton />}>
           <CTVPostsContent userId={session.user.id} searchParams={searchParams} />
         </Suspense>

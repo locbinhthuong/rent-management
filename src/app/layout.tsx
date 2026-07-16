@@ -36,9 +36,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontMono.variable} ${fontSpace.variable} h-full antialiased dark`}
+      className={`${fontSans.variable} ${fontMono.variable} ${fontSpace.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30">
+      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-emerald-500/30">
         <AuthProvider>
           <ReactQueryProvider>
             <NextTopLoader color="#4f46e5" showSpinner={false} />

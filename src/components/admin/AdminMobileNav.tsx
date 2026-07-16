@@ -16,7 +16,7 @@ export default function AdminMobileNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 z-[100] pb-[env(safe-area-inset-bottom)]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-200 z-[100] pb-[env(safe-area-inset-bottom)]">
       <div className="flex justify-around items-center h-16">
         {navLinks.map((link) => {
           const isActive = link.exact 
@@ -28,7 +28,7 @@ export default function AdminMobileNav() {
               key={link.href}
               href={link.href} 
               className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
-                isActive ? 'text-cyan-400' : 'text-slate-400 hover:text-slate-200'
+                isActive ? 'text-cyan-400' : 'text-slate-600 hover:text-slate-800'
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]' : ''}`} />

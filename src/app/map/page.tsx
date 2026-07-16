@@ -62,11 +62,11 @@ export default async function MapPage(props: {
   const { posts } = await getActivePosts(searchParams);
 
   return (
-    <div className="w-full h-screen relative bg-slate-950 overflow-hidden">
+    <div className="w-full h-screen relative bg-slate-50 overflow-hidden">
       {/* Back button overlay */}
       <Link 
         href={`/?${new URLSearchParams((searchParams as any) || {}).toString()}`}
-        className="absolute top-6 left-6 z-[400] bg-white/90 backdrop-blur-md shadow-lg p-3 rounded-full text-slate-900 hover:bg-white hover:scale-110 transition-all flex items-center justify-center border border-white/20"
+        className="absolute top-6 left-6 z-[400] bg-white/90 backdrop-blur-md shadow-lg p-3 rounded-full text-slate-900 hover:bg-white hover:scale-110 transition-all flex items-center justify-center border border-slate-300"
       >
         <ArrowLeft className="w-5 h-5 font-bold" />
       </Link>

@@ -213,7 +213,7 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
           >
             {locating ? <Loader2 className="w-5 h-5 text-indigo-600 animate-spin" /> : <Navigation className="w-5 h-5 text-indigo-600" />}
           </button>
-          <button type="submit" className="flex-1 md:w-auto md:px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition shrink-0 flex items-center justify-center shadow-md">
+          <button type="submit" className="flex-1 md:w-auto md:px-8 py-3.5 bg-indigo-600 text-slate-900 font-bold rounded-full hover:bg-indigo-700 transition shrink-0 flex items-center justify-center shadow-md">
             <Search className="w-5 h-5 mr-2 md:hidden" />
             <span>Tìm kiếm</span>
           </button>

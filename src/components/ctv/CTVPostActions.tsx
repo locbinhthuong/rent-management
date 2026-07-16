@@ -38,7 +38,7 @@ export default function CTVPostActions({ postId, isExpired }: { postId: string, 
       <button 
         onClick={handleDelete}
         disabled={isPending}
-        className="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500/20 transition disabled:opacity-50"
+        className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500/20 transition disabled:opacity-50"
         title="Xóa bài đăng"
       >
         {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}

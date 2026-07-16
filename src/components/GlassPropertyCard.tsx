@@ -67,10 +67,10 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
     >
       <motion.div
         whileHover={{ scale: 1.02 }}
-        className={`relative rounded-2xl overflow-hidden backdrop-blur-xl bg-slate-900/40 border transition-all duration-300 ${
+        className={`relative rounded-2xl overflow-hidden backdrop-blur-xl bg-white/40 border transition-all duration-300 ${
           isActive 
             ? 'border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.4)]' 
-            : 'border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-white/30 hover:shadow-[0_8px_32px_0_rgba(139,92,246,0.3)]'
+            : 'border-slate-200 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-white/30 hover:shadow-[0_8px_32px_0_rgba(139,92,246,0.3)]'
         }`}
       >
         <div className="block h-full w-full">
@@ -91,13 +91,13 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
               <>
                 <button 
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIndex((prev) => (prev - 1 + images.length) % images.length); }}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 z-30"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-slate-900 p-1.5 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 z-30"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIndex((prev) => (prev + 1) % images.length); }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 z-30"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-slate-900 p-1.5 rounded-full backdrop-blur-md transition opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 z-30"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -114,14 +114,14 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
             )}
 
             {/* Badges */}
-            <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white tracking-wide uppercase shadow-sm z-20 pointer-events-none">
+            <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-900 tracking-wide uppercase shadow-sm z-20 pointer-events-none">
               {post.property_type || 'PHÒNG TRỌ'}
             </div>
             
             {post.is_verified && (
-              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm z-20 pointer-events-none">
+              <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm z-20 pointer-events-none">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[10px] font-bold text-slate-100 tracking-wide uppercase">ĐÃ XÁC THỰC</span>
+                <span className="text-[10px] font-bold text-slate-900 tracking-wide uppercase">ĐÃ XÁC THỰC</span>
               </div>
             )}
           </div>
@@ -130,10 +130,10 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
           <Link href={`/p/${post._id || post.id}`} className="block p-5 flex flex-col gap-3 relative z-20">
             {/* Title & Location */}
             <div>
-              <h3 className="font-bold text-slate-100 line-clamp-1 text-[16px] md:text-lg mb-1 tracking-tight">
+              <h3 className="font-bold text-slate-900 line-clamp-1 text-[16px] md:text-lg mb-1 tracking-tight">
                 {post.title}
               </h3>
-              <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
+              <div className="flex items-center gap-1.5 text-slate-600 text-xs font-medium">
                 <MapPin className="w-3.5 h-3.5 shrink-0" />
                 <span className="line-clamp-1">{fullAddress}</span>
               </div>
@@ -145,19 +145,19 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
                 <span className="font-extrabold text-cyan-400 text-[18px] md:text-[22px] tracking-tight">
                   {new Intl.NumberFormat('vi-VN').format(price)}₫
                 </span>
-                <span className="text-slate-400 text-[11px] md:text-xs font-medium">/tháng</span>
+                <span className="text-slate-600 text-[11px] md:text-xs font-medium">/tháng</span>
               </div>
             </div>
 
             {/* Amenities Tags */}
             <div className="flex flex-wrap items-center gap-2 mt-1">
               {post.area_sqm && (
-                <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/50 rounded-lg px-2.5 py-1.5 text-slate-300">
+                <div className="flex items-center gap-1.5 bg-slate-100/80 border border-slate-300/50 rounded-lg px-2.5 py-1.5 text-slate-700">
                   <Maximize className="w-3.5 h-3.5 opacity-70" />
                   <span className="font-medium text-[11px] md:text-xs">{post.area_sqm} m²</span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/50 rounded-lg px-2.5 py-1.5 text-slate-300">
+              <div className="flex items-center gap-1.5 bg-slate-100/80 border border-slate-300/50 rounded-lg px-2.5 py-1.5 text-slate-700">
                 <Home className="w-3.5 h-3.5 opacity-70" />
                 <span className="font-medium text-[11px] md:text-xs">1 PN</span>
               </div>

@@ -15,7 +15,7 @@ export default function CTVMobileNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-xl border-t border-white/5 z-[100] pb-[env(safe-area-inset-bottom)]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200 z-[100] pb-[env(safe-area-inset-bottom)]">
       <div className="flex justify-around items-center h-16 px-2">
         {navLinks.map((link) => {
           const isActive = link.exact 
@@ -27,10 +27,10 @@ export default function CTVMobileNav() {
               key={link.href}
               href={link.href} 
               className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all ${
-                isActive ? 'text-orange-400' : 'text-slate-400 hover:text-slate-200'
+                isActive ? 'text-orange-400' : 'text-slate-600 hover:text-slate-800'
               }`}
             >
-              <div className={`p-2 rounded-full ${isActive ? 'bg-orange-400 text-slate-900 shadow-lg shadow-orange-400/20' : 'bg-transparent text-slate-400'}`}>
+              <div className={`p-2 rounded-full ${isActive ? 'bg-orange-400 text-slate-900 shadow-lg shadow-orange-400/20' : 'bg-transparent text-slate-600'}`}>
                 <Icon className={`w-5 h-5`} />
               </div>
               <span className="text-[10px] font-medium leading-none">{link.label}</span>

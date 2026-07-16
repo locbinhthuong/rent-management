@@ -99,42 +99,42 @@ export default function LoginPage() {
 
       <Link 
         href="/" 
-        className="absolute top-6 left-6 z-20 flex items-center gap-2 text-white/80 hover:text-white transition group bg-black/20 px-4 py-2 rounded-full backdrop-blur-md border border-white/10"
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 text-slate-700 hover:text-slate-900 transition group bg-black/20 px-4 py-2 rounded-full backdrop-blur-md border border-slate-200"
       >
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         <span className="text-sm font-medium">Trang chủ</span>
       </Link>
 
       {/* Central Glassmorphism Panel */}
-      <div className="relative z-10 max-w-[420px] w-full rounded-3xl overflow-hidden backdrop-blur-xl bg-white/10 border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+      <div className="relative z-10 max-w-[420px] w-full rounded-3xl overflow-hidden backdrop-blur-xl bg-slate-200 border border-slate-300 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
         
         {/* Header Section */}
-        <div className="p-8 text-center border-b border-white/10 relative overflow-hidden">
+        <div className="p-8 text-center border-b border-slate-200 relative overflow-hidden">
           {/* Glow Effect */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-indigo-500/50 rounded-full blur-[50px] -z-10" />
           
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-white/20">
-            <ShieldCheck className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-slate-300">
+            <ShieldCheck className="w-8 h-8 text-slate-900" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
             {isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
           </h1>
-          <p className="text-white/60 text-sm mt-2 font-medium">
+          <p className="text-slate-500 text-sm mt-2 font-medium">
             Truy cập nền tảng môi giới hiện đại nhất
           </p>
         </div>
 
         {/* Tab Toggle */}
-        <div className="flex border-b border-white/10 bg-black/20">
+        <div className="flex border-b border-slate-200 bg-black/20">
           <button 
-            className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${isLogin ? 'text-white border-b-2 border-indigo-400 bg-white/5' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}
+            className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${isLogin ? 'text-slate-900 border-b-2 border-indigo-400 bg-slate-200/50' : 'text-slate-900/50 hover:text-slate-700 hover:bg-slate-200/50'}`}
             onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
             type="button"
           >
             ĐĂNG NHẬP
           </button>
           <button 
-            className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${!isLogin ? 'text-white border-b-2 border-indigo-400 bg-white/5' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}
+            className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${!isLogin ? 'text-slate-900 border-b-2 border-indigo-400 bg-slate-200/50' : 'text-slate-900/50 hover:text-slate-700 hover:bg-slate-200/50'}`}
             onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}
             type="button"
           >
@@ -163,11 +163,11 @@ export default function LoginPage() {
             {!isLogin && (
               <div className="space-y-4">
                 <div className="flex gap-3 mb-2">
-                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'Customer' ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-white/10 text-white/60 hover:bg-white/5'}`}>
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'Customer' ? 'bg-indigo-600/30 border-indigo-400 text-slate-900 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-slate-200 text-slate-500 hover:bg-slate-200/50'}`}>
                     <input type="radio" name="role" value="Customer" checked={role === 'Customer'} onChange={() => setRole('Customer')} className="hidden" />
                     <span className="text-sm font-bold tracking-wide">KHÁCH</span>
                   </label>
-                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'CTV' ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-white/10 text-white/60 hover:bg-white/5'}`}>
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'CTV' ? 'bg-indigo-600/30 border-indigo-400 text-slate-900 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-slate-200 text-slate-500 hover:bg-slate-200/50'}`}>
                     <input type="radio" name="role" value="CTV" checked={role === 'CTV'} onChange={() => setRole('CTV')} className="hidden" />
                     <span className="text-sm font-bold tracking-wide">MÔI GIỚI</span>
                   </label>
@@ -175,14 +175,14 @@ export default function LoginPage() {
 
                 <div>
                   <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
                       <User className="w-5 h-5" />
                     </div>
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
                       placeholder="Họ và Tên"
                       required={!isLogin}
                     />
@@ -191,14 +191,14 @@ export default function LoginPage() {
 
                 <div>
                   <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
                       <Phone className="w-5 h-5" />
                     </div>
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
                       placeholder="Số điện thoại"
                       required={!isLogin}
                     />
@@ -209,14 +209,14 @@ export default function LoginPage() {
 
             <div>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
                   placeholder="Email đăng nhập"
                   required
                 />
@@ -225,21 +225,21 @@ export default function LoginPage() {
 
             <div>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40 group-focus-within:text-indigo-300 transition-colors">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-white placeholder-white/30 backdrop-blur-sm transition-all"
+                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
                   placeholder="Mật khẩu"
                   required
                 />
               </div>
               {isLogin && (
                 <div className="flex justify-end mt-3">
-                  <a href="#" className="text-xs font-medium text-indigo-300 hover:text-white transition-colors hover:underline">
+                  <a href="#" className="text-xs font-medium text-indigo-300 hover:text-slate-900 transition-colors hover:underline">
                     Quên mật khẩu?
                   </a>
                 </div>
@@ -249,7 +249,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className={`w-full py-6 mt-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-white/20'}`}
+              className={`w-full py-6 mt-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-slate-300'}`}
             >
               {loading ? 'ĐANG XỬ LÝ...' : (isLogin ? 'ĐĂNG NHẬP' : 'TẠO TÀI KHOẢN')}
             </Button>

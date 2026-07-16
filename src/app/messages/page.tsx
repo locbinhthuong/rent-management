@@ -37,24 +37,24 @@ export default function MessagesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* App Header */}
-      <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 h-16 flex items-center justify-center px-4">
+      <header className="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200 h-16 flex items-center justify-center px-4">
         <h1 className="text-lg font-space font-bold tracking-wide">Danh sách tư vấn</h1>
       </header>
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-4 flex flex-col">
         
         {/* Tabs */}
-        <div className="flex bg-slate-900 p-1 rounded-xl mb-6 shadow-inner border border-white/5">
+        <div className="flex bg-white p-1 rounded-xl mb-6 shadow-inner border border-slate-200">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
                 activeTab === tab 
-                  ? 'bg-slate-800 text-cyan-400 shadow-sm border border-white/10' 
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-slate-100 text-cyan-400 shadow-sm border border-slate-200' 
+                  : 'text-slate-600 hover:text-slate-800'
               }`}
             >
               {tab}
@@ -70,18 +70,18 @@ export default function MessagesPage() {
             </div>
           ) : (
             filteredMessages.map((msg) => (
-              <div key={msg.id} className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-2xl p-4 flex gap-4 cursor-pointer hover:bg-slate-800/50 transition-colors">
-                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 relative border border-slate-700">
+              <div key={msg.id} className="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl p-4 flex gap-4 cursor-pointer hover:bg-slate-100/80 transition-colors">
+                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 relative border border-slate-300">
                   <Image src={msg.image} alt={msg.title} fill className="object-cover" />
                 </div>
                 
                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                   <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-bold text-slate-200 text-sm md:text-base line-clamp-1">{msg.title}</h3>
+                    <h3 className="font-bold text-slate-800 text-sm md:text-base line-clamp-1">{msg.title}</h3>
                     <span className="text-slate-500 text-[10px] md:text-xs whitespace-nowrap shrink-0">{msg.time}</span>
                   </div>
                   
-                  <p className="text-slate-400 text-xs md:text-sm line-clamp-2 leading-relaxed">
+                  <p className="text-slate-600 text-xs md:text-sm line-clamp-2 leading-relaxed">
                     &quot;{msg.content}&quot;
                   </p>
                   

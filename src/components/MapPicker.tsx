@@ -73,7 +73,7 @@ export default function MapPicker({ position, onPositionChange, city, district }
   );
 
   return (
-    <div className="w-full h-[300px] rounded-xl overflow-hidden border border-white/20 relative z-0 shadow-inner bg-slate-900">
+    <div className="w-full h-[300px] rounded-xl overflow-hidden border border-slate-300 relative z-0 shadow-inner bg-white">
       <MapContainer 
         center={mapCenter} 
         zoom={13} 

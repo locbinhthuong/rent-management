@@ -12,7 +12,7 @@ export default function AccountPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
       </div>
     );
@@ -36,21 +36,21 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* App Header */}
-      <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 h-16 flex items-center justify-center px-4">
+      <header className="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200 h-16 flex items-center justify-center px-4">
         <h1 className="text-lg font-space font-bold tracking-wide">Tài khoản</h1>
       </header>
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
         
         {/* Profile Card */}
-        <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 flex flex-col items-center relative overflow-hidden">
+        <div className="bg-white/80 backdrop-blur-xl border border-slate-200 rounded-3xl p-6 flex flex-col items-center relative overflow-hidden">
           {/* Background Glow */}
           <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none"></div>
           
           {/* Avatar */}
-          <div className="relative w-24 h-24 rounded-full border-4 border-slate-900 shadow-xl z-10 mb-4 bg-slate-800">
+          <div className="relative w-24 h-24 rounded-full border-4 border-slate-900 shadow-xl z-10 mb-4 bg-slate-100">
             {user.image && (
               <Image 
                 src={user.image} 
@@ -59,16 +59,16 @@ export default function AccountPage() {
                 className="object-cover rounded-full"
               />
             )}
-            <button className="absolute bottom-0 right-0 bg-slate-800 border border-slate-700 p-1.5 rounded-full text-slate-300 hover:text-white transition-colors shadow-lg">
+            <button className="absolute bottom-0 right-0 bg-slate-100 border border-slate-300 p-1.5 rounded-full text-slate-700 hover:text-slate-900 transition-colors shadow-lg">
               <Edit2 className="w-4 h-4" />
             </button>
           </div>
 
           {/* Info */}
-          <h2 className="text-2xl font-bold font-space text-white mb-1 z-10">
+          <h2 className="text-2xl font-bold font-space text-slate-900 mb-1 z-10">
             {user.name}
           </h2>
-          <p className="text-slate-400 text-sm mb-4 z-10">{user.email}</p>
+          <p className="text-slate-600 text-sm mb-4 z-10">{user.email}</p>
 
           {/* Badges */}
           <div className="flex gap-2 z-10 w-full justify-center">
@@ -84,21 +84,21 @@ export default function AccountPage() {
         </div>
 
         {/* Menu Items */}
-        <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-3xl overflow-hidden flex flex-col mt-2">
+        <div className="bg-white/80 backdrop-blur-xl border border-slate-200 rounded-3xl overflow-hidden flex flex-col mt-2">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             return (
               <Link 
                 key={index}
                 href={item.href}
-                className={`flex items-center p-4 hover:bg-slate-800/50 transition-colors ${
-                  index !== menuItems.length - 1 ? 'border-b border-slate-800/50' : ''
+                className={`flex items-center p-4 hover:bg-slate-100/80 transition-colors ${
+                  index !== menuItems.length - 1 ? 'border-b border-slate-200/50' : ''
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mr-4 ${item.color}`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className="flex-1 font-semibold text-slate-200">{item.label}</span>
+                <span className="flex-1 font-semibold text-slate-800">{item.label}</span>
                 <ChevronRight className="w-5 h-5 text-slate-600" />
               </Link>
             );
