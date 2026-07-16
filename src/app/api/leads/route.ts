@@ -8,19 +8,29 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json({ message: 'Vui lòng đăng nhập để thực hiện' }, { status: 401 });
+    }
+
     await connectDB();
     const data = await req.json();
 
-    if (!data.post_id || !data.ctv_id || !data.name || !data.phone) {
+    if (!data.post_id || !data.ctv_id) {
       return NextResponse.json({ message: 'Thiếu thông tin bắt buộc' }, { status: 400 });
+    }
+
+    // Lấy thông tin khách hàng từ DB
+    const customer = await User.findById(session.user.id).select('name phone');
+    if (!customer) {
+      return NextResponse.json({ message: 'Tài khoản không tồn tại' }, { status: 404 });
     }
 
     const newLead = await Lead.create({
       post_id: data.post_id,
       ctv_id: data.ctv_id,
-      customer_id: session?.user?.id || null,
-      name: data.name,
-      phone: data.phone,
+      customer_id: session.user.id,
+      name: customer.name,
+      phone: customer.phone || 'Chưa cập nhật',
       message: data.message || '',
       status: 'New',
     });

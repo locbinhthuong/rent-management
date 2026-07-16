@@ -288,28 +288,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
                     postTitle={post.title}
                   />
                 </div>
-                
-                {ctvPhone && (
-                  <a 
-                    href={`tel:${ctvPhone}`} 
-                    className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-emerald-500/10 text-emerald-400 rounded-xl font-bold hover:bg-emerald-500/20 transition-all border border-emerald-500/30 hover:border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-                  >
-                    <Phone className="w-6 h-6" />
-                    <span className="text-lg">{ctvPhone}</span>
-                  </a>
-                )}
-                
-                {ctvPhone && (
-                  <a 
-                    href={`https://zalo.me/${ctvPhone}`} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-blue-500/10 text-blue-400 rounded-xl font-bold hover:bg-blue-500/20 transition-all border border-blue-500/30 hover:border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
-                  >
-                    <span className="font-black text-xl leading-none">Zalo</span>
-                    <span className="text-lg">Nhắn tin Zalo</span>
-                  </a>
-                )}
               </div>
               
               <div className="mt-8 pt-5 border-t border-slate-200 flex items-start gap-3 bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10 relative z-10">
