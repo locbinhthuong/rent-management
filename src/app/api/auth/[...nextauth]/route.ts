@@ -25,6 +25,10 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Tài khoản không tồn tại');
         }
 
+        if (user.role === 'CTV' && user.isEmailVerified === false) {
+          throw new Error('Tài khoản chưa được xác thực email. Vui lòng đăng ký lại hoặc liên hệ hỗ trợ.');
+        }
+
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isPasswordValid) {
