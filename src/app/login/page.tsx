@@ -192,12 +192,12 @@ export default function LoginPage() {
           <div className="absolute bottom-0 right-0 w-40 h-40 bg-violet-500/20 rounded-full blur-[60px] -z-10 pointer-events-none" />
 
           {error && (
-            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 text-red-200 text-sm rounded-xl backdrop-blur-md">
+            <div className="mb-6 p-3 bg-red-100 border border-red-200 text-red-600 text-sm rounded-xl font-medium shadow-sm flex items-center justify-center text-center">
               {error}
             </div>
           )}
           {success && (
-            <div className="mb-6 p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 text-sm rounded-xl font-medium backdrop-blur-md">
+            <div className="mb-6 p-3 bg-emerald-100 border border-emerald-200 text-emerald-700 text-sm rounded-xl font-medium shadow-sm flex items-center justify-center text-center">
               {success}
             </div>
           )}
