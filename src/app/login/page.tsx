@@ -82,7 +82,7 @@ export default function LoginPage() {
           setShowVerification(true);
           setLoading(false);
         } else {
-          setSuccess('Đăng ký tài khoản thành công! Vui lòng Đăng nhập.');
+          setSuccess(data.message || 'Đăng ký tài khoản thành công! Vui lòng Đăng nhập.');
           setIsLogin(true);
           setPassword('');
           setLoading(false);

@@ -60,6 +60,18 @@ export async function POST(req: Request) {
     });
 
     if (role === 'CTV' && verificationCode) {
+      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.log(`[MOCK EMAIL] To: ${email}, Verification Code: ${verificationCode}`);
+        return NextResponse.json(
+          { 
+            message: `(MOCK) Mã xác thực ${verificationCode} đã được gửi đến email ${email}`,
+            requiresVerification: true,
+            email: email
+          },
+          { status: 201 }
+        );
+      }
+
       try {
         const transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -97,7 +109,7 @@ export async function POST(req: Request) {
       } catch (emailError) {
         console.error('Error sending email:', emailError);
         return NextResponse.json(
-          { message: 'Đăng ký thành công nhưng không thể gửi email xác thực. Vui lòng liên hệ hỗ trợ.' },
+          { message: 'Đăng ký thành công nhưng không thể gửi email xác thực. Vui lòng kiểm tra lại cấu hình EMAIL_USER.' },
           { status: 201 }
         );
       }
