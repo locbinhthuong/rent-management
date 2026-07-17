@@ -29,9 +29,9 @@ export default function AccountPage() {
 
   const menuItems = [
     { id: 'profile', icon: User, label: 'Thông tin cá nhân', color: 'text-blue-400 bg-blue-500/10', href: '/account/profile' },
-    { id: 'history', icon: Clock, label: 'Lịch sử chọn phòng tư vấn', color: 'text-emerald-400 bg-emerald-500/10', href: '#' },
-    { id: 'privacy', icon: ShieldCheck, label: 'Chính sách bảo mật', color: 'text-violet-400 bg-violet-500/10', href: '#' },
-    { id: 'terms', icon: FileText, label: 'Điều khoản sử dụng', color: 'text-pink-400 bg-pink-500/10', href: '#' },
+    { id: 'history', icon: Clock, label: 'Lịch sử chọn phòng tư vấn', color: 'text-emerald-400 bg-emerald-500/10', href: '/account/history' },
+    { id: 'privacy', icon: ShieldCheck, label: 'Chính sách bảo mật', color: 'text-violet-400 bg-violet-500/10', href: '/account/privacy' },
+    { id: 'terms', icon: FileText, label: 'Điều khoản sử dụng', color: 'text-pink-400 bg-pink-500/10', href: '/account/terms' },
     { id: 'help', icon: HelpCircle, label: 'Trợ giúp', color: 'text-amber-400 bg-amber-500/10', href: '#' },
   ];
 
