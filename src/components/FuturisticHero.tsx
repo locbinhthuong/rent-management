@@ -84,10 +84,10 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
 
   return (
     <div className="relative w-full min-h-[100svh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden py-24 md:py-0">
-      {/* Fresh Light Background */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-cyan-100 via-sky-50 to-slate-50">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[400px] w-[600px] rounded-full bg-cyan-300 opacity-30 blur-[120px]"></div>
+      {/* Blue Light Background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-blue-100 via-blue-50/50 to-slate-50">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f615_1px,transparent_1px),linear-gradient(to_bottom,#3b82f615_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[400px] w-[600px] rounded-full bg-blue-400 opacity-25 blur-[120px]"></div>
         {/* Smooth overlay fading into the content below */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50"></div>
       </div>
@@ -103,7 +103,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
         >
           <h1 className="font-space text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-3 md:mb-4 drop-shadow-sm leading-tight">
             Tương lai của <br className="md:hidden" />
-            <span className="text-cyan-600 font-space drop-shadow-md">Không Gian Sống</span>
+            <span className="text-blue-600 font-space drop-shadow-md">Không Gian Sống</span>
           </h1>
           <p className="text-slate-600 text-base md:text-xl max-w-2xl mx-auto font-medium px-2">
             Khám phá trải nghiệm thuê nhà đẳng cấp với hệ thống tìm kiếm đa chiều.
@@ -233,10 +233,10 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
               
               <button 
                 onClick={handleSearch}
-                className="flex-[4] bg-cyan-500 hover:bg-cyan-400 py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                className="flex-[4] bg-blue-600 hover:bg-blue-500 py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]"
               >
-                <Search className="w-4 h-4 text-slate-950 font-bold" />
-                <span className="font-bold text-[14px] text-slate-950">TÌM KIẾM</span>
+                <Search className="w-4 h-4 text-white font-bold" />
+                <span className="font-bold text-[14px] text-white">TÌM KIẾM</span>
               </button>
             </div>
           </motion.div>
@@ -249,7 +249,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
             className="w-full lg:w-2/3 h-[400px] lg:h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group"
           >
             {/* Floating glowing frame */}
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-cyan-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
             
             <MapClientWrapper posts={posts} />
             
@@ -276,9 +276,9 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
         <motion.div 
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="w-8 h-12 rounded-full border border-slate-300 flex items-start justify-center p-1 bg-white/50 backdrop-blur-sm shadow-sm"
+          className="w-8 h-12 rounded-full border border-blue-200 flex items-start justify-center p-1 bg-white/70 backdrop-blur-sm shadow-sm"
         >
-          <div className="w-1.5 h-3 bg-cyan-500 rounded-full"></div>
+          <div className="w-1.5 h-3 bg-blue-500 rounded-full"></div>
         </motion.div>
       </motion.div>
     </div>
