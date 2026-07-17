@@ -14,7 +14,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const { status } = await req.json();
     const { id } = await params;
 
-    if (!['Pending', 'Active', 'Rejected'].includes(status)) {
+    if (!['Pending', 'Active', 'Rejected', 'Locked'].includes(status)) {
       return NextResponse.json({ message: 'Trạng thái không hợp lệ' }, { status: 400 });
     }
 

@@ -15,6 +15,9 @@ export interface IUser extends Document {
     account_name: string;
   };
   status: 'Pending' | 'Active' | 'Rejected' | 'Locked';
+  isEmailVerified?: boolean;
+  verificationCode?: string;
+  verificationCodeExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -35,6 +38,9 @@ const UserSchema: Schema = new Schema(
       account_name: { type: String },
     },
     status: { type: String, enum: ['Pending', 'Active', 'Rejected', 'Locked'], default: 'Active' },
+    isEmailVerified: { type: Boolean, default: false },
+    verificationCode: { type: String },
+    verificationCodeExpires: { type: Date },
   },
   { timestamps: true }
 );

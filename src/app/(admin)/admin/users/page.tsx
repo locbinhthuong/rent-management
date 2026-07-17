@@ -75,7 +75,13 @@ export default async function AdminUsersPage() {
                           {new Date(ctv.createdAt).toLocaleDateString('vi-VN')}
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <UserActionButtons userId={ctv._id.toString()} currentStatus={ctv.status || 'Active'} />
+                          <UserActionButtons user={{
+                            _id: ctv._id.toString(),
+                            name: ctv.name,
+                            phone: ctv.phone || '',
+                            avatar: ctv.avatar || '',
+                            status: ctv.status || 'Active'
+                          }} />
                         </td>
                       </tr>
                     ))

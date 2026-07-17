@@ -22,6 +22,10 @@ export default function LoginPage() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [showVerification, setShowVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [registeredEmail, setRegisteredEmail] = useState('');
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -72,13 +76,51 @@ export default function LoginPage() {
         setError(data.message || 'Lỗi đăng ký');
         setLoading(false);
       } else {
-        setSuccess('Đăng ký tài khoản thành công! Vui lòng Đăng nhập.');
-        setIsLogin(true);
-        setPassword('');
-        setLoading(false);
+        if (data.requiresVerification) {
+          setSuccess(data.message);
+          setRegisteredEmail(data.email);
+          setShowVerification(true);
+          setLoading(false);
+        } else {
+          setSuccess('Đăng ký tài khoản thành công! Vui lòng Đăng nhập.');
+          setIsLogin(true);
+          setPassword('');
+          setLoading(false);
+        }
       }
     } catch(err) {
       setError('Đã xảy ra lỗi hệ thống, vui lòng thử lại sau');
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/verify-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: registeredEmail, code: verificationCode }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'Mã xác thực không hợp lệ');
+        setLoading(false);
+      } else {
+        setSuccess('Xác thực email thành công! Vui lòng đăng nhập.');
+        setShowVerification(false);
+        setIsLogin(true);
+        setPassword('');
+        setVerificationCode('');
+        setLoading(false);
+      }
+    } catch (err) {
+      setError('Đã xảy ra lỗi, vui lòng thử lại');
       setLoading(false);
     }
   };
@@ -117,7 +159,7 @@ export default function LoginPage() {
             <ShieldCheck className="w-8 h-8 text-slate-900" />
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            {isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
+            {showVerification ? 'Xác thực Email' : isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
           </h1>
           <p className="text-slate-500 text-sm mt-2 font-medium">
             Truy cập nền tảng môi giới hiện đại nhất
@@ -125,7 +167,8 @@ export default function LoginPage() {
         </div>
 
         {/* Tab Toggle */}
-        <div className="flex border-b border-slate-200 bg-black/20">
+        {!showVerification && (
+          <div className="flex border-b border-slate-200 bg-black/20">
           <button 
             className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${isLogin ? 'text-slate-900 border-b-2 border-indigo-400 bg-slate-200/50' : 'text-slate-900/50 hover:text-slate-700 hover:bg-slate-200/50'}`}
             onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
@@ -141,6 +184,7 @@ export default function LoginPage() {
             ĐĂNG KÝ
           </button>
         </div>
+        )}
 
         {/* Form Content */}
         <div className="p-8 relative">
@@ -158,7 +202,46 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
+          {showVerification ? (
+            <form onSubmit={handleVerifyEmail} className="space-y-4">
+              <p className="text-sm text-slate-600 mb-4 text-center font-medium">
+                Vui lòng kiểm tra email <strong className="text-indigo-600">{registeredEmail}</strong> và nhập mã xác thực gồm 6 chữ số.
+              </p>
+              <div>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <input
+                    type="text"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all text-center tracking-widest text-xl font-bold"
+                    placeholder="------"
+                    maxLength={6}
+                    required
+                  />
+                </div>
+              </div>
+              <Button
+                type="submit"
+                disabled={loading}
+                className={`w-full py-6 mt-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-slate-300'}`}
+              >
+                {loading ? 'ĐANG XỬ LÝ...' : 'XÁC NHẬN EMAIL'}
+              </Button>
+              <div className="text-center mt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowVerification(false)}
+                  className="text-sm text-indigo-500 hover:underline font-medium"
+                >
+                  Quay lại đăng ký
+                </button>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
             
             {!isLogin && (
               <div className="space-y-4">
@@ -254,6 +337,7 @@ export default function LoginPage() {
               {loading ? 'ĐANG XỬ LÝ...' : (isLogin ? 'ĐĂNG NHẬP' : 'TẠO TÀI KHOẢN')}
             </Button>
           </form>
+          )}
         </div>
       </div>
     </div>
