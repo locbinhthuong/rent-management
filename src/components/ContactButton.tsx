@@ -11,7 +11,8 @@ export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { 
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(0);
 
   const fetchMessages = async () => {
     if (!session) return;
@@ -33,8 +34,11 @@ export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { 
   }, [showForm, session]);
 
   useEffect(() => {
-    if (showForm) {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (showForm && chatContainerRef.current) {
+      if (messages.length > prevMessagesLengthRef.current || prevMessagesLengthRef.current === 0) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+      prevMessagesLengthRef.current = messages.length;
     }
   }, [messages, showForm]);
 
@@ -124,7 +128,7 @@ export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { 
         <div className="pt-2">
           <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden flex flex-col h-[400px]">
             {/* Chat Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
                 <div className="text-center text-slate-400 text-sm mt-10">
                   <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-20" />
@@ -143,7 +147,6 @@ export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { 
                   );
                 })
               )}
-              <div ref={chatEndRef} />
             </div>
 
             {/* Chat Input Area */}

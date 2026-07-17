@@ -9,7 +9,8 @@ export default function LeadChatModal({ lead, onClose }: { lead: any, onClose: (
   const [messages, setMessages] = useState<any[]>([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(0);
 
   const fetchMessages = async () => {
     try {
@@ -28,7 +29,12 @@ export default function LeadChatModal({ lead, onClose }: { lead: any, onClose: (
   }, [lead._id]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      if (messages.length > prevMessagesLengthRef.current || prevMessagesLengthRef.current === 0) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+      prevMessagesLengthRef.current = messages.length;
+    }
   }, [messages]);
 
   const handleSend = async () => {
@@ -69,7 +75,7 @@ export default function LeadChatModal({ lead, onClose }: { lead: any, onClose: (
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center text-slate-400 mt-10">Chưa có tin nhắn nào.</div>
           ) : (
@@ -85,7 +91,6 @@ export default function LeadChatModal({ lead, onClose }: { lead: any, onClose: (
               );
             })
           )}
-          <div ref={chatEndRef} />
         </div>
 
         {/* Input */}
