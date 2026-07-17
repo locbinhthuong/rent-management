@@ -3,12 +3,14 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { User, Clock, Settings, HelpCircle, LogOut, ChevronRight, ShieldCheck, Star, Edit2 } from 'lucide-react';
+import { User, Clock, Settings, HelpCircle, LogOut, ChevronRight, ShieldCheck, Star, Edit2, Mail, Phone, MessageCircle, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function AccountPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [showHelp, setShowHelp] = useState(false);
 
   if (status === 'loading') {
     return (
@@ -18,17 +20,19 @@ export default function AccountPage() {
     );
   }
 
-  const user = session?.user || {
+  const currentUser = session?.user || {
     name: 'Khách hàng',
     email: 'Vui lòng đăng nhập để xem thông tin',
-    image: 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff'
+    image: null
   };
+  const avatarUrl = currentUser.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'Khách Hàng')}&background=0D8ABC&color=fff`;
 
   const menuItems = [
-    { icon: User, label: 'Thông tin cá nhân', color: 'text-blue-400 bg-blue-500/10', href: '/account/profile' },
-    { icon: Clock, label: 'Lịch sử thuê', color: 'text-emerald-400 bg-emerald-500/10', href: '#' },
-    { icon: Settings, label: 'Cài đặt', color: 'text-violet-400 bg-violet-500/10', href: '#' },
-    { icon: HelpCircle, label: 'Trợ giúp', color: 'text-amber-400 bg-amber-500/10', href: '#' },
+    { id: 'profile', icon: User, label: 'Thông tin cá nhân', color: 'text-blue-400 bg-blue-500/10', href: '/account/profile' },
+    { id: 'history', icon: Clock, label: 'Lịch sử chọn phòng tư vấn', color: 'text-emerald-400 bg-emerald-500/10', href: '#' },
+    { id: 'privacy', icon: ShieldCheck, label: 'Chính sách bảo mật', color: 'text-violet-400 bg-violet-500/10', href: '#' },
+    { id: 'terms', icon: FileText, label: 'Điều khoản sử dụng', color: 'text-pink-400 bg-pink-500/10', href: '#' },
+    { id: 'help', icon: HelpCircle, label: 'Trợ giúp', color: 'text-amber-400 bg-amber-500/10', href: '#' },
   ];
 
   const handleLogout = async () => {
@@ -51,12 +55,11 @@ export default function AccountPage() {
           
           {/* Avatar */}
           <div className="relative w-24 h-24 rounded-full border-4 border-slate-900 shadow-xl z-10 mb-4 bg-slate-100">
-            {user.image && (
-              <Image 
-                src={user.image} 
+            {avatarUrl && (
+              <img 
+                src={avatarUrl} 
                 alt="Avatar" 
-                fill 
-                className="object-cover rounded-full"
+                className="object-cover rounded-full w-full h-full"
               />
             )}
             <button className="absolute bottom-0 right-0 bg-slate-100 border border-slate-300 p-1.5 rounded-full text-slate-700 hover:text-slate-900 transition-colors shadow-lg">
@@ -66,9 +69,9 @@ export default function AccountPage() {
 
           {/* Info */}
           <h2 className="text-2xl font-bold font-space text-slate-900 mb-1 z-10">
-            {user.name}
+            {currentUser.name}
           </h2>
-          <p className="text-slate-600 text-sm mb-4 z-10">{user.email}</p>
+          <p className="text-slate-600 text-sm mb-4 z-10">{currentUser.email}</p>
 
           {/* Badges */}
           <div className="flex gap-2 z-10 w-full justify-center">
@@ -87,6 +90,57 @@ export default function AccountPage() {
         <div className="bg-white/80 backdrop-blur-xl border border-slate-200 rounded-3xl overflow-hidden flex flex-col mt-2">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
+            
+            if (item.id === 'help') {
+              return (
+                <div key={index} className="flex flex-col">
+                  <button 
+                    onClick={() => setShowHelp(!showHelp)}
+                    className={`w-full flex items-center p-4 hover:bg-slate-100/80 transition-colors ${
+                      index !== menuItems.length - 1 && !showHelp ? 'border-b border-slate-200/50' : ''
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mr-4 ${item.color}`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="flex-1 font-semibold text-slate-800 text-left">{item.label}</span>
+                    <ChevronRight className={`w-5 h-5 text-slate-600 transition-transform ${showHelp ? 'rotate-90' : ''}`} />
+                  </button>
+                  
+                  {/* Expanded Help Content */}
+                  {showHelp && (
+                    <div className="bg-slate-50 border-t border-slate-200/50 p-4 px-6 flex flex-col gap-4 shadow-inner">
+                      <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Thông tin liên hệ Công ty TNHH Thuê Phòng</div>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="bg-rose-100 p-2.5 rounded-full text-rose-500"><Mail className="w-5 h-5" /></div>
+                        <div className="flex-1 text-left">
+                          <p className="text-xs font-semibold text-slate-400">Email doanh nghiệp</p>
+                          <p className="font-bold text-slate-700">contact@thuephong.com</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="bg-emerald-100 p-2.5 rounded-full text-emerald-500"><Phone className="w-5 h-5" /></div>
+                        <div className="flex-1 text-left">
+                          <p className="text-xs font-semibold text-slate-400">Số điện thoại Hotline</p>
+                          <p className="font-bold text-slate-700">1900 6868</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="bg-blue-100 p-2.5 rounded-full text-blue-500"><MessageCircle className="w-5 h-5" /></div>
+                        <div className="flex-1 text-left">
+                          <p className="text-xs font-semibold text-slate-400">Zalo CSKH 24/7</p>
+                          <p className="font-bold text-slate-700">0901 234 567</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
             return (
               <Link 
                 key={index}
