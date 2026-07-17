@@ -24,10 +24,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Email đã được đăng ký trong hệ thống' }, { status: 400 });
     }
 
-    // Check phone exists
-    const existingPhone = await User.findOne({ phone });
+    // Check phone exists for the same role
+    const existingPhone = await User.findOne({ phone, role });
     if (existingPhone) {
-      return NextResponse.json({ message: 'Số điện thoại đã được sử dụng' }, { status: 400 });
+      return NextResponse.json({ message: `Số điện thoại đã được đăng ký cho tài khoản ${role === 'CTV' ? 'Môi giới' : 'Khách'}` }, { status: 400 });
     }
 
     // Hash password
