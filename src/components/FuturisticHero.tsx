@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Home, Navigation } from 'lucide-react';
+import { Search, MapPin, Home, Navigation, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 import MapClientWrapper from '@/components/MapClientWrapper';
@@ -21,6 +21,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const maxPrice = searchParams.get('max_price');
   const initialPriceRange = (minPrice && maxPrice) ? `${minPrice}-${maxPrice}` : '';
   const [priceRange, setPriceRange] = useState(initialPriceRange);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   
   const [categories, setCategories] = useState([]);
 
@@ -116,101 +117,145 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </p>
         </motion.div>
 
-        {/* Horizontal Independent Search Filters */}
-        <div className="w-full max-w-4xl flex flex-wrap items-center justify-center gap-2 mt-2">
+        {/* Search Section */}
+        <div className="w-full max-w-3xl flex flex-col gap-3 mt-6">
           
-          {/* Keyword */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm min-w-[180px] flex-1 hover:border-blue-300 transition-colors">
-            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <input 
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder="Tìm tên, địa chỉ..."
-              className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-          </div>
-
-          {/* City */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
-            <MapPin className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <select 
-              value={city}
-              onChange={handleCityChange}
-              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
-            >
-              <option value="">Toàn quốc</option>
-              {provincesList.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* District */}
-          <div className={`flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm transition-colors ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
-            <div className="w-4 h-4 rounded-full border-2 border-slate-400 flex items-center justify-center shrink-0 mr-2">
-              <div className="w-1.5 h-1.5 bg-slate-400 rounded-full"></div>
+          {/* Top Row: Keyword & Filter Toggle */}
+          <div className="flex items-center gap-2 w-full">
+            <div className="flex-1 flex items-center bg-white/95 backdrop-blur-md rounded-full px-5 py-3.5 border border-slate-200 shadow-sm hover:border-blue-400 transition-all">
+              <Search className="w-5 h-5 text-blue-500 mr-2 shrink-0" />
+              <input 
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="Tìm tên phòng trọ, đường, địa chỉ..."
+                className="bg-transparent text-slate-700 font-medium text-[15px] outline-none w-full placeholder-slate-400"
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              />
             </div>
-            <select 
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-              disabled={!city}
-              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
+            
+            <button 
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className={`p-3.5 rounded-full border shadow-sm transition-all flex items-center justify-center shrink-0 ${
+                showAdvanced 
+                  ? 'bg-blue-600 border-blue-600 text-white shadow-blue-500/30' 
+                  : 'bg-white/95 border-slate-200 text-slate-600 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+              title="Bộ lọc tìm kiếm"
             >
-              <option value="">{city ? "Quận/Huyện" : "Chọn Tỉnh trước"}</option>
-              {districtsList.map((loc: string) => (
-                <option key={loc} value={loc}>{loc}</option>
-              ))}
-            </select>
+              <SlidersHorizontal className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Property Type */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
-            <Home className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <select 
-              value={propertyType}
-              onChange={(e) => setPropertyType(e.target.value)}
-              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
-            >
-              <option value="">Loại phòng</option>
-              {categories.map((cat: any) => (
-                <option key={cat._id} value={cat.name}>{cat.name}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Price */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
-            <span className="text-slate-400 mr-2 font-bold text-sm shrink-0">₫</span>
-            <select 
-              onChange={(e) => setPriceRange(e.target.value || "")}
-              value={priceRange}
-              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
-            >
-              <option value="">Mức giá</option>
-              <option value="0-2000000">Dưới 2 triệu</option>
-              <option value="2000000-5000000">Từ 2 - 5 triệu</option>
-              <option value="5000000-10000000">Từ 5 - 10 triệu</option>
-              <option value="10000000-999999999">Trên 10 triệu</option>
-            </select>
-          </div>
-
-          {/* Action Buttons */}
-          <button 
-            onClick={handleNearMe}
-            className="bg-white/90 hover:bg-slate-100 backdrop-blur-md border border-slate-200 px-3 py-2.5 rounded-full flex items-center justify-center transition-all shadow-sm"
-            title="Tìm quanh đây"
+          {/* Expanded Advanced Filters */}
+          <motion.div 
+            initial={false}
+            animate={{ height: showAdvanced ? 'auto' : 0, opacity: showAdvanced ? 1 : 0 }}
+            className="overflow-hidden w-full"
           >
-            <Navigation className="w-4 h-4 text-slate-600" />
-          </button>
-          
-          <button 
-            onClick={handleSearch}
-            className="bg-blue-600 hover:bg-blue-500 px-6 py-2.5 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/20"
-          >
-            <Search className="w-4 h-4 text-white font-bold" />
-            <span className="font-bold text-sm text-white">TÌM KIẾM</span>
-          </button>
+            <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl p-5 shadow-lg mb-2 mt-1 flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 className="font-bold text-slate-800 flex items-center gap-2 text-sm">
+                  <SlidersHorizontal className="w-4 h-4 text-blue-600" />
+                  Bộ lọc chi tiết
+                </h3>
+                <button onClick={() => setShowAdvanced(false)} className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* District */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Quận/Huyện</label>
+                  <div className={`flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 transition-colors ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
+                    <select 
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                      disabled={!city}
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    >
+                      <option value="">{city ? "Tất cả Quận/Huyện" : "Chọn Tỉnh trước"}</option>
+                      {districtsList.map((loc: string) => (
+                        <option key={loc} value={loc}>{loc}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />
+                  </div>
+                </div>
+
+                {/* Property Type */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Loại phòng</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <Home className="w-4 h-4 text-slate-400 mr-2 shrink-0 hidden sm:block" />
+                    <select 
+                      value={propertyType}
+                      onChange={(e) => setPropertyType(e.target.value)}
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    >
+                      <option value="">Tất cả loại hình</option>
+                      {categories.map((cat: any) => (
+                        <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bottom Row: Simple Filters & Search Button */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 w-full">
+            
+            {/* City */}
+            <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[140px]">
+              <MapPin className="w-4 h-4 text-emerald-500 mr-2 shrink-0" />
+              <select 
+                value={city}
+                onChange={handleCityChange}
+                className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+              >
+                <option value="">Tỉnh/Thành</option>
+                {provincesList.map((p) => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[140px]">
+              <span className="text-amber-500 mr-2 font-bold text-sm shrink-0">₫</span>
+              <select 
+                onChange={(e) => setPriceRange(e.target.value || "")}
+                value={priceRange}
+                className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+              >
+                <option value="">Mức giá</option>
+                <option value="0-2000000">Dưới 2 triệu</option>
+                <option value="2000000-5000000">Từ 2 - 5 triệu</option>
+                <option value="5000000-10000000">Từ 5 - 10 triệu</option>
+                <option value="10000000-999999999">Trên 10 triệu</option>
+              </select>
+            </div>
+
+            {/* Action Buttons */}
+            <button 
+              onClick={handleNearMe}
+              className="bg-white/95 hover:bg-slate-100 backdrop-blur-md border border-slate-200 p-3.5 rounded-full flex items-center justify-center transition-all shadow-sm shrink-0"
+              title="Tìm quanh đây"
+            >
+              <Navigation className="w-4 h-4 text-violet-500" />
+            </button>
+            
+            <button 
+              onClick={handleSearch}
+              className="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/30 flex-[2] sm:flex-none"
+            >
+              <Search className="w-4 h-4 text-white font-bold" />
+              <span className="font-bold text-sm text-white">TÌM</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
