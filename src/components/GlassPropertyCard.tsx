@@ -75,7 +75,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
       >
         <div className="block h-full w-full">
           {/* Image Section */}
-          <div className="relative aspect-[4/3] w-full overflow-hidden group/slider">
+          <div className="relative aspect-[16/9] w-full overflow-hidden group/slider">
             <Link href={`/p/${post.slug || post._id || post.id}`} className="absolute inset-0 z-0">
               <Image
                 src={images[currentImgIndex]}
@@ -127,10 +127,10 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
           </div>
 
           {/* Content Section */}
-          <Link href={`/p/${post.slug || post._id || post.id}`} className="block p-5 flex flex-col gap-3 relative z-20">
+          <Link href={`/p/${post.slug || post._id || post.id}`} className="block p-3.5 flex flex-col gap-2 relative z-20">
             {/* Title & Location */}
             <div>
-              <h3 className="font-bold text-slate-900 line-clamp-1 text-[16px] md:text-lg mb-1 tracking-tight">
+              <h3 className="font-bold text-slate-900 line-clamp-1 text-[15px] md:text-[16px] mb-1 tracking-tight">
                 {post.title}
               </h3>
               <div className="flex items-center gap-1.5 text-slate-600 text-xs font-medium">
@@ -142,19 +142,29 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
             {/* Price & View Button */}
             <div className="flex items-end justify-between mt-1">
               <div className="flex items-baseline gap-1">
-                <span className="font-extrabold text-cyan-400 text-[18px] md:text-[22px] tracking-tight">
+                <span className="font-extrabold text-blue-600 text-[17px] md:text-[20px] tracking-tight">
                   {new Intl.NumberFormat('vi-VN').format(price)}₫
                 </span>
-                <span className="text-slate-600 text-[11px] md:text-xs font-medium">/tháng</span>
+                <span className="text-slate-500 text-[11px] md:text-xs font-medium">/tháng</span>
               </div>
             </div>
 
             {/* Amenities Tags */}
-            <div className="flex flex-wrap items-center gap-2 mt-1">
+            <div className="flex flex-wrap items-center gap-1.5 mt-1">
               {post.area_sqm && (
-                <div className="flex items-center gap-1.5 bg-slate-100/80 border border-slate-300/50 rounded-lg px-2.5 py-1.5 text-slate-700">
-                  <Maximize className="w-3.5 h-3.5 opacity-70" />
-                  <span className="font-medium text-[11px] md:text-xs">{post.area_sqm} m²</span>
+                <div className="flex items-center gap-1 bg-slate-100/80 border border-slate-200/50 rounded px-2 py-1 text-slate-700">
+                  <Maximize className="w-3 h-3 opacity-70" />
+                  <span className="font-medium text-[10px] md:text-[11px]">{post.area_sqm} m²</span>
+                </div>
+              )}
+              {post.electricity_price !== undefined && post.electricity_price !== null && (
+                <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 rounded px-2 py-1 text-amber-700">
+                  <span className="font-semibold text-[10px]">Điện: {new Intl.NumberFormat('vi-VN').format(post.electricity_price)}đ</span>
+                </div>
+              )}
+              {post.water_price !== undefined && post.water_price !== null && (
+                <div className="flex items-center gap-1 bg-blue-50 border border-blue-100 rounded px-2 py-1 text-blue-700">
+                  <span className="font-semibold text-[10px]">Nước: {new Intl.NumberFormat('vi-VN').format(post.water_price)}đ</span>
                 </div>
               )}
             </div>

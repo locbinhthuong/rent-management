@@ -17,7 +17,7 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8 flex flex-col gap-6 relative z-10">
+    <div className="w-full max-w-5xl mx-auto px-4 pb-8 pt-0 flex flex-col gap-4 relative z-10">
       
       <div className="flex items-center justify-between">
         <h2 className="text-xl md:text-2xl font-bold text-slate-900 font-space tracking-tight">Kết quả nổi bật</h2>
