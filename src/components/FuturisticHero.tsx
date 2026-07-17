@@ -395,7 +395,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
               </div>
 
               {/* Row 2: Price & University */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+              <div className="grid grid-cols-2 gap-2 w-full">
                 
                 {/* Price */}
                 <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-3 py-2.5 md:px-4 md:py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors w-full overflow-hidden">
