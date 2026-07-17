@@ -75,7 +75,7 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
       >
         <div className="block h-full w-full">
           {/* Image Section */}
-          <div className="relative aspect-[16/9] w-full overflow-hidden group/slider">
+          <div className="relative aspect-[4/3] w-full overflow-hidden group/slider">
             <Link href={`/p/${post.slug || post._id || post.id}`} className="absolute inset-0 z-0">
               <Image
                 src={images[currentImgIndex]}
@@ -157,16 +157,20 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
                   <span className="font-medium text-[10px] md:text-[11px]">{post.area_sqm} m²</span>
                 </div>
               )}
-              {post.electricity_price !== undefined && post.electricity_price !== null && (
-                <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 rounded px-2 py-1 text-amber-700">
-                  <span className="font-semibold text-[10px]">Điện: {new Intl.NumberFormat('vi-VN').format(post.electricity_price)}đ</span>
-                </div>
-              )}
-              {post.water_price !== undefined && post.water_price !== null && (
-                <div className="flex items-center gap-1 bg-blue-50 border border-blue-100 rounded px-2 py-1 text-blue-700">
-                  <span className="font-semibold text-[10px]">Nước: {new Intl.NumberFormat('vi-VN').format(post.water_price)}đ</span>
-                </div>
-              )}
+              
+              {/* Electricity Price - Always show */}
+              <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 rounded px-2 py-1 text-amber-700">
+                <span className="font-semibold text-[10px] md:text-[11px]">
+                  Điện: {post.electricity_price ? new Intl.NumberFormat('vi-VN').format(post.electricity_price) + 'đ' : 'Thỏa thuận'}
+                </span>
+              </div>
+              
+              {/* Water Price - Always show */}
+              <div className="flex items-center gap-1 bg-blue-50 border border-blue-100 rounded px-2 py-1 text-blue-700">
+                <span className="font-semibold text-[10px] md:text-[11px]">
+                  Nước: {post.water_price ? new Intl.NumberFormat('vi-VN').format(post.water_price) + 'đ' : 'Thỏa thuận'}
+                </span>
+              </div>
             </div>
           </Link>
         </div>

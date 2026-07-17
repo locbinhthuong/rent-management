@@ -30,7 +30,7 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
       ) : (
         <>
           {/* Horizontal scroll on mobile, grid on desktop */}
-          <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto pb-6 snap-x snap-mandatory custom-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory custom-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
             {posts.map((post) => (
               <div key={post._id} className="min-w-[85vw] sm:min-w-[300px] md:min-w-0 snap-center shrink-0">
                 <GlassPropertyCard 

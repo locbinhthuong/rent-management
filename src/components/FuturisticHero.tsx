@@ -83,7 +83,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const districtsList = city ? getDistrictsByProvince(city) : [];
 
   return (
-    <div className="relative w-full flex flex-col items-center justify-center overflow-hidden pt-8 pb-4 md:pt-10 md:pb-4">
+    <div className="relative w-full flex flex-col items-center justify-center overflow-hidden pt-16 pb-4 md:pt-24 md:pb-4">
       {/* Premium Modern Mesh Gradient Background */}
       <div className="absolute inset-0 z-0 bg-slate-50 overflow-hidden">
         {/* Subtle grid pattern */}
