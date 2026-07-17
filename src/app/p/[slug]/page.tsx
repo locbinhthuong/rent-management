@@ -94,13 +94,9 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
   const isVerified = post.is_verified || false;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 relative overflow-hidden font-sans">
-      {/* Ambient glowing background effects */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-[20%] right-[-10%] w-[600px] h-[600px] bg-violet-500/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
-
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 relative font-sans">
       {/* Header */}
-      <header className="bg-slate-50/60 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-200 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <header className="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-slate-600 hover:text-cyan-400 transition-colors p-2 -ml-2 rounded-lg hover:bg-slate-200/50">
@@ -121,8 +117,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
             <div className="lg:col-span-2 space-y-8">
-              {/* Image Gallery (Glassmorphism & Carousel) */}
-              <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-slate-200 relative">
+              {/* Image Gallery */}
+              <div className="bg-white rounded-3xl p-3 shadow-sm border border-slate-200 relative">
                 <div className="absolute top-5 right-5 z-20">
                   <WishlistButton post={{ ...post, _id: post._id.toString() }} />
                 </div>
@@ -137,17 +133,14 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
               </div>
 
             {/* Title & Info */}
-            <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 relative overflow-hidden">
-              {/* Subtle inner glow */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
               <div className="flex flex-wrap gap-3 mb-6">
                 {post.property_type && (
-                  <span className="px-4 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-full text-sm font-bold border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                  <span className="px-4 py-1.5 bg-slate-100 text-slate-700 rounded-full text-sm font-semibold border border-slate-200">
                     {post.property_type}
                   </span>
                 )}
-                <span className="px-4 py-1.5 bg-slate-100/80 text-slate-600 rounded-full text-sm font-medium border border-slate-200">
+                <span className="px-4 py-1.5 bg-slate-50 text-slate-500 rounded-full text-sm font-medium border border-slate-200">
                   Đăng ngày {new Date(post.createdAt).toLocaleDateString('vi-VN')}
                 </span>
               </div>
@@ -165,7 +158,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
                 <div>
                   <div className="text-slate-600 text-sm font-semibold mb-2 uppercase tracking-widest">Mức giá thuê</div>
                   <div className="flex items-end gap-2">
-                    <div className="text-4xl md:text-5xl font-extrabold text-cyan-400 font-space glow-cyan-text">
+                    <div className="text-4xl md:text-5xl font-extrabold text-cyan-500 font-space">
                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}
                     </div>
                     <span className="text-lg font-medium text-slate-500 mb-1">/tháng</span>
@@ -184,9 +177,9 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
             </div>
 
             {/* Thông số kỹ thuật / Tiện ích */}
-            <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 relative overflow-hidden">
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
               <h2 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3 font-space">
-                <FileText className="w-6 h-6 text-cyan-400" /> Thông tin chi tiết
+                <FileText className="w-6 h-6 text-cyan-500" /> Thông tin chi tiết
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
@@ -230,14 +223,14 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
 
             {/* Tiện ích có sẵn */}
             {post.amenities && post.amenities.length > 0 && (
-              <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 relative overflow-hidden mt-8">
+              <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden mt-8">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6 font-space flex items-center gap-3">
-                  <Bolt className="w-6 h-6 text-cyan-400" /> Tiện ích có sẵn
+                  <Bolt className="w-6 h-6 text-cyan-500" /> Tiện ích có sẵn
                 </h2>
                 <div className="flex flex-wrap gap-3">
                   {post.amenities.map((amenity: string, idx: number) => (
-                    <span key={idx} className="px-4 py-2 bg-white/60 border border-slate-200 rounded-xl text-slate-700 font-medium shadow-sm flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    <span key={idx} className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-medium flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
                       {amenity}
                     </span>
                   ))}
@@ -246,7 +239,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
             )}
 
             {/* Mô tả */}
-            <div className="bg-slate-200/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200">
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
               <h2 className="text-2xl font-bold text-slate-900 mb-6 font-space">Mô tả phòng</h2>
               <div className="prose prose-invert prose-slate max-w-none">
                 <p className="whitespace-pre-line text-slate-700 leading-relaxed text-lg">
@@ -258,18 +251,15 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
           
           {/* Right Column: Contact Widget */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white/80 backdrop-blur-2xl rounded-3xl p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-slate-200 relative overflow-hidden">
-              {/* Highlight gradient at the top border */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-violet-500"></div>
-
+            <div className="sticky top-24 bg-white rounded-3xl p-6 shadow-md border border-slate-200 relative overflow-hidden">
               <div className="text-center mb-6 pb-6 border-b border-slate-200 relative z-10">
-                <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)] p-1">
-                   <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-3xl font-black text-slate-900">
+                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-slate-200 p-1">
+                   <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-3xl font-black text-slate-800">
                       {post.ctv_id?.name?.charAt(0) || 'U'}
                    </div>
                 </div>
                 <h3 className="font-space font-bold text-xl text-slate-900 tracking-wide">{post.ctv_id?.name || 'Ẩn danh'}</h3>
-                <p className="text-cyan-400 text-sm mt-1 font-medium">Chuyên viên tư vấn</p>
+                <p className="text-slate-500 text-sm mt-1 font-medium">Chuyên viên tư vấn</p>
               </div>
               
               <div className="space-y-4 relative z-10">
@@ -281,10 +271,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
                 />
               </div>
               
-              <div className="mt-8 pt-5 border-t border-slate-200 flex items-start gap-3 bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10 relative z-10">
+              <div className="mt-8 pt-5 border-t border-slate-200 flex items-start gap-3 bg-amber-50 p-4 rounded-2xl border border-amber-100 relative z-10">
                 <ShieldCheck className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-xs text-amber-200/70 leading-relaxed">
-                  <span className="font-bold text-amber-400">Lưu ý an toàn:</span> Không bao giờ chuyển khoản đặt cọc trước khi đến xem phòng trực tiếp và ký hợp đồng.
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  <span className="font-bold">Lưu ý an toàn:</span> Không bao giờ chuyển khoản đặt cọc trước khi đến xem phòng trực tiếp và ký hợp đồng.
                 </p>
               </div>
             </div>
