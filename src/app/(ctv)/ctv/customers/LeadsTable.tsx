@@ -3,12 +3,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import { PhoneCall, Search, Clock, Home, CornerDownRight, CheckCircle, MessageSquare } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import LeadChatModal from '@/components/ctv/LeadChatModal';
 
 export default function LeadsTable({ initialLeads, isAdmin = false }: { initialLeads: any[], isAdmin?: boolean }) {
   const [leads, setLeads] = useState(initialLeads);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('All');
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [chatLead, setChatLead] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -172,10 +174,28 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
                       <Home className="w-3 h-3 text-indigo-500" /> {lead.post_id?.property_type === 'Căn hộ chung cư' ? 'Căn hộ' : 'Phòng trọ'}
                     </div>
                   </div>
-                  {lead.message && (
+                  {(lead.last_message || lead.message) && (
+                    <div className="mt-3 pt-3 border-t border-indigo-100 flex items-center justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-bold text-slate-500 mb-1">TIN NHẮN GẦN NHẤT</p>
+                        <p className="text-sm text-slate-700 italic truncate">"{lead.last_message || lead.message}"</p>
+                      </div>
+                      <button 
+                        onClick={() => setChatLead(lead)}
+                        className="bg-cyan-500 text-white shadow-sm hover:bg-cyan-600 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0"
+                      >
+                        <MessageSquare className="w-4 h-4" /> Mở Chat
+                      </button>
+                    </div>
+                  )}
+                  {!(lead.last_message || lead.message) && (
                     <div className="mt-3 pt-3 border-t border-indigo-100">
-                      <p className="text-[10px] font-bold text-slate-500 mb-1">LỜI NHẮN TỪ KHÁCH HÀNG</p>
-                      <p className="text-sm text-slate-700 italic">"{lead.message}"</p>
+                      <button 
+                        onClick={() => setChatLead(lead)}
+                        className="bg-cyan-50 text-cyan-700 border border-cyan-200 hover:bg-cyan-100 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 w-full"
+                      >
+                        <MessageSquare className="w-4 h-4" /> Nhắn tin cho khách
+                      </button>
                     </div>
                   )}
                 </div>
@@ -248,6 +268,7 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
           })
         )}
       </div>
+      {chatLead && <LeadChatModal lead={chatLead} onClose={() => setChatLead(null)} />}
     </div>
   );
 }

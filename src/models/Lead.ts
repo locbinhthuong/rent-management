@@ -9,6 +9,8 @@ export interface ILead extends Document {
   message?: string;
   note?: string; // Ghi chú nội bộ của CTV/Admin
   status: 'New' | 'Contacted' | 'Success' | 'Failed';
+  last_message?: string;
+  last_message_at?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +25,8 @@ const LeadSchema: Schema = new Schema(
     message: { type: String },
     note: { type: String }, // Thêm field ghi chú
     status: { type: String, enum: ['New', 'Contacted', 'Success', 'Failed'], default: 'New' },
+    last_message: { type: String },
+    last_message_at: { type: Date },
   },
   { timestamps: true }
 );

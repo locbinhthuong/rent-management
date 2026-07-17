@@ -25,21 +25,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Tài khoản không tồn tại' }, { status: 404 });
     }
 
-    const newLead = await Lead.create({
+    let lead = await Lead.findOne({
       post_id: data.post_id,
       ctv_id: data.ctv_id,
-      customer_id: session.user.id,
-      name: customer.name,
-      phone: customer.phone || 'Chưa cập nhật',
-      message: data.message || '',
-      status: 'New',
+      customer_id: session.user.id
     });
+
+    if (!lead) {
+      lead = await Lead.create({
+        post_id: data.post_id,
+        ctv_id: data.ctv_id,
+        customer_id: session.user.id,
+        name: customer.name,
+        phone: customer.phone || 'Chưa cập nhật',
+        message: data.message || '', // Keep for legacy
+        status: 'New',
+        last_message: data.message,
+        last_message_at: new Date()
+      });
+    } else if (data.message) {
+      lead.last_message = data.message;
+      lead.last_message_at = new Date();
+      await lead.save();
+    }
+
+    if (data.message) {
+      const ChatMessage = (await import('@/models/ChatMessage')).default;
+      await ChatMessage.create({
+        lead_id: lead._id,
+        sender_id: session.user.id,
+        content: data.message
+      });
+    }
 
     const ctv = await User.findById(data.ctv_id).select('phone name');
 
     return NextResponse.json({ 
       message: 'Gửi thành công', 
-      lead: newLead,
+      lead: lead,
       ctvPhone: ctv?.phone || 'Đang cập nhật',
       ctvName: ctv?.name || 'Cộng tác viên'
     }, { status: 201 });

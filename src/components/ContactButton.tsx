@@ -1,16 +1,42 @@
 'use client';
 
-import { Phone, Lock, MessageSquare, Send, ChevronDown, CheckCircle2, Loader2 } from 'lucide-react';
+import { Phone, Lock, MessageSquare, Send, ChevronDown, Loader2, User } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { postId: string, ctvId: string, postTitle: string, ctvPhone: string }) {
   const { data: session, status } = useSession();
   const [showForm, setShowForm] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [messages, setMessages] = useState<any[]>([]);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const fetchMessages = async () => {
+    if (!session) return;
+    try {
+      const res = await fetch(`/api/leads/thread?post_id=${postId}&ctv_id=${ctvId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data.messages || []);
+      }
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    if (showForm) {
+      fetchMessages();
+      const interval = setInterval(fetchMessages, 3000); // Poll every 3 seconds
+      return () => clearInterval(interval);
+    }
+  }, [showForm, session]);
+
+  useEffect(() => {
+    if (showForm) {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, showForm]);
 
   const handleAction = async (type: 'call' | 'zalo') => {
     try {
@@ -38,12 +64,8 @@ export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { 
         body: JSON.stringify({ post_id: postId, ctv_id: ctvId, message })
       });
       if (res.ok) {
-        setSuccess(true);
-        setTimeout(() => {
-          setShowForm(false);
-          setSuccess(false);
-          setMessage('');
-        }, 3000);
+        setMessage('');
+        fetchMessages();
       }
     } catch (err) {}
     setLoading(false);
@@ -97,33 +119,54 @@ export default function ContactButton({ postId, ctvId, postTitle, ctvPhone }: { 
         <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${showForm ? 'rotate-180' : ''}`} />
       </button>
 
-      {/* Slide down form */}
-      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showForm ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
+      {/* Slide down chat box */}
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showForm ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="pt-2">
-          {success ? (
-            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex flex-col items-center justify-center text-center gap-2">
-              <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-              <p className="font-bold text-emerald-700 text-sm">Gửi thành công!</p>
-              <p className="text-xs text-emerald-600">Chuyên viên tư vấn sẽ liên hệ lại sớm nhất.</p>
+          <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden flex flex-col h-[400px]">
+            {/* Chat Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.length === 0 ? (
+                <div className="text-center text-slate-400 text-sm mt-10">
+                  <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-20" />
+                  Chưa có tin nhắn nào.<br/>Hãy gửi lời nhắn để bắt đầu trò chuyện.
+                </div>
+              ) : (
+                messages.map((msg, idx) => {
+                  // @ts-ignore
+                  const isMine = msg.sender_id === session?.user?.id;
+                  return (
+                    <div key={idx} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${isMine ? 'bg-cyan-500 text-white rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-sm'}`}>
+                        {msg.content}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+              <div ref={chatEndRef} />
             </div>
-          ) : (
-            <div className="bg-slate-50 rounded-xl p-3 border border-slate-200">
-              <textarea 
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Bạn cần hỗ trợ thêm thông tin gì?"
-                className="w-full bg-white border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 min-h-[80px] resize-none mb-2 text-slate-700 placeholder:text-slate-400"
-              />
-              <button 
-                onClick={handleSubmitMessage}
-                disabled={loading || !message.trim()}
-                className="w-full bg-slate-900 text-white font-bold py-2.5 rounded-lg hover:bg-slate-800 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                Gửi tin nhắn
-              </button>
+
+            {/* Chat Input Area */}
+            <div className="p-3 bg-white border-t border-slate-200">
+              <div className="flex gap-2">
+                <input 
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSubmitMessage()}
+                  placeholder="Nhập tin nhắn..."
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 text-slate-700 placeholder:text-slate-400"
+                />
+                <button 
+                  onClick={handleSubmitMessage}
+                  disabled={loading || !message.trim()}
+                  className="bg-slate-900 text-white p-2.5 rounded-lg hover:bg-slate-800 transition disabled:opacity-50 disabled:cursor-not-allowed shrink-0 flex items-center justify-center w-10 h-10"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
