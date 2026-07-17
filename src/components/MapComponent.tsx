@@ -55,6 +55,28 @@ const MapAutoPanner = ({ hoveredPostId, posts }: { hoveredPostId: string | null,
   return null;
 };
 
+const MapBoundsFitter = ({ posts }: { posts: any[] }) => {
+  const map = useMap();
+  useEffect(() => {
+    // Only fit bounds if there are posts and the map is visible
+    if (!map || map.getSize().x === 0 || map.getSize().y === 0 || !posts || posts.length === 0) return;
+    
+    // Check if we are currently hovering, if so, let MapAutoPanner handle it
+    // Wait, MapBoundsFitter only runs when posts change, which is correct.
+    const validCoords = posts.map(getCoordinates).filter(c => c !== null) as [number, number][];
+    
+    if (validCoords.length > 0) {
+      try {
+        const bounds = L.latLngBounds(validCoords);
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14, animate: true, duration: 1.5 });
+      } catch (error) {
+        console.error("Lỗi Leaflet fitBounds:", error);
+      }
+    }
+  }, [posts, map]);
+  return null;
+};
+
 const DeviceLocationPanner = () => {
   const map = useMap();
   useEffect(() => {
@@ -154,6 +176,7 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
         
         <DeviceLocationPanner />
         <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
+        <MapBoundsFitter posts={posts} />
 
         {posts.map((post) => {
           const isActive = hoveredPostId === post._id.toString();
