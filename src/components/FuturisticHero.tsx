@@ -84,12 +84,12 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
 
   return (
     <div className="relative w-full min-h-[100svh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden py-24 md:py-0">
-      {/* Futuristic Background */}
-      <div className="absolute inset-0 z-0 bg-slate-950">
+      {/* Fresh Light Background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-cyan-100 via-sky-50 to-slate-50">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-cyan-500 opacity-20 blur-[100px]"></div>
-        {/* Deep dark gradient overlay for text readability and futuristic vibe */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/80 to-slate-950"></div>
+        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[400px] w-[600px] rounded-full bg-cyan-300 opacity-30 blur-[120px]"></div>
+        {/* Smooth overlay fading into the content below */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50"></div>
       </div>
 
       {/* Hero Content */}
@@ -101,11 +101,11 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center mb-8 md:mb-10 w-full"
         >
-          <h1 className="font-space text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-3 md:mb-4 drop-shadow-2xl leading-tight">
+          <h1 className="font-space text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-3 md:mb-4 drop-shadow-sm leading-tight">
             Tương lai của <br className="md:hidden" />
-            <span className="text-cyan-400 font-space glow-cyan">Không Gian Sống</span>
+            <span className="text-cyan-600 font-space drop-shadow-md">Không Gian Sống</span>
           </h1>
-          <p className="text-slate-700 text-base md:text-xl max-w-2xl mx-auto font-medium px-2">
+          <p className="text-slate-600 text-base md:text-xl max-w-2xl mx-auto font-medium px-2">
             Khám phá trải nghiệm thuê nhà đẳng cấp với hệ thống tìm kiếm đa chiều.
           </p>
         </motion.div>
@@ -118,7 +118,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="w-full lg:w-1/3 bg-white/95 backdrop-blur-xl rounded-3xl border border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.3)] p-5 md:p-6 flex flex-col h-full"
+            className="w-full lg:w-1/3 bg-white/80 backdrop-blur-2xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 p-5 md:p-6 flex flex-col h-full"
           >
             <div className="flex flex-col gap-1 overflow-y-auto custom-scrollbar flex-1 pr-1">
               
@@ -246,17 +246,17 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="w-full lg:w-2/3 h-[400px] lg:h-full bg-slate-100/5 backdrop-blur-md rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden relative group"
+            className="w-full lg:w-2/3 h-[400px] lg:h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group"
           >
             {/* Floating glowing frame */}
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-cyan-500/30 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-cyan-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
             
             <MapClientWrapper posts={posts} />
             
             {/* Empty state fallback if no posts */}
             {posts && posts.length === 0 && (
-              <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[400] pointer-events-none">
-                <span className="text-cyan-400 font-space font-medium glow-cyan-text bg-slate-950/80 px-6 py-3 rounded-full border border-cyan-500/30">
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-[400] pointer-events-none">
+                <span className="text-slate-700 font-space font-medium bg-white shadow-lg px-6 py-3 rounded-full border border-slate-200">
                   Không tìm thấy phòng ở khu vực này
                 </span>
               </div>
@@ -276,9 +276,9 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
         <motion.div 
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="w-8 h-12 rounded-full border border-slate-300 flex items-start justify-center p-1 bg-slate-200/50 backdrop-blur-sm"
+          className="w-8 h-12 rounded-full border border-slate-300 flex items-start justify-center p-1 bg-white/50 backdrop-blur-sm shadow-sm"
         >
-          <div className="w-1.5 h-3 bg-cyan-400 rounded-full glow-cyan"></div>
+          <div className="w-1.5 h-3 bg-cyan-500 rounded-full"></div>
         </motion.div>
       </motion.div>
     </div>
