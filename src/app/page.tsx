@@ -14,6 +14,28 @@ import MapClientWrapper from '@/components/MapClientWrapper';
 
 export const revalidate = 60;
 
+function createFuzzyRegex(keyword: string) {
+  let str = keyword.toLowerCase().replace(/\s+/g, '');
+  let regexStr = '';
+  
+  const charMap: Record<string, string> = {
+    'a': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'á': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'à': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ả': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ã': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ạ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ă': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ắ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ằ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ẳ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ẵ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ặ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'â': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ấ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ầ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ẩ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ẫ': '[aáàảãạăắằẳẵặâấầẩẫậ]', 'ậ': '[aáàảãạăắằẳẵặâấầẩẫậ]',
+    'e': '[eéèẻẽẹêếềểễệ]', 'é': '[eéèẻẽẹêếềểễệ]', 'è': '[eéèẻẽẹêếềểễệ]', 'ẻ': '[eéèẻẽẹêếềểễệ]', 'ẽ': '[eéèẻẽẹêếềểễệ]', 'ẹ': '[eéèẻẽẹêếềểễệ]', 'ê': '[eéèẻẽẹêếềểễệ]', 'ế': '[eéèẻẽẹêếềểễệ]', 'ề': '[eéèẻẽẹêếềểễệ]', 'ể': '[eéèẻẽẹêếềểễệ]', 'ễ': '[eéèẻẽẹêếềểễệ]', 'ệ': '[eéèẻẽẹêếềểễệ]',
+    'i': '[iíìỉĩị]', 'í': '[iíìỉĩị]', 'ì': '[iíìỉĩị]', 'ỉ': '[iíìỉĩị]', 'ĩ': '[iíìỉĩị]', 'ị': '[iíìỉĩị]',
+    'o': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ó': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ò': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ỏ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'õ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ọ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ô': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ố': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ồ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ổ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ỗ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ộ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ơ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ớ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ờ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ở': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ỡ': '[oóòỏõọôốồổỗộơớờởỡợ]', 'ợ': '[oóòỏõọôốồổỗộơớờởỡợ]',
+    'u': '[uúùủũụưứừửữự]', 'ú': '[uúùủũụưứừửữự]', 'ù': '[uúùủũụưứừửữự]', 'ủ': '[uúùủũụưứừửữự]', 'ũ': '[uúùủũụưứừửữự]', 'ụ': '[uúùủũụưứừửữự]', 'ư': '[uúùủũụưứừửữự]', 'ứ': '[uúùủũụưứừửữự]', 'ừ': '[uúùủũụưứừửữự]', 'ử': '[uúùủũụưứừửữự]', 'ữ': '[uúùủũụưứừửữự]', 'ự': '[uúùủũụưứừửữự]',
+    'y': '[yýỳỷỹỵ]', 'ý': '[yýỳỷỹỵ]', 'ỳ': '[yýỳỷỹỵ]', 'ỷ': '[yýỳỷỹỵ]', 'ỹ': '[yýỳỷỹỵ]', 'ỵ': '[yýỳỷỹỵ]',
+    'd': '[dđ]', 'đ': '[dđ]'
+  };
+
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    const mapped = charMap[char] || char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    regexStr += mapped + (i < str.length - 1 ? '\\s*' : '');
+  }
+  return regexStr;
+}
+
 async function getActivePosts(searchParams?: { [key: string]: string | string[] | undefined }) {
   await connectDB();
   User.init(); // Ensure user model is registered
@@ -27,8 +49,8 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
     if (searchParams.district) query.district = searchParams.district;
     if (searchParams.property_type) query.property_type = searchParams.property_type;
     
-    if (searchParams.ward) query.ward = { $regex: searchParams.ward, $options: 'i' };
-    if (searchParams.street) query.address = { $regex: searchParams.street, $options: 'i' };
+    if (searchParams.ward) query.ward = { $regex: createFuzzyRegex(searchParams.ward as string), $options: 'i' };
+    if (searchParams.street) query.address = { $regex: createFuzzyRegex(searchParams.street as string), $options: 'i' };
     
     if (searchParams.max_electricity) {
       query.electricity_price = { $lte: Number(searchParams.max_electricity) };
@@ -37,10 +59,11 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
       query.water_price = { $lte: Number(searchParams.max_water) };
     }
     if (searchParams.q) {
+      const fuzzyRegex = createFuzzyRegex(searchParams.q as string);
       query.$or = [
-        { title: { $regex: searchParams.q, $options: 'i' } },
-        { address: { $regex: searchParams.q, $options: 'i' } },
-        { description: { $regex: searchParams.q, $options: 'i' } }
+        { title: { $regex: fuzzyRegex, $options: 'i' } },
+        { address: { $regex: fuzzyRegex, $options: 'i' } },
+        { description: { $regex: fuzzyRegex, $options: 'i' } }
       ];
     }
     
