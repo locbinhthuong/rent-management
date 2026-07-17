@@ -26,6 +26,16 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
     if (searchParams.city) query.city = searchParams.city;
     if (searchParams.district) query.district = searchParams.district;
     if (searchParams.property_type) query.property_type = searchParams.property_type;
+    
+    if (searchParams.ward) query.ward = { $regex: searchParams.ward, $options: 'i' };
+    if (searchParams.street) query.address = { $regex: searchParams.street, $options: 'i' };
+    
+    if (searchParams.max_electricity) {
+      query.electricity_price = { $lte: Number(searchParams.max_electricity) };
+    }
+    if (searchParams.max_water) {
+      query.water_price = { $lte: Number(searchParams.max_water) };
+    }
     if (searchParams.q) {
       query.$or = [
         { title: { $regex: searchParams.q, $options: 'i' } },

@@ -23,6 +23,12 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const [priceRange, setPriceRange] = useState(initialPriceRange);
   const [showAdvanced, setShowAdvanced] = useState(false);
   
+  // Additional fields for advanced search
+  const [ward, setWard] = useState(searchParams.get('ward') || '');
+  const [street, setStreet] = useState(searchParams.get('street') || '');
+  const [maxElectricity, setMaxElectricity] = useState(searchParams.get('max_electricity') || '');
+  const [maxWater, setMaxWater] = useState(searchParams.get('max_water') || '');
+  
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -47,6 +53,11 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
     if (district) params.set('district', district);
     if (propertyType) params.set('property_type', propertyType);
     if (keyword) params.set('q', keyword);
+    
+    if (ward) params.set('ward', ward);
+    if (street) params.set('street', street);
+    if (maxElectricity) params.set('max_electricity', maxElectricity);
+    if (maxWater) params.set('max_water', maxWater);
     
     if (priceRange) {
       const [min, max] = priceRange.split('-');
@@ -163,7 +174,26 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+                
+                {/* City */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Tỉnh/Thành phố</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <select 
+                      value={city}
+                      onChange={handleCityChange}
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    >
+                      <option value="">Tất cả Tỉnh/Thành</option>
+                      {provincesList.map((p) => (
+                        <option key={p} value={p}>{p}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />
+                  </div>
+                </div>
+
                 {/* District */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Quận/Huyện</label>
@@ -182,12 +212,37 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                     <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />
                   </div>
                 </div>
+                
+                {/* Ward */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Phường/Xã</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <input 
+                      value={ward}
+                      onChange={(e) => setWard(e.target.value)}
+                      placeholder="Nhập phường/xã..."
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
+                    />
+                  </div>
+                </div>
+                
+                {/* Street */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Tên đường</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <input 
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      placeholder="Nhập tên đường..."
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
+                    />
+                  </div>
+                </div>
 
                 {/* Property Type */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Loại phòng</label>
                   <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
-                    <Home className="w-4 h-4 text-slate-400 mr-2 shrink-0 hidden sm:block" />
                     <select 
                       value={propertyType}
                       onChange={(e) => setPropertyType(e.target.value)}
@@ -201,6 +256,54 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                     <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />
                   </div>
                 </div>
+                
+                {/* Room Price */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Giá phòng</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <select 
+                      onChange={(e) => setPriceRange(e.target.value || "")}
+                      value={priceRange}
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    >
+                      <option value="">Tất cả mức giá</option>
+                      <option value="0-2000000">Dưới 2 triệu</option>
+                      <option value="2000000-5000000">Từ 2 - 5 triệu</option>
+                      <option value="5000000-10000000">Từ 5 - 10 triệu</option>
+                      <option value="10000000-999999999">Trên 10 triệu</option>
+                    </select>
+                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />
+                  </div>
+                </div>
+                
+                {/* Electricity Price */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Giá điện tối đa (VNĐ)</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <input 
+                      type="number"
+                      value={maxElectricity}
+                      onChange={(e) => setMaxElectricity(e.target.value)}
+                      placeholder="VD: 3500..."
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
+                    />
+                  </div>
+                </div>
+                
+                {/* Water Price */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Giá nước tối đa (VNĐ)</label>
+                  <div className="flex items-center bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200 hover:border-blue-300 transition-colors">
+                    <input 
+                      type="number"
+                      value={maxWater}
+                      onChange={(e) => setMaxWater(e.target.value)}
+                      placeholder="VD: 100000..."
+                      className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
+                    />
+                  </div>
+                </div>
+                
               </div>
             </div>
           </motion.div>
