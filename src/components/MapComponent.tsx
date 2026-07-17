@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from 'react-leaflet';
+import { useSearchParams } from 'next/navigation';
 import { Layers } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -130,9 +131,14 @@ const createCustomIcon = (isActive: boolean) => {
 };
 
 export default function MapComponent({ posts, hoveredPostId }: MapComponentProps) {
+  const searchParams = useSearchParams();
+  const uni_lat = searchParams.get('uni_lat');
+  const uni_lng = searchParams.get('uni_lng');
   // Find first valid coordinates for default center
   const firstValidCoords = posts.map(getCoordinates).find(c => c !== null);
-  const defaultCenter: [number, number] = firstValidCoords || [14.0583, 108.2772]; // Vietnam center
+  const defaultCenter: [number, number] = (uni_lat && uni_lng && !isNaN(Number(uni_lat)) && !isNaN(Number(uni_lng))) 
+    ? [Number(uni_lat), Number(uni_lng)] 
+    : (firstValidCoords || [14.0583, 108.2772]); // Vietnam center
   const [mapType, setMapType] = useState<'street' | 'satellite'>('street');
 
   return (
@@ -177,6 +183,14 @@ export default function MapComponent({ posts, hoveredPostId }: MapComponentProps
         <DeviceLocationPanner />
         <MapAutoPanner hoveredPostId={hoveredPostId} posts={posts} />
         <MapBoundsFitter posts={posts} />
+
+        {uni_lat && uni_lng && !isNaN(Number(uni_lat)) && !isNaN(Number(uni_lng)) && (
+          <Circle 
+            center={[Number(uni_lat), Number(uni_lng)]} 
+            radius={3000} 
+            pathOptions={{ color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.15, weight: 2 }}
+          />
+        )}
 
         {posts.map((post) => {
           const isActive = hoveredPostId === post._id.toString();

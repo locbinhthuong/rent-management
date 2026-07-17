@@ -1,0 +1,55 @@
+export const universities = [
+  // TP.HCM
+  { name: 'Đại học Bách Khoa TP.HCM (CS1)', lat: 10.7724, lng: 106.6581, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Bách Khoa TP.HCM (CS2 - Thủ Đức)', lat: 10.8805, lng: 106.8053, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Quốc gia TP.HCM (Làng Đại học Thủ Đức)', lat: 10.8700, lng: 106.8016, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Sư phạm Kỹ thuật TP.HCM', lat: 10.8507, lng: 106.7719, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Nông Lâm TP.HCM', lat: 10.8698, lng: 106.7937, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Kinh tế TP.HCM (UEH - Nguyễn Đình Chiểu)', lat: 10.7830, lng: 106.6924, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Y Dược TP.HCM', lat: 10.7548, lng: 106.6654, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Khoa học Tự nhiên TP.HCM (Nguyễn Văn Cừ)', lat: 10.7628, lng: 106.6825, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Khoa học Tự nhiên TP.HCM (Thủ Đức)', lat: 10.8759, lng: 106.7981, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Khoa học Xã hội và Nhân văn TP.HCM (Đinh Tiên Hoàng)', lat: 10.7859, lng: 106.7013, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Khoa học Xã hội và Nhân văn TP.HCM (Thủ Đức)', lat: 10.8722, lng: 106.8021, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Tôn Đức Thắng (Quận 7)', lat: 10.7327, lng: 106.6991, city: 'Hồ Chí Minh' },
+  { name: 'RMIT University (Quận 7)', lat: 10.7293, lng: 106.6958, city: 'Hồ Chí Minh' },
+  { name: 'Đại học FPT TP.HCM (Quận 9)', lat: 10.8411, lng: 106.8099, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Giao thông Vận tải TP.HCM (Bình Thạnh)', lat: 10.8039, lng: 106.7166, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Công nghiệp TP.HCM (Gò Vấp)', lat: 10.8222, lng: 106.6875, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Mở TP.HCM', lat: 10.7766, lng: 106.6908, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Sài Gòn', lat: 10.7610, lng: 106.6811, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Kiến trúc TP.HCM', lat: 10.7816, lng: 106.6927, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Công nghệ TP.HCM (HUTECH)', lat: 10.8016, lng: 106.7145, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Kinh tế - Tài chính TP.HCM (UEF)', lat: 10.8033, lng: 106.7005, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Hoa Sen', lat: 10.7709, lng: 106.6922, city: 'Hồ Chí Minh' },
+  { name: 'Đại học Sư phạm TP.HCM', lat: 10.7616, lng: 106.6822, city: 'Hồ Chí Minh' },
+
+  // Hà Nội
+  { name: 'Đại học Quốc gia Hà Nội (Cầu Giấy)', lat: 21.0378, lng: 105.7816, city: 'Hà Nội' },
+  { name: 'Đại học Bách Khoa Hà Nội', lat: 21.0041, lng: 105.8437, city: 'Hà Nội' },
+  { name: 'Đại học Kinh tế Quốc dân', lat: 21.0000, lng: 105.8422, city: 'Hà Nội' },
+  { name: 'Đại học Xây dựng Hà Nội', lat: 21.0031, lng: 105.8430, city: 'Hà Nội' },
+  { name: 'Đại học Y Hà Nội', lat: 21.0028, lng: 105.8299, city: 'Hà Nội' },
+  { name: 'Đại học Ngoại thương Hà Nội', lat: 21.0232, lng: 105.8051, city: 'Hà Nội' },
+  { name: 'Học viện Công nghệ Bưu chính Viễn thông', lat: 20.9806, lng: 105.7877, city: 'Hà Nội' },
+  { name: 'Đại học Thương mại', lat: 21.0366, lng: 105.7745, city: 'Hà Nội' },
+  { name: 'Học viện Báo chí và Tuyên truyền', lat: 21.0381, lng: 105.7875, city: 'Hà Nội' },
+  { name: 'Đại học FPT Hà Nội (Hòa Lạc)', lat: 21.0125, lng: 105.5269, city: 'Hà Nội' },
+  { name: 'Học viện Nông nghiệp Việt Nam', lat: 21.0055, lng: 105.9326, city: 'Hà Nội' },
+  { name: 'Đại học Thủy lợi', lat: 21.0069, lng: 105.8247, city: 'Hà Nội' },
+  { name: 'Đại học Sư phạm Hà Nội', lat: 21.0371, lng: 105.7831, city: 'Hà Nội' },
+  { name: 'Đại học Giao thông Vận tải Hà Nội', lat: 21.0275, lng: 105.8037, city: 'Hà Nội' },
+  { name: 'Đại học Luật Hà Nội', lat: 21.0244, lng: 105.8118, city: 'Hà Nội' },
+  { name: 'Đại học Công nghiệp Hà Nội', lat: 21.0537, lng: 105.7350, city: 'Hà Nội' },
+
+  // Đà Nẵng
+  { name: 'Đại học Bách Khoa Đà Nẵng', lat: 16.0739, lng: 108.1499, city: 'Đà Nẵng' },
+  { name: 'Đại học Kinh tế Đà Nẵng', lat: 16.0472, lng: 108.2382, city: 'Đà Nẵng' },
+  { name: 'Đại học Ngoại ngữ Đà Nẵng', lat: 16.0357, lng: 108.2173, city: 'Đà Nẵng' },
+  { name: 'Đại học Sư phạm Đà Nẵng', lat: 16.0610, lng: 108.1578, city: 'Đà Nẵng' },
+  { name: 'Đại học Duy Tân', lat: 16.0594, lng: 108.2096, city: 'Đà Nẵng' },
+  
+  // Cần Thơ
+  { name: 'Đại học Cần Thơ', lat: 10.0299, lng: 105.7706, city: 'Cần Thơ' },
+  { name: 'Đại học Y Dược Cần Thơ', lat: 10.0461, lng: 105.7606, city: 'Cần Thơ' }
+];

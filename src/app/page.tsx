@@ -76,8 +76,21 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
     
-    // 4. Xử lý GPS (near)
-    if (searchParams.lat && searchParams.lng) {
+    // 4. Xử lý Lọc quanh Trường Đại học (Bán kính 3km)
+    if (searchParams.uni_lat && searchParams.uni_lng) {
+      const lat = parseFloat(searchParams.uni_lat as string);
+      const lng = parseFloat(searchParams.uni_lng as string);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        query.location = {
+          $geoWithin: {
+            $centerSphere: [[lng, lat], 3 / 6378.1] // 3km in radians
+          }
+        };
+      }
+    }
+
+    // 5. Xử lý GPS (near)
+    if (searchParams.lat && searchParams.lng && !query.location) {
       const lat = parseFloat(searchParams.lat as string);
       const lng = parseFloat(searchParams.lng as string);
       if (!isNaN(lat) && !isNaN(lng)) {
