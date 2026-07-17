@@ -118,7 +118,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const districtsList = city ? getDistrictsByProvince(city) : [];
 
   return (
-    <div className="relative w-full flex flex-col items-center justify-center overflow-hidden pt-16 pb-4 md:pt-24 md:pb-4">
+    <div className="relative w-full flex flex-col items-center justify-center overflow-hidden pt-6 pb-2 md:pt-24 md:pb-4">
       {/* Premium Modern Mesh Gradient Background */}
       <div className="absolute inset-0 z-0 bg-slate-50 overflow-hidden">
         {/* Subtle grid pattern */}
@@ -134,25 +134,25 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 flex flex-col items-center mt-4 md:mt-[-5vh]">
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 flex flex-col items-center mt-2 md:mt-[-5vh]">
         
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-4 md:mb-6 w-full"
+          className="text-center mb-2 md:mb-6 w-full"
         >
-          <h1 className="font-space text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-3 md:mb-4 drop-shadow-sm leading-tight">
-            Tương lai của <br className="md:hidden" />
-            <span className="text-blue-600 font-space drop-shadow-md">Không Gian Sống</span>
+          <h1 className="font-space text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-1 md:mb-4 drop-shadow-sm leading-tight">
+            Tương lai của <span className="md:hidden text-blue-600">Không Gian Sống</span>
+            <span className="hidden md:block text-blue-600 font-space drop-shadow-md">Không Gian Sống</span>
           </h1>
-          <p className="text-slate-600 text-base md:text-xl max-w-2xl mx-auto font-medium px-2">
+          <p className="hidden md:block text-slate-600 text-base md:text-xl max-w-2xl mx-auto font-medium px-2">
             Khám phá trải nghiệm thuê nhà đẳng cấp với hệ thống tìm kiếm đa chiều.
           </p>
         </motion.div>
 
         {/* Search Section */}
-        <div className="w-full max-w-3xl flex flex-col gap-3 mt-6">
+        <div className="w-full max-w-3xl flex flex-col gap-2 md:gap-3 mt-2 md:mt-6">
           
           {/* Top Row: Keyword & Filter Toggle */}
           <div className="flex items-center gap-2 w-full">
@@ -359,17 +359,17 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
 
           {/* Bottom Row: Simple Filters & Search Button */}
           {!showAdvanced && (
-            <div className="flex flex-col w-full gap-2.5">
+            <div className="flex flex-col w-full gap-2">
               
-              {/* Row 1: City, District, Price */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 w-full mt-2">
+              {/* Row 1: City & District */}
+              <div className="grid grid-cols-2 gap-2 w-full mt-1 md:mt-2">
                 {/* City */}
-                <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[130px]">
-                  <MapPin className="w-4 h-4 text-emerald-500 mr-2 shrink-0" />
+                <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-3 py-2.5 md:px-4 md:py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors w-full overflow-hidden">
+                  <MapPin className="w-4 h-4 text-emerald-500 mr-1.5 shrink-0" />
                   <select 
                     value={city}
                     onChange={handleCityChange}
-                    className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    className="bg-transparent text-slate-700 font-medium text-xs md:text-sm outline-none cursor-pointer appearance-none w-full truncate"
                   >
                     <option value="">Tỉnh/Thành</option>
                     {provincesList.map((p) => (
@@ -379,12 +379,12 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                 </div>
 
                 {/* District */}
-                <div className={`flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm transition-colors flex-1 min-w-[130px] ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
+                <div className={`flex items-center bg-white/95 backdrop-blur-md rounded-full px-3 py-2.5 md:px-4 md:py-3 border border-slate-200 shadow-sm transition-colors w-full overflow-hidden ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
                   <select 
                     value={district}
                     onChange={(e) => setDistrict(e.target.value)}
                     disabled={!city}
-                    className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    className="bg-transparent text-slate-700 font-medium text-xs md:text-sm outline-none cursor-pointer appearance-none w-full truncate"
                   >
                     <option value="">{city ? "Quận/Huyện" : "Chọn Tỉnh"}</option>
                     {districtsList.map((loc: string) => (
@@ -392,14 +392,18 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              {/* Row 2: Price & University */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
                 
                 {/* Price */}
-                <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[130px]">
-                  <span className="text-amber-500 mr-2 font-bold text-sm shrink-0">₫</span>
+                <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-3 py-2.5 md:px-4 md:py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors w-full overflow-hidden">
+                  <span className="text-amber-500 mr-1.5 font-bold text-xs md:text-sm shrink-0">₫</span>
                   <select 
                     onChange={(e) => setPriceRange(e.target.value || "")}
                     value={priceRange}
-                    className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                    className="bg-transparent text-slate-700 font-medium text-xs md:text-sm outline-none cursor-pointer appearance-none w-full truncate"
                   >
                     <option value="">Mức giá</option>
                     <option value="0-2000000">Dưới 2 triệu</option>
@@ -408,20 +412,16 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                     <option value="10000000-999999999">Trên 10 triệu</option>
                   </select>
                 </div>
-              </div>
 
-              {/* Row 2: University & Actions */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 w-full">
-                
                 {/* University Search */}
-                <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-[1.5] w-full">
-                  <GraduationCap className="w-4 h-4 text-violet-500 mr-2 shrink-0" />
+                <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-3 py-2.5 md:px-4 md:py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors w-full overflow-hidden">
+                  <GraduationCap className="w-4 h-4 text-violet-500 mr-1.5 shrink-0" />
                   <input 
                     list="universities-list"
                     value={universityName}
                     onChange={(e) => setUniversityName(e.target.value)}
-                    placeholder="Gần trường Đại học (bán kính 3km)..."
-                    className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
+                    placeholder="Đại học (bán kính 3km)..."
+                    className="bg-transparent text-slate-700 font-medium text-xs md:text-sm outline-none w-full placeholder-slate-400 truncate"
                   />
                   <datalist id="universities-list">
                     {universities.map(u => (
@@ -429,25 +429,25 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                     ))}
                   </datalist>
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className="flex w-full sm:w-auto gap-2.5 flex-1">
-                  <button 
-                    onClick={handleMapSearch}
-                    className="bg-white/95 hover:bg-slate-100 text-slate-700 backdrop-blur-md border border-slate-200 px-4 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-sm flex-1 whitespace-nowrap"
-                  >
-                    <Map className="w-4 h-4 text-emerald-600 font-bold" />
-                    <span className="font-bold text-sm">BẢN ĐỒ</span>
-                  </button>
-                  
-                  <button 
-                    onClick={handleSearch}
-                    className="bg-blue-600 hover:bg-blue-500 px-4 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/30 flex-1 whitespace-nowrap"
-                  >
-                    <Search className="w-4 h-4 text-white font-bold" />
-                    <span className="font-bold text-sm text-white">TÌM KIẾM</span>
-                  </button>
-                </div>
+              {/* Row 3: Action Buttons */}
+              <div className="flex w-full gap-2 mt-1 md:mt-2">
+                <button 
+                  onClick={handleMapSearch}
+                  className="bg-white/95 hover:bg-slate-100 text-slate-700 backdrop-blur-md border border-slate-200 px-3 py-2.5 md:px-4 md:py-3 rounded-full flex items-center justify-center gap-1.5 transition-all shadow-sm flex-1 whitespace-nowrap"
+                >
+                  <Map className="w-4 h-4 text-emerald-600 font-bold" />
+                  <span className="font-bold text-xs md:text-sm">BẢN ĐỒ</span>
+                </button>
+                
+                <button 
+                  onClick={handleSearch}
+                  className="bg-blue-600 hover:bg-blue-500 px-3 py-2.5 md:px-4 md:py-3 rounded-full flex items-center justify-center gap-1.5 transition-all shadow-md shadow-blue-500/30 flex-[1.5] whitespace-nowrap"
+                >
+                  <Search className="w-4 h-4 text-white font-bold" />
+                  <span className="font-bold text-xs md:text-sm text-white">TÌM KIẾM</span>
+                </button>
               </div>
               
             </div>
