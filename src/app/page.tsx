@@ -177,7 +177,7 @@ export default async function CustomerHome(props: {
         </section>
 
         {/* Map Section (Bottom) */}
-        <section className="w-full max-w-[1400px] mx-auto px-4 mb-20 relative z-10 h-[500px] mt-8">
+        <section id="map-view" className="w-full max-w-[1400px] mx-auto px-4 mb-20 relative z-10 h-[500px] mt-8">
           <div className="w-full h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group">
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
             <MapClientWrapper posts={posts} />

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Home, Navigation, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
+import { Search, MapPin, Home, Navigation, SlidersHorizontal, X, ChevronDown, Map } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 import MapClientWrapper from '@/components/MapClientWrapper';
@@ -68,6 +68,30 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
     router.push(`/?${params.toString()}`, { scroll: false });
     setTimeout(() => {
       document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+  
+  const handleMapSearch = () => {
+    const params = new URLSearchParams();
+    if (city) params.set('city', city);
+    if (district) params.set('district', district);
+    if (propertyType) params.set('property_type', propertyType);
+    if (keyword) params.set('q', keyword);
+    
+    if (ward) params.set('ward', ward);
+    if (street) params.set('street', street);
+    if (maxElectricity) params.set('max_electricity', maxElectricity);
+    if (maxWater) params.set('max_water', maxWater);
+    
+    if (priceRange) {
+      const [min, max] = priceRange.split('-');
+      params.set('min_price', min);
+      params.set('max_price', max);
+    }
+    
+    router.push(`/?${params.toString()}`, { scroll: false });
+    setTimeout(() => {
+      document.getElementById('map-view')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
 
@@ -309,55 +333,59 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </motion.div>
 
           {/* Bottom Row: Simple Filters & Search Button */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 w-full">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 w-full">
             
-            {/* City */}
-            <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[140px]">
-              <MapPin className="w-4 h-4 text-emerald-500 mr-2 shrink-0" />
-              <select 
-                value={city}
-                onChange={handleCityChange}
-                className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
-              >
-                <option value="">Tỉnh/Thành</option>
-                {provincesList.map((p) => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
-              </select>
-            </div>
+            {/* City & District container for mobile */}
+            <div className="flex w-full sm:w-auto gap-2.5 flex-1">
+              {/* City */}
+              <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[130px]">
+                <MapPin className="w-4 h-4 text-emerald-500 mr-2 shrink-0" />
+                <select 
+                  value={city}
+                  onChange={handleCityChange}
+                  className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                >
+                  <option value="">Tỉnh/Thành</option>
+                  {provincesList.map((p) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Price */}
-            <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors flex-1 min-w-[140px]">
-              <span className="text-amber-500 mr-2 font-bold text-sm shrink-0">₫</span>
-              <select 
-                onChange={(e) => setPriceRange(e.target.value || "")}
-                value={priceRange}
-                className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
-              >
-                <option value="">Mức giá</option>
-                <option value="0-2000000">Dưới 2 triệu</option>
-                <option value="2000000-5000000">Từ 2 - 5 triệu</option>
-                <option value="5000000-10000000">Từ 5 - 10 triệu</option>
-                <option value="10000000-999999999">Trên 10 triệu</option>
-              </select>
+              {/* District */}
+              <div className={`flex items-center bg-white/95 backdrop-blur-md rounded-full px-4 py-3 border border-slate-200 shadow-sm transition-colors flex-1 min-w-[130px] ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
+                <select 
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  disabled={!city}
+                  className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
+                >
+                  <option value="">{city ? "Quận/Huyện" : "Chọn Tỉnh"}</option>
+                  {districtsList.map((loc: string) => (
+                    <option key={loc} value={loc}>{loc}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Action Buttons */}
-            <button 
-              onClick={handleNearMe}
-              className="bg-white/95 hover:bg-slate-100 backdrop-blur-md border border-slate-200 p-3.5 rounded-full flex items-center justify-center transition-all shadow-sm shrink-0"
-              title="Tìm quanh đây"
-            >
-              <Navigation className="w-4 h-4 text-violet-500" />
-            </button>
-            
-            <button 
-              onClick={handleSearch}
-              className="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/30 flex-[2] sm:flex-none"
-            >
-              <Search className="w-4 h-4 text-white font-bold" />
-              <span className="font-bold text-sm text-white">TÌM</span>
-            </button>
+            <div className="flex w-full sm:w-auto gap-2.5 flex-[1.2]">
+              <button 
+                onClick={handleMapSearch}
+                className="bg-white/95 hover:bg-slate-100 text-slate-700 backdrop-blur-md border border-slate-200 px-4 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-sm flex-1 whitespace-nowrap"
+              >
+                <Map className="w-4 h-4 text-emerald-600 font-bold" />
+                <span className="font-bold text-sm">BẢN ĐỒ</span>
+              </button>
+              
+              <button 
+                onClick={handleSearch}
+                className="bg-blue-600 hover:bg-blue-500 px-4 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/30 flex-1 whitespace-nowrap"
+              >
+                <Search className="w-4 h-4 text-white font-bold" />
+                <span className="font-bold text-sm text-white">TÌM KIẾM</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
