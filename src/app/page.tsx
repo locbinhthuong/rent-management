@@ -10,6 +10,7 @@ import Image from 'next/image';
 // Client components
 import FuturisticHero from '@/components/FuturisticHero';
 import MapSearchClient from '@/components/MapSearchClient';
+import MapClientWrapper from '@/components/MapClientWrapper';
 
 export const revalidate = 60;
 
@@ -160,9 +161,25 @@ export default async function CustomerHome(props: {
       <main className="pt-16">
         <FuturisticHero posts={posts} />
         
-        {/* Featured Content: List & Map Banner */}
-        <section id="explore" className="w-full relative flex flex-col mt-4">
+        {/* Featured Content: Posts List */}
+        <section id="explore" className="w-full relative flex flex-col mt-4 z-20">
           <MapSearchClient posts={posts} pagination={pagination} />
+        </section>
+
+        {/* Map Section (Bottom) */}
+        <section className="w-full max-w-[1400px] mx-auto px-4 mb-20 relative z-10 h-[500px] mt-8">
+          <div className="w-full h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group">
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
+            <MapClientWrapper posts={posts} />
+            
+            {posts && posts.length === 0 && (
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-[400] pointer-events-none">
+                <span className="text-slate-700 font-space font-medium bg-white shadow-lg px-6 py-3 rounded-full border border-slate-200">
+                  Không tìm thấy phòng ở khu vực này
+                </span>
+              </div>
+            )}
+          </div>
         </section>
       </main>
     </div>

@@ -83,7 +83,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const districtsList = city ? getDistrictsByProvince(city) : [];
 
   return (
-    <div className="relative w-full min-h-[100svh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden py-24 md:py-0">
+    <div className="relative w-full min-h-[50vh] md:min-h-[60vh] flex flex-col items-center justify-center overflow-hidden py-20">
       {/* Premium Modern Mesh Gradient Background */}
       <div className="absolute inset-0 z-0 bg-slate-50 overflow-hidden">
         {/* Subtle grid pattern */}
@@ -116,158 +116,101 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </p>
         </motion.div>
 
-        {/* 2-Column Split: Search Filter & Map */}
-        <div className="w-full flex flex-col lg:flex-row gap-6 md:gap-8 lg:h-[450px]">
+        {/* Horizontal Independent Search Filters */}
+        <div className="w-full max-w-5xl flex flex-wrap items-center justify-center gap-3 mt-8">
           
-          {/* Left Column: Search Filter */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="w-full lg:w-1/3 bg-white/80 backdrop-blur-2xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 p-5 md:p-6 flex flex-col h-full"
-          >
-            <div className="flex flex-col gap-1 overflow-y-auto custom-scrollbar flex-1 pr-1">
-              
-              {/* Row 1: Keyword */}
-              <div className="flex items-center gap-4 py-3 border-b border-slate-200/80 group">
-                <Search className="w-5 h-5 text-blue-500 shrink-0" />
-                <div className="flex flex-col w-full flex-1">
-                  <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest mb-0.5">Từ khóa</span>
-                  <input 
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Tìm tên, địa chỉ..."
-                    className="bg-transparent text-slate-900 font-semibold text-[14px] outline-none placeholder-slate-500 w-full"
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  />
-                </div>
-              </div>
+          {/* Keyword */}
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm min-w-[200px] flex-1 hover:border-blue-300 transition-colors">
+            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+            <input 
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="Tìm tên, địa chỉ..."
+              className="bg-transparent text-slate-700 font-medium text-sm outline-none w-full placeholder-slate-400"
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+          </div>
 
-              {/* Row 2: City */}
-              <div className="flex items-center gap-4 py-3 border-b border-slate-200/80 group">
-                <MapPin className="w-5 h-5 text-emerald-500 shrink-0" />
-                <div className="flex flex-col w-full flex-1">
-                  <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest mb-0.5">Tỉnh/Thành</span>
-                  <select 
-                    value={city}
-                    onChange={handleCityChange}
-                    className="bg-transparent text-slate-900 font-semibold text-[14px] outline-none appearance-none cursor-pointer w-full"
-                  >
-                    <option value="" className="bg-white">Toàn quốc</option>
-                    {provincesList.map((p) => (
-                      <option key={p} value={p} className="bg-white">{p}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+          {/* City */}
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+            <MapPin className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+            <select 
+              value={city}
+              onChange={handleCityChange}
+              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
+            >
+              <option value="">Toàn quốc</option>
+              {provincesList.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </div>
 
-              {/* Row 3: District */}
-              <div className={`flex items-center gap-4 py-3 border-b border-slate-200/80 group ${!city ? "opacity-50" : ""}`}>
-                <div className="w-5 h-5 rounded-full border-2 border-violet-500 flex items-center justify-center shrink-0">
-                  <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
-                </div>
-                <div className="flex flex-col w-full flex-1">
-                  <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest mb-0.5">Quận/Huyện</span>
-                  <select 
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
-                    disabled={!city}
-                    className="bg-transparent text-slate-900 font-semibold text-[14px] outline-none appearance-none cursor-pointer w-full"
-                  >
-                    <option value="" className="bg-white">{city ? "Chọn Quận/Huyện" : "Chọn Tỉnh/Thành trước"}</option>
-                    {districtsList.map((loc: string) => (
-                      <option key={loc} value={loc} className="bg-white">{loc}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Row 4: Property Type */}
-              <div className="flex items-center gap-4 py-3 border-b border-slate-200/80 group">
-                <Home className="w-5 h-5 text-teal-400 shrink-0" />
-                <div className="flex flex-col w-full flex-1">
-                  <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest mb-0.5">Loại phòng</span>
-                  <select 
-                    value={propertyType}
-                    onChange={(e) => setPropertyType(e.target.value)}
-                    className="bg-transparent text-slate-900 font-semibold text-[14px] outline-none appearance-none cursor-pointer w-full"
-                  >
-                    <option value="" className="bg-white">Tất cả loại hình</option>
-                    {categories.map((cat: any) => (
-                      <option key={cat._id} value={cat.name} className="bg-white">{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Row 5: Price */}
-              <div className="flex items-center gap-4 py-3 group">
-                <div className="w-5 h-5 flex items-center justify-center bg-amber-500/20 text-amber-500 rounded shrink-0 font-bold text-xs border border-amber-500/50">
-                  ₫
-                </div>
-                <div className="flex flex-col w-full flex-1">
-                  <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest mb-0.5">Mức giá</span>
-                  <select 
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (!val) setPriceRange("");
-                      else setPriceRange(val);
-                    }}
-                    value={priceRange}
-                    className="bg-transparent text-slate-900 font-semibold text-[14px] outline-none appearance-none cursor-pointer w-full"
-                  >
-                    <option value="" className="bg-white">Mọi mức giá</option>
-                    <option value="0-2000000" className="bg-white">Dưới 2 triệu</option>
-                    <option value="2000000-5000000" className="bg-white">Từ 2 - 5 triệu</option>
-                    <option value="5000000-10000000" className="bg-white">Từ 5 - 10 triệu</option>
-                    <option value="10000000-999999999" className="bg-white">Trên 10 triệu</option>
-                  </select>
-                </div>
-              </div>
-
+          {/* District */}
+          <div className={`flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm transition-colors ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
+            <div className="w-4 h-4 rounded-full border-2 border-slate-400 flex items-center justify-center shrink-0 mr-2">
+              <div className="w-1.5 h-1.5 bg-slate-400 rounded-full"></div>
             </div>
+            <select 
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              disabled={!city}
+              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
+            >
+              <option value="">{city ? "Quận/Huyện" : "Chọn Tỉnh trước"}</option>
+              {districtsList.map((loc: string) => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 mt-4 pt-4 border-t border-slate-200/50 w-full shrink-0">
-              <button 
-                onClick={handleNearMe}
-                className="flex-[1] bg-violet-600/10 hover:bg-violet-600/20 border border-violet-500/30 py-3 rounded-xl flex items-center justify-center transition-all"
-                title="Gần tôi"
-              >
-                <Navigation className="w-5 h-5 text-violet-500" />
-              </button>
-              
-              <button 
-                onClick={handleSearch}
-                className="flex-[4] bg-blue-600 hover:bg-blue-500 py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]"
-              >
-                <Search className="w-4 h-4 text-white font-bold" />
-                <span className="font-bold text-[14px] text-white">TÌM KIẾM</span>
-              </button>
-            </div>
-          </motion.div>
+          {/* Property Type */}
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+            <Home className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+            <select 
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
+            >
+              <option value="">Loại phòng</option>
+              {categories.map((cat: any) => (
+                <option key={cat._id} value={cat.name}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
 
-          {/* Right Column: Map */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="w-full lg:w-2/3 h-[400px] lg:h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group"
+          {/* Price */}
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+            <span className="text-slate-400 mr-2 font-bold text-sm shrink-0">₫</span>
+            <select 
+              onChange={(e) => setPriceRange(e.target.value || "")}
+              value={priceRange}
+              className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none pr-4"
+            >
+              <option value="">Mức giá</option>
+              <option value="0-2000000">Dưới 2 triệu</option>
+              <option value="2000000-5000000">Từ 2 - 5 triệu</option>
+              <option value="5000000-10000000">Từ 5 - 10 triệu</option>
+              <option value="10000000-999999999">Trên 10 triệu</option>
+            </select>
+          </div>
+
+          {/* Action Buttons */}
+          <button 
+            onClick={handleNearMe}
+            className="bg-white/90 hover:bg-slate-100 backdrop-blur-md border border-slate-200 px-4 py-3 rounded-full flex items-center justify-center transition-all shadow-sm"
+            title="Tìm quanh đây"
           >
-            {/* Floating glowing frame */}
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
-            
-            <MapClientWrapper posts={posts} />
-            
-            {/* Empty state fallback if no posts */}
-            {posts && posts.length === 0 && (
-              <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-[400] pointer-events-none">
-                <span className="text-slate-700 font-space font-medium bg-white shadow-lg px-6 py-3 rounded-full border border-slate-200">
-                  Không tìm thấy phòng ở khu vực này
-                </span>
-              </div>
-            )}
-          </motion.div>
+            <Navigation className="w-4 h-4 text-slate-600" />
+          </button>
+          
+          <button 
+            onClick={handleSearch}
+            className="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/20"
+          >
+            <Search className="w-4 h-4 text-white font-bold" />
+            <span className="font-bold text-sm text-white">TÌM KIẾM</span>
+          </button>
         </div>
       </div>
       
