@@ -83,7 +83,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const districtsList = city ? getDistrictsByProvince(city) : [];
 
   return (
-    <div className="relative w-full min-h-[50vh] md:min-h-[60vh] flex flex-col items-center justify-center overflow-hidden py-20">
+    <div className="relative w-full flex flex-col items-center justify-center overflow-hidden py-12 md:py-16">
       {/* Premium Modern Mesh Gradient Background */}
       <div className="absolute inset-0 z-0 bg-slate-50 overflow-hidden">
         {/* Subtle grid pattern */}
@@ -105,7 +105,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-8 md:mb-10 w-full"
+          className="text-center mb-4 md:mb-6 w-full"
         >
           <h1 className="font-space text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-3 md:mb-4 drop-shadow-sm leading-tight">
             Tương lai của <br className="md:hidden" />
@@ -117,10 +117,10 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
         </motion.div>
 
         {/* Horizontal Independent Search Filters */}
-        <div className="w-full max-w-5xl flex flex-wrap items-center justify-center gap-3 mt-8">
+        <div className="w-full max-w-4xl flex flex-wrap items-center justify-center gap-2 mt-2">
           
           {/* Keyword */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm min-w-[200px] flex-1 hover:border-blue-300 transition-colors">
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm min-w-[180px] flex-1 hover:border-blue-300 transition-colors">
             <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
             <input 
               value={keyword}
@@ -132,7 +132,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </div>
 
           {/* City */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
             <MapPin className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
             <select 
               value={city}
@@ -147,7 +147,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </div>
 
           {/* District */}
-          <div className={`flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm transition-colors ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
+          <div className={`flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm transition-colors ${city ? 'hover:border-blue-300' : 'opacity-50'}`}>
             <div className="w-4 h-4 rounded-full border-2 border-slate-400 flex items-center justify-center shrink-0 mr-2">
               <div className="w-1.5 h-1.5 bg-slate-400 rounded-full"></div>
             </div>
@@ -165,7 +165,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </div>
 
           {/* Property Type */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
             <Home className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
             <select 
               value={propertyType}
@@ -180,7 +180,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           </div>
 
           {/* Price */}
-          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-3 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+          <div className="flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2.5 border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
             <span className="text-slate-400 mr-2 font-bold text-sm shrink-0">₫</span>
             <select 
               onChange={(e) => setPriceRange(e.target.value || "")}
@@ -198,7 +198,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           {/* Action Buttons */}
           <button 
             onClick={handleNearMe}
-            className="bg-white/90 hover:bg-slate-100 backdrop-blur-md border border-slate-200 px-4 py-3 rounded-full flex items-center justify-center transition-all shadow-sm"
+            className="bg-white/90 hover:bg-slate-100 backdrop-blur-md border border-slate-200 px-3 py-2.5 rounded-full flex items-center justify-center transition-all shadow-sm"
             title="Tìm quanh đây"
           >
             <Navigation className="w-4 h-4 text-slate-600" />
@@ -206,30 +206,13 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
           
           <button 
             onClick={handleSearch}
-            className="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/20"
+            className="bg-blue-600 hover:bg-blue-500 px-6 py-2.5 rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/20"
           >
             <Search className="w-4 h-4 text-white font-bold" />
             <span className="font-bold text-sm text-white">TÌM KIẾM</span>
           </button>
         </div>
       </div>
-      
-      {/* Scroll Down Indicator */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
-      >
-        <span className="text-xs text-slate-600 font-space tracking-widest uppercase">Khám phá</span>
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="w-8 h-12 rounded-full border border-blue-200 flex items-start justify-center p-1 bg-white/70 backdrop-blur-sm shadow-sm"
-        >
-          <div className="w-1.5 h-3 bg-blue-500 rounded-full"></div>
-        </motion.div>
-      </motion.div>
     </div>
   );
 }
