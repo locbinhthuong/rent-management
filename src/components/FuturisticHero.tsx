@@ -84,12 +84,18 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
 
   return (
     <div className="relative w-full min-h-[100svh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden py-24 md:py-0">
-      {/* Blue Light Background */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-blue-100 via-blue-50/50 to-slate-50">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f615_1px,transparent_1px),linear-gradient(to_bottom,#3b82f615_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[400px] w-[600px] rounded-full bg-blue-400 opacity-25 blur-[120px]"></div>
+      {/* Premium Modern Mesh Gradient Background */}
+      <div className="absolute inset-0 z-0 bg-slate-50 overflow-hidden">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8b5cf610_1px,transparent_1px),linear-gradient(to_bottom,#8b5cf610_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        
+        {/* Glowing Orbs for Mesh Effect */}
+        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full bg-violet-400 opacity-20 blur-[120px] animate-pulse-slow"></div>
+        <div className="absolute top-[10%] right-[-5%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full bg-blue-400 opacity-20 blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] left-[20%] w-[60vw] h-[40vw] max-w-[700px] max-h-[500px] rounded-full bg-indigo-300 opacity-20 blur-[120px]"></div>
+        
         {/* Smooth overlay fading into the content below */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/50 to-slate-50"></div>
       </div>
 
       {/* Hero Content */}
