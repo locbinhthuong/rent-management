@@ -329,11 +329,38 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                 </div>
                 
               </div>
+              
+              {/* Action Buttons Inside Detailed Filter */}
+              <div className="flex gap-3 mt-6 pt-5 border-t border-slate-100">
+                <button 
+                  onClick={() => {
+                    setShowAdvanced(false);
+                    handleMapSearch();
+                  }}
+                  className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm flex-1"
+                >
+                  <Map className="w-4 h-4 text-emerald-600 font-bold" />
+                  <span className="font-bold text-sm">BẢN ĐỒ</span>
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    setShowAdvanced(false);
+                    handleSearch();
+                  }}
+                  className="bg-blue-600 hover:bg-blue-500 px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-500/30 flex-1"
+                >
+                  <Search className="w-4 h-4 text-white font-bold" />
+                  <span className="font-bold text-sm text-white">TÌM KIẾM</span>
+                </button>
+              </div>
+
             </div>
           </motion.div>
 
           {/* Bottom Row: Simple Filters & Search Button */}
-          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 w-full">
+          {!showAdvanced && (
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 w-full">
             
             {/* City & District container for mobile */}
             <div className="flex w-full sm:w-auto gap-2.5 flex-1">
@@ -387,6 +414,7 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
               </button>
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>
