@@ -11,13 +11,10 @@ import FilterBar from '@/components/admin/FilterBar';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPostsPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
-  const session = await getServerSession(authOptions);
-  
-  if (!session || session.user.role !== 'Admin') {
-    redirect('/login');
-  }
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
 
+async function PostsDataWrapper({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
   await connectDB();
   User.init();
   
@@ -61,6 +58,16 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: {
     bumped_at: p.bumped_at?.toISOString()
   }));
 
+  return <PostsTable initialPosts={serializedPosts} />;
+}
+
+export default async function AdminPostsPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || session.user.role !== 'Admin') {
+    redirect('/login');
+  }
+
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
         <header className="bg-white/80 backdrop-blur-xl p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
@@ -77,7 +84,14 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: {
               </h3>
             </div>
             
-            <PostsTable initialPosts={serializedPosts} />
+            <Suspense fallback={
+              <div className="flex justify-center items-center p-12">
+                <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
+                <span className="ml-3 text-slate-500 font-medium">Đang tải dữ liệu...</span>
+              </div>
+            }>
+              <PostsDataWrapper searchParams={searchParams} />
+            </Suspense>
           </div>
         </div>
       </main>
