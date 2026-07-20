@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { LogOut, User, LayoutDashboard, Heart } from 'lucide-react';
+import { LogOut, User, LayoutDashboard, Heart, MessageCircle } from 'lucide-react';
 
 export default function UserMenu({ user }: { user: any }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,9 +58,18 @@ export default function UserMenu({ user }: { user: any }) {
             </Link>
 
             <Link 
+              href="/messages"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition-colors font-medium"
+            >
+              <MessageCircle className="w-4 h-4 text-green-500" />
+              Tin nhắn
+            </Link>
+
+            <Link 
               href="/saved"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition-colors font-medium sm:hidden"
+              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition-colors font-medium"
             >
               <Heart className="w-4 h-4 text-rose-500" />
               Tin đã lưu
