@@ -69,7 +69,7 @@ export default async function CTVAccountPage() {
             </div>
             <div className="bg-slate-100/80 border border-slate-200 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-center text-center h-[90px]">
               <Star className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 mb-2" />
-              <p className="text-lg sm:text-xl font-bold text-slate-900 font-space leading-tight">4.9</p>
+              <p className="text-lg sm:text-xl font-bold text-slate-900 font-space leading-tight">{(dbUser?.rating || 5.0).toFixed(1)}</p>
               <p className="text-[8px] sm:text-[9px] font-bold text-slate-600 mt-1 uppercase leading-tight">Đánh giá</p>
             </div>
           </div>

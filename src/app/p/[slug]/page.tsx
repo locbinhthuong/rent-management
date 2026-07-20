@@ -181,14 +181,19 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                {post.utility_costs && (
+                {(post.electricity_price || post.water_price || post.service_price || post.utility_costs) && (
                   <div className="flex items-start gap-4 group">
                     <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500/20 transition-colors">
                       <Bolt className="w-6 h-6 text-amber-400" />
                     </div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-1">Chi phí dịch vụ</div>
-                      <div className="text-slate-600 leading-relaxed">{post.utility_costs}</div>
+                    <div className="w-full">
+                      <div className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Chi phí dịch vụ</div>
+                      <div className="text-slate-600 leading-relaxed text-sm space-y-1">
+                        {post.electricity_price && <div className="flex justify-between items-center"><span className="text-slate-500">Giá điện:</span> <span className="font-medium text-slate-800">{post.electricity_price.toLocaleString('vi-VN')} đ/kWh</span></div>}
+                        {post.water_price && <div className="flex justify-between items-center"><span className="text-slate-500">Giá nước:</span> <span className="font-medium text-slate-800">{post.water_price.toLocaleString('vi-VN')} đ/người</span></div>}
+                        {post.service_price && <div className="flex justify-between items-center"><span className="text-slate-500">Phí quản lý/Dịch vụ:</span> <span className="font-medium text-slate-800">{post.service_price.toLocaleString('vi-VN')} đ/tháng</span></div>}
+                        {!post.electricity_price && !post.water_price && !post.service_price && post.utility_costs && <div>{post.utility_costs}</div>}
+                      </div>
                     </div>
                   </div>
                 )}

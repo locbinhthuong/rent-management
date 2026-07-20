@@ -21,6 +21,9 @@ export interface IPost extends Document {
   area_sqm?: number;
   amenities?: string[];
   utility_costs?: string;
+  electricity_price?: number;
+  water_price?: number;
+  service_price?: number;
   contract_terms?: string;
   target_audience?: string;
   is_vip?: boolean;
@@ -59,6 +62,9 @@ const PostSchema: Schema = new Schema(
     area_sqm: { type: Number },
     amenities: [{ type: String }],
     utility_costs: { type: String },
+    electricity_price: { type: Number },
+    water_price: { type: Number },
+    service_price: { type: Number },
     contract_terms: { type: String },
     target_audience: { type: String },
     is_vip: { type: Boolean, default: false },

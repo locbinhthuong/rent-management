@@ -42,7 +42,9 @@ export default function CreatePostPage() {
     city: 'Hồ Chí Minh',
     price: '',
     property_type: '',
-    utility_costs: 'Điện 3.5k/kwh - Nước 100k/người',
+    electricity_price: '',
+    water_price: '',
+    service_price: '',
     contract_terms: 'Cọc 1 tháng - Hợp đồng 6 tháng',
     target_audience: 'Sinh viên, Người đi làm',
     images: [] as string[],
@@ -318,18 +320,24 @@ export default function CreatePostPage() {
 
               {/* Cột 2 */}
               <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    <Bolt className="w-4 h-4 text-cyan-400" /> Chính sách Điện - Nước - Dịch vụ
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6">
+                  <label className="block text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <Bolt className="w-4 h-4 text-cyan-500" /> Chi phí Điện - Nước - Dịch vụ
                   </label>
-                  <input
-                    type="text"
-                    name="utility_costs"
-                    value={formData.utility_costs}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
-                    placeholder="Điện 3.5k/kwh - Nước 100k/người - Dịch vụ 150k"
-                  />
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-slate-600 w-24">Giá điện</span>
+                      <input type="number" name="electricity_price" value={formData.electricity_price} onChange={handleChange} placeholder="VD: 3500 (VNĐ/kWh)" className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 outline-none text-slate-900 font-medium" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-slate-600 w-24">Giá nước</span>
+                      <input type="number" name="water_price" value={formData.water_price} onChange={handleChange} placeholder="VD: 100000 (VNĐ/người)" className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 outline-none text-slate-900 font-medium" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-slate-600 w-24">Phí dịch vụ</span>
+                      <input type="number" name="service_price" value={formData.service_price} onChange={handleChange} placeholder="VD: 150000 (VNĐ/tháng)" className="flex-1 px-4 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 outline-none text-slate-900 font-medium" />
+                    </div>
+                  </div>
                 </div>
 
                 <div>

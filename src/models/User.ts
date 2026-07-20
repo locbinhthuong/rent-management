@@ -18,6 +18,8 @@ export interface IUser extends Document {
   isEmailVerified?: boolean;
   verificationCode?: string;
   verificationCodeExpires?: Date;
+  rating?: number;
+  rating_count?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,6 +43,8 @@ const UserSchema: Schema = new Schema(
     isEmailVerified: { type: Boolean, default: false },
     verificationCode: { type: String },
     verificationCodeExpires: { type: Date },
+    rating: { type: Number, default: 0 },
+    rating_count: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
