@@ -12,6 +12,7 @@ import FuturisticHero from '@/components/FuturisticHero';
 import MapSearchClient from '@/components/MapSearchClient';
 import MapClientWrapper from '@/components/MapClientWrapper';
 import UserMenu from '@/components/UserMenu';
+import LocusLogo from '@/components/LocusLogo';
 
 export const revalidate = 60;
 
@@ -169,12 +170,8 @@ export default async function CustomerHome(props: {
       {/* Glassmorphism Header (Fixed) */}
       <header className="fixed top-0 inset-x-0 h-16 bg-slate-50/50 backdrop-blur-xl z-50 border-b border-slate-200 shadow-lg flex items-center justify-between px-4 lg:px-8">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-cyan-500/20 p-2 rounded-lg border border-cyan-500/30 group-hover:glow-cyan transition-all">
-              <Home className="w-5 h-5 text-cyan-400" />
-            </div>
-            {/* If there's a dark mode logo, use it. Otherwise use text */}
-            <span className="font-space font-bold text-xl tracking-tight text-slate-900 hidden sm:block">thuenhatro<span className="text-cyan-400">.com</span></span>
+          <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
+            <LocusLogo width={120} height={50} />
           </Link>
         </div>
         

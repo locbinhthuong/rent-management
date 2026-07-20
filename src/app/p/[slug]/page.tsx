@@ -10,6 +10,7 @@ import WishlistButton from '@/components/WishlistButton';
 import { notFound } from 'next/navigation';
 import GlassPropertyCard from '@/components/GlassPropertyCard';
 import PostImageGallery from '@/components/PostImageGallery';
+import LocusLogo from '@/components/LocusLogo';
 
 export const revalidate = 60; // Cache for 60 seconds to improve load times
 
@@ -66,16 +67,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     await connectDB();
     const query = mongoose.isValidObjectId(resolvedParams.slug) ? { _id: resolvedParams.slug } : { slug: resolvedParams.slug };
     const post = await Post.findOne(query).lean();
-    if (!post) return { title: 'Không tìm thấy - thuenhatro.com' };
+    if (!post) return { title: 'Không tìm thấy - LocusHome' };
     return {
-      title: `${post.title} | thuenhatro.com`,
+      title: `${post.title} | LocusHome`,
       description: post.description.slice(0, 150) + '...',
       openGraph: {
         images: post.images && post.images.length > 0 ? [post.images[0]] : [],
       },
     };
   } catch (e) {
-    return { title: 'thuenhatro.com' };
+    return { title: 'LocusHome' };
   }
 }
 
@@ -102,11 +103,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
             <Link href="/" className="text-slate-600 hover:text-cyan-400 transition-colors p-2 -ml-2 rounded-lg hover:bg-slate-200/50">
               <ChevronLeft className="w-6 h-6" />
             </Link>
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="bg-cyan-500/20 p-1.5 rounded-lg border border-cyan-500/30 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all">
-                <Home className="w-5 h-5 text-cyan-400 hidden sm:block" />
-              </div>
-              <span className="font-space font-bold text-xl tracking-tight text-slate-900">thuenhatro<span className="text-cyan-400">.com</span></span>
+            <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
+              <LocusLogo width={100} height={50} />
             </Link>
           </div>
         </div>

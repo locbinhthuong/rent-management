@@ -7,6 +7,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import NextTopLoader from 'nextjs-toploader';
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import SplashScreen from "@/components/SplashScreen";
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -24,7 +25,7 @@ const fontSpace = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Hệ thống Quản lý Thuê Trọ",
+  title: "LocusHome - Nền tảng thuê nhà thông minh",
   description: "Giải pháp toàn diện quản lý phòng trọ",
 };
 
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-emerald-500/30">
         <AuthProvider>
           <ReactQueryProvider>
+            <SplashScreen />
             <NextTopLoader color="#06b6d4" showSpinner={false} height={3} />
             <div className="flex-1 flex flex-col pb-[68px] md:pb-0">
               {children}
