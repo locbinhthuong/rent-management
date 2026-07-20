@@ -44,7 +44,6 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
       });
       if (res.ok) {
         setLeads(leads.map(l => l._id === id ? { ...l, ...body } : l));
-        if (status) router.refresh();
       }
     } catch(err) {
       alert('Lỗi hệ thống');

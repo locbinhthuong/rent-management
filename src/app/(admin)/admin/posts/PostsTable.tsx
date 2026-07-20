@@ -28,7 +28,6 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
       });
       if (res.ok) {
         setPosts(posts.map(p => p._id === id ? { ...p, ...bodyData } : p));
-        router.refresh();
       } else {
         alert('Có lỗi xảy ra');
       }
@@ -47,7 +46,6 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
       const res = await fetch(`/api/ctv/posts/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setPosts(posts.filter(p => p._id !== id));
-        router.refresh();
       } else {
         alert('Có lỗi xảy ra');
       }

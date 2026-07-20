@@ -4,7 +4,6 @@ import "./globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import NextTopLoader from 'nextjs-toploader';
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -41,7 +40,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-emerald-500/30">
         <AuthProvider>
           <ReactQueryProvider>
-            <NextTopLoader color="#4f46e5" showSpinner={false} />
             <div className="flex-1 flex flex-col pb-[68px] md:pb-0">
               {children}
             </div>

@@ -41,7 +41,6 @@ export default function UserActionButtons({ user }: { user: UserData }) {
       
       if (res.ok) {
         toast.success('Đã cập nhật trạng thái thành công');
-        router.refresh();
       } else {
         setOptimisticStatus(previousStatus);
         toast.error('Lỗi cập nhật');

@@ -35,7 +35,8 @@ export async function POST(req: Request) {
     user.verificationCode = undefined;
     user.verificationCodeExpires = undefined;
     
-    // We leave user.status as 'Pending' if they are CTV, so admin still needs to approve.
+    // Auto-approve account once email is verified
+    user.status = 'Active';
     
     await user.save();
 
