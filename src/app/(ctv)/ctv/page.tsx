@@ -38,16 +38,21 @@ async function CTVDashboardContent({ userId }: { userId: string }) {
   const totalPosts = await Post.countDocuments({ ctv_id: userId });
   const activePosts = await Post.countDocuments({ ctv_id: userId, status: 'Active' });
   const pendingLeads = await Lead.countDocuments({ ctv_id: userId, status: 'New' });
+  const totalLeads = await Lead.countDocuments({ ctv_id: userId });
+  
+  const postsForViews = await Post.find({ ctv_id: userId }).select('views').lean();
+  const totalViews = postsForViews.reduce((sum, post: any) => sum + (post.views || 0), 0);
 
   // Get current date formatted
   const today = new Date();
   const dateString = `Số liệu hôm nay, ${today.getDate()} Thg ${today.getMonth() + 1}`;
+  
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="p-4 md:p-6 space-y-8 max-w-5xl mx-auto w-full">
       {/* Mobile Top Header */}
-      {/* Mobile Top Header */}
-      <CTVMobileHeader />
+      <CTVMobileHeader title={session?.user?.name || 'CTV Admin'} avatarUrl={session?.user?.image} />
 
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-3">
@@ -117,7 +122,7 @@ async function CTVDashboardContent({ userId }: { userId: string }) {
           <div className="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
             <div>
               <p className="text-slate-500 text-sm font-medium mb-1">Lượt xem</p>
-              <p className="text-2xl font-bold text-slate-900 font-space">2,450</p>
+              <p className="text-2xl font-bold text-slate-900 font-space">{new Intl.NumberFormat('vi-VN').format(totalViews)}</p>
             </div>
             <BarChart2 className="w-8 h-8 text-blue-500" />
           </div>
@@ -126,7 +131,7 @@ async function CTVDashboardContent({ userId }: { userId: string }) {
           <div className="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
             <div>
               <p className="text-slate-500 text-sm font-medium mb-1">Khách hàng tiềm năng</p>
-              <p className="text-2xl font-bold text-slate-900 font-space">12</p>
+              <p className="text-2xl font-bold text-slate-900 font-space">{new Intl.NumberFormat('vi-VN').format(totalLeads)}</p>
             </div>
             <TrendingUp className="w-8 h-8 text-orange-400" />
           </div>
