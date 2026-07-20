@@ -104,9 +104,10 @@ export default function FuturisticHero() {
           router.push(`/?${params.toString()}#explore`);
         },
         (error) => {
-          alert("Không thể lấy vị trí của bạn. Vui lòng kiểm tra quyền trên trình duyệt.");
+          console.warn("Geolocation failed or timed out:", error.message);
+          alert("Không thể lấy vị trí của bạn. Vui lòng bật định vị trên trình duyệt.");
         },
-        { enableHighAccuracy: true, timeout: 5000 }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
       );
     } else {
       alert("Trình duyệt không hỗ trợ định vị.");

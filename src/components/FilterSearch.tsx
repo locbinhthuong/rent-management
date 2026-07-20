@@ -29,7 +29,9 @@ export default function FilterSearch({ propertyTypes = [], locations = [] }: Fil
       try {
         const { latitude, longitude } = position.coords;
         // Dùng API Nominatim để lấy địa chỉ từ tọa độ
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`);
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`, {
+          headers: { 'Accept-Language': 'vi' }
+        });
         const data = await res.json();
         
         const addr = data.address || {};

@@ -89,14 +89,16 @@ const DeviceLocationPanner = () => {
           const lng = position.coords.longitude;
           if (Number.isFinite(lat) && Number.isFinite(lng) && !isNaN(lat) && !isNaN(lng)) {
             try {
-              map.setView([lat, lng], 13);
+              map.setView([lat, lng], 14);
             } catch (error) {
-              console.error("Lỗi Leaflet setView:", error);
+              // Ignore errors silently
             }
           }
         },
-        (error) => console.error("Geolocation error:", error),
-        { enableHighAccuracy: true, timeout: 5000 }
+        (error) => {
+          // Ignore errors silently
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
       );
     }
   }, [map]);
