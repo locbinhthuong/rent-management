@@ -4,8 +4,9 @@ import User from '@/models/User';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { Heart, Home } from 'lucide-react';
+import { Heart, Home, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 // Client components
 import FuturisticHero from '@/components/FuturisticHero';
@@ -138,7 +139,6 @@ export default async function CustomerHome(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const { posts, pagination } = await getActivePosts(searchParams);
   const session = await getServerSession(authOptions);
 
   return (
@@ -176,29 +176,46 @@ export default async function CustomerHome(props: {
 
       {/* Futuristic Hero Section */}
       <main className="pt-16">
-        <FuturisticHero posts={posts} />
+        <FuturisticHero />
         
-        {/* Featured Content: Posts List */}
-        <section id="explore" className="w-full relative flex flex-col mt-4 z-20">
-          <MapSearchClient posts={posts} pagination={pagination} />
-        </section>
-
-        {/* Map Section (Bottom) */}
-        <section id="map-view" className="w-full max-w-[1400px] mx-auto px-4 mb-20 relative z-10 h-[500px] mt-8">
-          <div className="w-full h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group">
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
-            <MapClientWrapper posts={posts} />
-            
-            {posts && posts.length === 0 && (
-              <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-[400] pointer-events-none">
-                <span className="text-slate-700 font-space font-medium bg-white shadow-lg px-6 py-3 rounded-full border border-slate-200">
-                  Không tìm thấy phòng ở khu vực này
-                </span>
-              </div>
-            )}
+        <Suspense fallback={
+          <div className="w-full flex flex-col items-center justify-center py-32 space-y-4">
+            <Loader2 className="w-10 h-10 text-cyan-500 animate-spin" />
+            <p className="text-slate-500 font-medium animate-pulse">Đang tải không gian sống...</p>
           </div>
-        </section>
+        }>
+          <PostsSection searchParams={searchParams} />
+        </Suspense>
       </main>
     </div>
+  );
+}
+
+async function PostsSection({ searchParams }: { searchParams: any }) {
+  const { posts, pagination } = await getActivePosts(searchParams);
+
+  return (
+    <>
+      {/* Featured Content: Posts List */}
+      <section id="explore" className="w-full relative flex flex-col mt-4 z-20">
+        <MapSearchClient posts={posts} pagination={pagination} />
+      </section>
+
+      {/* Map Section (Bottom) */}
+      <section id="map-view" className="w-full max-w-[1400px] mx-auto px-4 mb-20 relative z-10 h-[500px] mt-8">
+        <div className="w-full h-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-slate-200/50 overflow-hidden relative group">
+          <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-3xl transition-colors duration-500 z-50 pointer-events-none"></div>
+          <MapClientWrapper posts={posts} />
+          
+          {posts && posts.length === 0 && (
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-[400] pointer-events-none">
+              <span className="text-slate-700 font-space font-medium bg-white shadow-lg px-6 py-3 rounded-full border border-slate-200">
+                Không tìm thấy phòng ở khu vực này
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 }

@@ -2,8 +2,9 @@ import connectDB from '@/lib/db';
 import Post from '@/models/Post';
 import User from '@/models/User';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import MapClientWrapper from '@/components/MapClientWrapper';
+import { Suspense } from 'react';
 
 export const revalidate = 60;
 
@@ -55,7 +56,6 @@ export default async function MapPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const { posts } = await getActivePosts(searchParams);
 
   return (
     <div className="w-full h-screen relative bg-slate-50 overflow-hidden">
@@ -68,8 +68,20 @@ export default async function MapPage(props: {
       </Link>
 
       <div className="w-full h-full z-0">
-        <MapClientWrapper posts={posts} />
+        <Suspense fallback={
+          <div className="w-full h-full flex flex-col items-center justify-center space-y-4">
+            <Loader2 className="w-10 h-10 text-cyan-500 animate-spin" />
+            <p className="text-slate-500 font-medium animate-pulse">Đang tải bản đồ...</p>
+          </div>
+        }>
+          <MapData searchParams={searchParams} />
+        </Suspense>
       </div>
     </div>
   );
+}
+
+async function MapData({ searchParams }: { searchParams: any }) {
+  const { posts } = await getActivePosts(searchParams);
+  return <MapClientWrapper posts={posts} />;
 }

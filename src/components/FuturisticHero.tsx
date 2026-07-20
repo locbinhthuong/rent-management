@@ -9,7 +9,7 @@ import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 import { universities } from '@/lib/data/universities';
 import MapClientWrapper from '@/components/MapClientWrapper';
 
-export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
+export default function FuturisticHero() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [city, setCity] = useState(searchParams.get('city') || '');
