@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight, Bath, Maximize, Loader2, User } from 'lucide-react';
+import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight, Bath, Maximize, Loader2, User as UserIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import connectDB from '@/lib/db';
 import mongoose from 'mongoose';
@@ -273,7 +273,7 @@ async function PostContent({ slug }: { slug: string }) {
             <div className="sticky top-24 bg-white rounded-3xl p-6 shadow-md border border-slate-200 relative overflow-hidden">
               <div className="text-center mb-6 pb-6 border-b border-slate-200 relative z-10">
                 <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200 overflow-hidden shadow-sm">
-                   <User className="w-20 h-20 text-slate-300 mt-6" />
+                   <UserIcon className="w-20 h-20 text-slate-300 mt-6" />
                 </div>
                 <h3 className="font-space font-bold text-xl text-slate-900 tracking-wide">{post.ctv_id?.name || 'Ẩn danh'}</h3>
                 <p className="text-slate-500 text-sm mt-1 font-medium">Chuyên viên tư vấn</p>
