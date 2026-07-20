@@ -104,7 +104,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
               <ChevronLeft className="w-6 h-6" />
             </Link>
             <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
-              <LocusLogo width={100} height={50} />
+              <LocusLogo width={45} height={45} variant="horizontal" />
             </Link>
           </div>
         </div>

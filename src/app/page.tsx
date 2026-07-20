@@ -171,7 +171,7 @@ export default async function CustomerHome(props: {
       <header className="fixed top-0 inset-x-0 h-16 bg-slate-50/50 backdrop-blur-xl z-50 border-b border-slate-200 shadow-lg flex items-center justify-between px-4 lg:px-8">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
-            <LocusLogo width={120} height={50} />
+            <LocusLogo width={45} height={45} variant="horizontal" />
           </Link>
         </div>
         
