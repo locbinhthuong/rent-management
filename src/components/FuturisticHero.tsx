@@ -34,11 +34,11 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch('/api/admin/categories')
+    fetch('/api/admin/settings')
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          setCategories(data.filter((c: any) => c.isActive));
+        if (data?.config?.propertyTypes) {
+          setCategories(data.config.propertyTypes);
         }
       })
       .catch(() => {});
@@ -272,8 +272,8 @@ export default function FuturisticHero({ posts = [] }: { posts?: any[] }) {
                       className="bg-transparent text-slate-700 font-medium text-sm outline-none cursor-pointer appearance-none w-full"
                     >
                       <option value="">Tất cả loại hình</option>
-                      {categories.map((cat: any) => (
-                        <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      {categories.map((cat: string) => (
+                        <option key={cat} value={cat}>{cat}</option>
                       ))}
                     </select>
                     <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 ml-2" />

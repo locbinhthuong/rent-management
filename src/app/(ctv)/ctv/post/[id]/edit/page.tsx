@@ -44,8 +44,8 @@ export default function EditPostPage() {
       })
     ])
     .then(([configData, postData]) => {
-      if (configData.config) {
-        setConfig({ propertyTypes: configData.config.propertyTypes || [] });
+      if (configData?.config?.propertyTypes) {
+        setCategories(configData.config.propertyTypes);
       }
       if (postData.post) {
         setFormData({

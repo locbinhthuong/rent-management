@@ -19,11 +19,13 @@ export default function CreatePostPage() {
   const [amenities, setAmenities] = useState([]);
 
   useEffect(() => {
-    // Fetch Categories
-    fetch('/api/admin/categories')
+    // Fetch Property Types from Settings
+    fetch('/api/admin/settings')
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) setCategories(data.filter((c: any) => c.isActive));
+        if (data?.config?.propertyTypes) {
+          setCategories(data.config.propertyTypes);
+        }
       });
       
     // Fetch Amenities
@@ -267,10 +269,10 @@ export default function CreatePostPage() {
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium"
                     >
-                      {categories.map((cat: any) => (
-                        <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      {categories.map((cat: string) => (
+                        <option key={cat} value={cat}>{cat}</option>
                       ))}
-                      {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
+                      {categories.length === 0 && <option value="">Đang tải loại phòng...</option>}
                     </select>
                   </div>
                 </div>
