@@ -18,14 +18,7 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
     if (searchParams.district) query.district = searchParams.district;
     if (searchParams.property_type) query.property_type = searchParams.property_type;
     if (searchParams.q) {
-      query.$or = [
-        { title: { $regex: searchParams.q, $options: 'i' } },
-        { address: { $regex: searchParams.q, $options: 'i' } },
-        { description: { $regex: searchParams.q, $options: 'i' } },
-        { district: { $regex: searchParams.q, $options: 'i' } },
-        { city: { $regex: searchParams.q, $options: 'i' } },
-        { ward: { $regex: searchParams.q, $options: 'i' } }
-      ];
+      query.$text = { $search: searchParams.q as string };
     }
     
     const minPrice = searchParams.min_price;

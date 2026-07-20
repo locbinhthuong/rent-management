@@ -90,4 +90,19 @@ const PostSchema: Schema = new Schema(
 // Tạo 2dsphere index trên trường location
 PostSchema.index({ location: '2dsphere' });
 
+// Performance indexes
+PostSchema.index({ approval_status: 1, rental_status: 1, is_vip: -1, bumped_at: -1, createdAt: -1 });
+PostSchema.index({ city: 1, district: 1 });
+PostSchema.index({ price: 1 });
+
+// Text search index for global search
+PostSchema.index({ 
+  title: 'text', 
+  description: 'text', 
+  address: 'text', 
+  ward: 'text', 
+  district: 'text', 
+  city: 'text' 
+});
+
 export default mongoose.models.Post || mongoose.model<IPost>('Post', PostSchema);

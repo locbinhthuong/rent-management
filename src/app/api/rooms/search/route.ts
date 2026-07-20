@@ -19,11 +19,7 @@ export async function GET(request: Request) {
     // 2. Lọc theo Text Search (Tiêu đề, Địa chỉ)
     const q = searchParams.get('q');
     if (q) {
-      query.$or = [
-        { title: { $regex: q, $options: 'i' } },
-        { address: { $regex: q, $options: 'i' } },
-        { district: { $regex: q, $options: 'i' } }
-      ];
+      query.$text = { $search: q };
     }
 
     // 3. Lọc theo Tỉnh/Thành, Quận/Huyện, Loại phòng, Tiện ích
