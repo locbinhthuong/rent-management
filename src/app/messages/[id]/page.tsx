@@ -49,10 +49,13 @@ async function ChatContent({ leadId, userId, role }: { leadId: string, userId: s
     redirect('/messages');
   }
 
-  // Verify permission
+  // Verify permission safely
+  const ctvIdStr = lead.ctv_id?._id?.toString() || lead.ctv_id?.toString();
+  const customerIdStr = lead.customer_id?._id?.toString() || lead.customer_id?.toString();
+
   if (role !== 'Admin') {
-    if (role === 'CTV' && lead.ctv_id._id.toString() !== userId) redirect('/messages');
-    if (role === 'User' && lead.customer_id && lead.customer_id._id.toString() !== userId) redirect('/messages');
+    if (role === 'CTV' && ctvIdStr !== userId) redirect('/messages');
+    if (role === 'Customer' && customerIdStr !== userId) redirect('/messages');
   }
 
   // Fetch messages
@@ -75,7 +78,7 @@ async function ChatContent({ leadId, userId, role }: { leadId: string, userId: s
       id: 'initial',
       content: lead.message,
       senderId: lead.customer_id ? lead.customer_id._id.toString() : 'guest',
-      isMine: role === 'User',
+      isMine: role === 'Customer',
       createdAt: lead.createdAt.toISOString()
     });
   }
@@ -87,11 +90,11 @@ async function ChatContent({ leadId, userId, role }: { leadId: string, userId: s
     phone: lead.phone
   };
 
-  if (role === 'User') {
+  if (role === 'Customer') {
     otherPerson = {
-      name: lead.ctv_id.name || 'Cộng tác viên',
-      avatar: lead.ctv_id.avatar || null,
-      phone: lead.ctv_id.phone
+      name: lead.ctv_id?.name || 'Cộng tác viên',
+      avatar: lead.ctv_id?.avatar || null,
+      phone: lead.ctv_id?.phone
     };
   } else {
     // We are CTV or Admin, chatting with Customer

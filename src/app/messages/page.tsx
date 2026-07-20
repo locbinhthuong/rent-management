@@ -48,7 +48,7 @@ async function MessagesContent({ userId, role }: { userId: string, role: string 
   let query = {};
   if (role === 'CTV') {
     query = { ctv_id: userId };
-  } else if (role === 'User') {
+  } else if (role === 'Customer') {
     query = { customer_id: userId };
   } else if (role === 'Admin') {
     query = {}; // Admin sees all? Let's say yes for now, or maybe they shouldn't use this view.

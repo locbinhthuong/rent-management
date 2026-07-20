@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       if (role === 'CTV' && lead.ctv_id.toString() !== userId) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
-      if (role === 'User' && (!lead.customer_id || lead.customer_id.toString() !== userId)) {
+      if (role === 'Customer' && (!lead.customer_id || lead.customer_id.toString() !== userId)) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     }
