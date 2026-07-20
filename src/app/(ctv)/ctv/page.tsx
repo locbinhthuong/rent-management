@@ -34,13 +34,15 @@ function DashboardSkeleton() {
 async function CTVDashboardContent({ userId }: { userId: string }) {
   await connectDB();
   
-  // Real stats
-  const totalPosts = await Post.countDocuments({ ctv_id: userId });
-  const activePosts = await Post.countDocuments({ ctv_id: userId, status: 'Active' });
-  const pendingLeads = await Lead.countDocuments({ ctv_id: userId, status: 'New' });
-  const totalLeads = await Lead.countDocuments({ ctv_id: userId });
+  // Real stats using Promise.all for parallel execution
+  const [totalPosts, activePosts, pendingLeads, totalLeads, postsForViews] = await Promise.all([
+    Post.countDocuments({ ctv_id: userId }),
+    Post.countDocuments({ ctv_id: userId, status: 'Active' }),
+    Lead.countDocuments({ ctv_id: userId, status: 'New' }),
+    Lead.countDocuments({ ctv_id: userId }),
+    Post.find({ ctv_id: userId }).select('views').lean()
+  ]);
   
-  const postsForViews = await Post.find({ ctv_id: userId }).select('views').lean();
   const totalViews = postsForViews.reduce((sum, post: any) => sum + (post.views || 0), 0);
 
   // Get current date formatted

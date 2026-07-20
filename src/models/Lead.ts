@@ -31,4 +31,8 @@ const LeadSchema: Schema = new Schema(
   { timestamps: true }
 );
 
+// Performance indexes for faster Dashboard loading
+LeadSchema.index({ ctv_id: 1, status: 1 });
+LeadSchema.index({ customer_id: 1 });
+
 export default mongoose.models.Lead || mongoose.model<ILead>('Lead', LeadSchema);

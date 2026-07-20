@@ -94,6 +94,7 @@ PostSchema.index({ location: '2dsphere' });
 PostSchema.index({ approval_status: 1, rental_status: 1, is_vip: -1, bumped_at: -1, createdAt: -1 });
 PostSchema.index({ city: 1, district: 1 });
 PostSchema.index({ price: 1 });
+PostSchema.index({ ctv_id: 1, status: 1 });
 
 // Text search index for global search
 PostSchema.index({ 

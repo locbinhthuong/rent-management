@@ -37,21 +37,29 @@ function DashboardSkeleton() {
 async function AdminDashboardContent() {
   await connectDB();
   
-  // Fetch stats from DB
-  const pendingPostsCount = await Post.countDocuments({ status: 'Pending' });
-  const rentedRoomsCount = await Room.countDocuments({ status: 'Rented' });
-  const totalRoomsCount = await Room.countDocuments();
-  const ctvCount = await User.countDocuments({ role: 'CTV' });
-  
-  const approvedDeposits = await DepositRequest.aggregate([
-    { $match: { status: 'Approved' } },
-    { $group: { _id: null, total: { $sum: '$amount' } } }
+  // Fetch stats from DB in parallel
+  const [
+    pendingPostsCount, 
+    rentedRoomsCount, 
+    totalRoomsCount, 
+    ctvCount, 
+    approvedDeposits, 
+    leadStats
+  ] = await Promise.all([
+    Post.countDocuments({ status: 'Pending' }),
+    Room.countDocuments({ status: 'Rented' }),
+    Room.countDocuments(),
+    User.countDocuments({ role: 'CTV' }),
+    DepositRequest.aggregate([
+      { $match: { status: 'Approved' } },
+      { $group: { _id: null, total: { $sum: '$amount' } } }
+    ]),
+    Lead.aggregate([
+      { $group: { _id: '$status', count: { $sum: 1 } } }
+    ])
   ]);
+  
   const totalRevenue = approvedDeposits.length > 0 ? approvedDeposits[0].total : 0;
-  
-  const leadStats = await Lead.aggregate([
-    { $group: { _id: '$status', count: { $sum: 1 } } }
-  ]);
   
   const occupancyRate = totalRoomsCount > 0 ? Math.round((rentedRoomsCount / totalRoomsCount) * 100) : 0;
 

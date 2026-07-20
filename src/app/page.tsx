@@ -104,15 +104,19 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
       mongooseQuery = mongooseQuery.sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
     }
     
-    total = await Post.countDocuments(query);
-    posts = await mongooseQuery.skip(skip).limit(limit).lean() as any[];
+    [total, posts] = await Promise.all([
+      Post.countDocuments(query),
+      mongooseQuery.skip(skip).limit(limit).lean() as Promise<any[]>
+    ]);
   } catch (error) {
     console.error("GeoQuery failed, falling back to normal query:", error);
     // Fallback: nếu query bị lỗi (ví dụ thiếu 2dsphere index), bỏ qua lọc vị trí
     delete query.location;
     let fallbackQuery = Post.find(query).populate('ctv_id', 'name phone').sort({ is_vip: -1, bumped_at: -1, createdAt: -1 });
-    total = await Post.countDocuments(query);
-    posts = await fallbackQuery.skip(skip).limit(limit).lean() as any[];
+    [total, posts] = await Promise.all([
+      Post.countDocuments(query),
+      fallbackQuery.skip(skip).limit(limit).lean() as Promise<any[]>
+    ]);
   }
 
   // Convert ObjectIds to strings to pass to client components safely
