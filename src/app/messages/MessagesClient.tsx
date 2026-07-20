@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ImageIcon } from 'lucide-react';
 
 interface LeadProps {
@@ -56,7 +57,7 @@ export default function MessagesClient({ leads }: { leads: LeadProps[] }) {
           </div>
         ) : (
           filteredLeads.map((lead) => (
-            <div key={lead.id} className="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl p-4 flex gap-4 cursor-pointer hover:bg-slate-100/80 transition-colors">
+            <Link href={`/messages/${lead.id}`} key={lead.id} className="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl p-4 flex gap-4 cursor-pointer hover:bg-slate-100/80 transition-colors block">
               <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden shrink-0 relative border border-slate-300">
                 {lead.image ? (
                   <Image src={lead.image} alt={lead.title} fill className="object-cover" />
@@ -87,7 +88,7 @@ export default function MessagesClient({ leads }: { leads: LeadProps[] }) {
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))
         )}
       </div>
