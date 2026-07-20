@@ -63,7 +63,10 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
       query.$or = [
         { title: { $regex: fuzzyRegex, $options: 'i' } },
         { address: { $regex: fuzzyRegex, $options: 'i' } },
-        { description: { $regex: fuzzyRegex, $options: 'i' } }
+        { description: { $regex: fuzzyRegex, $options: 'i' } },
+        { district: { $regex: fuzzyRegex, $options: 'i' } },
+        { city: { $regex: fuzzyRegex, $options: 'i' } },
+        { ward: { $regex: fuzzyRegex, $options: 'i' } }
       ];
     }
     

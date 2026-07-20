@@ -21,7 +21,10 @@ async function getActivePosts(searchParams?: { [key: string]: string | string[] 
       query.$or = [
         { title: { $regex: searchParams.q, $options: 'i' } },
         { address: { $regex: searchParams.q, $options: 'i' } },
-        { description: { $regex: searchParams.q, $options: 'i' } }
+        { description: { $regex: searchParams.q, $options: 'i' } },
+        { district: { $regex: searchParams.q, $options: 'i' } },
+        { city: { $regex: searchParams.q, $options: 'i' } },
+        { ward: { $regex: searchParams.q, $options: 'i' } }
       ];
     }
     
