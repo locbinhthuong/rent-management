@@ -11,6 +11,7 @@ import Image from 'next/image';
 import FuturisticHero from '@/components/FuturisticHero';
 import MapSearchClient from '@/components/MapSearchClient';
 import MapClientWrapper from '@/components/MapClientWrapper';
+import UserMenu from '@/components/UserMenu';
 
 export const revalidate = 60;
 
@@ -187,13 +188,7 @@ export default async function CustomerHome(props: {
           
           {session ? (
             <div className="flex items-center gap-3">
-              <Link 
-                href={session.user?.role === 'Admin' ? '/admin' : session.user?.role === 'CTV' ? '/ctv' : '/'}
-                className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-500 text-slate-900 flex items-center justify-center font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)] border border-slate-300 hover:scale-105 transition-transform"
-                title="Bảng điều khiển"
-              >
-                {session.user?.name?.charAt(0).toUpperCase() || 'U'}
-              </Link>
+              <UserMenu user={session.user} />
             </div>
           ) : (
             <Link 
