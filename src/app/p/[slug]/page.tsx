@@ -291,7 +291,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
               {similarPosts.map((p: any) => {
                  p._id = p._id.toString(); // Ensure ID is string for client component
                  return <GlassPropertyCard key={p._id} post={p} />
