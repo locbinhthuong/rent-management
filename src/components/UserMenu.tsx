@@ -25,10 +25,10 @@ export default function UserMenu({ user }: { user: any }) {
     <div className="relative" ref={menuRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-500 text-slate-900 flex items-center justify-center font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)] border border-slate-300 hover:scale-105 transition-transform"
+        className="w-10 h-10 rounded-full bg-white text-slate-400 flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors overflow-hidden"
         title="Tài khoản"
       >
-        {user?.name?.charAt(0).toUpperCase() || 'U'}
+        <User className="w-6 h-6 mt-1" />
       </button>
 
       {isOpen && (

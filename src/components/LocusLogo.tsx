@@ -59,23 +59,21 @@ export default function LocusLogo({ className = "", width = "100%", height = "10
 
   if (variant === 'horizontal') {
     return (
-      <div className={`flex items-center gap-2 ${className}`}>
+      <div className={`flex items-center gap-1.5 ${className}`}>
         {Icon}
-        <div className="flex flex-col justify-center">
-          <span className="font-sans font-black text-[#1d5681] leading-none tracking-widest text-lg md:text-xl mb-0.5">LOCUS</span>
-          <span className="font-sans font-bold text-[#25b6d6] leading-none tracking-[0.2em] text-[10px] md:text-xs">HOME</span>
-        </div>
+        <span className="font-sans font-black text-slate-900 text-lg md:text-xl tracking-tight leading-none mt-1">
+          locus<span className="text-cyan-500">home</span>
+        </span>
       </div>
     );
   }
 
   return (
-    <div className={`flex flex-col items-center justify-center gap-2 ${className}`}>
+    <div className={`flex flex-col items-center justify-center gap-1 ${className}`}>
       {Icon}
-      <div className="flex flex-col items-center justify-center">
-        <span className="font-sans font-black text-[#1d5681] leading-none tracking-[0.1em] text-3xl mb-1.5">LOCUS</span>
-        <span className="font-sans font-bold text-[#25b6d6] leading-none tracking-[0.4em] text-sm ml-1">HOME</span>
-      </div>
+      <span className="font-sans font-black text-slate-900 text-2xl tracking-tight leading-none mt-2">
+        locus<span className="text-cyan-500">home</span>
+      </span>
     </div>
   );
 }
