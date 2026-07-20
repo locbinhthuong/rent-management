@@ -6,9 +6,10 @@ import Post from '@/models/Post';
 import User from '@/models/User';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Home, Wallet, MessageCircle, PlusCircle, LogOut, MessageSquare, CheckCircle } from 'lucide-react';
+import { Users, Home, Wallet, MessageCircle, PlusCircle, LogOut, MessageSquare, CheckCircle, Loader2 } from 'lucide-react';
 import LeadsTable from './LeadsTable';
 import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
+import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,10 +20,36 @@ export default async function CTVCustomersPage() {
     redirect('/login');
   }
 
+  return (
+    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
+      <main className="flex-1 flex flex-col h-full pb-24 md:pb-0">
+        <div className="p-4 md:p-6 max-w-5xl mx-auto w-full space-y-6">
+          <CTVMobileHeader />
+          {/* Header */}
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Yêu cầu Tư vấn</h1>
+            <p className="text-slate-600 text-sm mt-1">Quản lý và phản hồi các yêu cầu từ khách hàng cho các bài đăng của bạn.</p>
+          </div>
+
+          <Suspense fallback={
+            <div className="flex flex-col justify-center items-center py-20">
+              <Loader2 className="w-10 h-10 text-cyan-500 animate-spin mb-4" />
+              <span className="text-slate-500 font-medium animate-pulse">Đang tải yêu cầu tư vấn...</span>
+            </div>
+          }>
+            <CTVCustomersContent userId={session.user.id} />
+          </Suspense>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+async function CTVCustomersContent({ userId }: { userId: string }) {
   await connectDB();
   Post.init();
 
-  const leads = await Lead.find({ ctv_id: session.user.id })
+  const leads = await Lead.find({ ctv_id: userId })
     .populate('post_id', 'title property_type')
     .sort({ createdAt: -1 })
     .lean() as any[];
@@ -41,15 +68,7 @@ export default async function CTVCustomersPage() {
   const successLeads = leads.filter(l => l.status === 'Success').length;
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
-      <main className="flex-1 flex flex-col h-full pb-24 md:pb-0">
-        <div className="p-4 md:p-6 max-w-5xl mx-auto w-full space-y-6">
-          <CTVMobileHeader />
-          {/* Header */}
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Yêu cầu Tư vấn</h1>
-            <p className="text-slate-600 text-sm mt-1">Quản lý và phản hồi các yêu cầu từ khách hàng cho các bài đăng của bạn.</p>
-          </div>
+    <>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -80,8 +99,6 @@ export default async function CTVCustomersPage() {
 
           {/* Leads List Component */}
           <LeadsTable initialLeads={serializedLeads} />
-        </div>
-      </main>
-    </div>
+    </>
   );
 }

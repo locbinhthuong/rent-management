@@ -5,7 +5,8 @@ import Lead from '@/models/Lead';
 import Post from '@/models/Post';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Clock, MapPin, Search } from 'lucide-react';
+import { ArrowLeft, Clock, MapPin, Search, Loader2 } from 'lucide-react';
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
@@ -15,21 +16,6 @@ export default async function HistoryPage() {
   
   if (!session?.user) {
     redirect('/login');
-  }
-
-  await connectDB();
-  Post.init(); // Ensure Post model is registered
-
-  // Lấy danh sách lịch sử tư vấn
-  // @ts-ignore - session.user.id may not be typed but exists if configured
-  const userId = session.user.id || session.user._id;
-  let leads = [];
-  
-  if (userId) {
-    leads = await Lead.find({ customer_id: userId })
-      .populate('post_id')
-      .sort({ createdAt: -1 })
-      .lean();
   }
 
   return (
@@ -42,7 +28,33 @@ export default async function HistoryPage() {
         <h1 className="text-lg font-space font-bold tracking-wide ml-2 flex-1 text-center pr-9">Lịch sử tư vấn</h1>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 mt-6">
+      <Suspense fallback={
+        <main className="max-w-2xl mx-auto px-4 mt-12 flex flex-col items-center justify-center">
+          <Loader2 className="w-10 h-10 text-cyan-500 animate-spin mb-4" />
+          <p className="text-slate-500 font-medium animate-pulse">Đang tải lịch sử...</p>
+        </main>
+      }>
+        <HistoryContent userId={session.user.id || (session.user as any)._id} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function HistoryContent({ userId }: { userId: string }) {
+  await connectDB();
+  Post.init(); // Ensure Post model is registered
+
+  let leads = [];
+  
+  if (userId) {
+    leads = await Lead.find({ customer_id: userId })
+      .populate('post_id')
+      .sort({ createdAt: -1 })
+      .lean();
+  }
+
+  return (
+    <main className="max-w-2xl mx-auto px-4 mt-6">
         
         {leads.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm flex flex-col items-center justify-center text-center h-[50vh]">
@@ -114,7 +126,6 @@ export default async function HistoryPage() {
           </div>
         )}
 
-      </main>
-    </div>
+    </main>
   );
 }

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight, Bath, Maximize } from 'lucide-react';
+import { MapPin, Phone, Home, Bolt, FileText, Users, Calendar, ShieldCheck, ChevronLeft, ArrowRight, Bath, Maximize, Loader2 } from 'lucide-react';
+import { Suspense } from 'react';
 import connectDB from '@/lib/db';
 import mongoose from 'mongoose';
 import Post from '@/models/Post';
@@ -82,17 +83,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const data = await getPostDetail(resolvedParams.slug);
-  
-  if (!data || !data.post) {
-    notFound();
-  }
-  
-  const { post, similarPosts } = data as any;
-  const price = post.price || 0;
-  const fullAddress = [post.address, post.district, post.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
-  const ctvPhone = post.ctv_id?.phone || '';
-  const isVerified = post.is_verified || false;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 relative font-sans">
@@ -110,8 +100,34 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 relative z-10">
-        {/* Main Content Grid */}
+      <Suspense fallback={
+        <main className="max-w-5xl mx-auto px-4 py-32 flex flex-col items-center justify-center">
+          <Loader2 className="w-12 h-12 text-cyan-500 animate-spin mb-4" />
+          <p className="text-slate-500 font-medium animate-pulse">Đang tải thông tin phòng...</p>
+        </main>
+      }>
+        <PostContent slug={resolvedParams.slug} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function PostContent({ slug }: { slug: string }) {
+  const data = await getPostDetail(slug);
+  
+  if (!data || !data.post) {
+    notFound();
+  }
+  
+  const { post, similarPosts } = data as any;
+  const price = post.price || 0;
+  const fullAddress = [post.address, post.district, post.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
+  const ctvPhone = post.ctv_id?.phone || '';
+  const isVerified = post.is_verified || false;
+
+  return (
+    <main className="max-w-5xl mx-auto px-4 py-8 relative z-10">
+      {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
             <div className="lg:col-span-2 space-y-8">
@@ -303,6 +319,5 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
           </div>
         )}
       </main>
-    </div>
   );
 }
