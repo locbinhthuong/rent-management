@@ -1,8 +1,8 @@
 'use client';
 
-import { CldUploadWidget } from 'next-cloudinary';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ImagePlus, Trash, X } from 'lucide-react';
+import { ImagePlus, Trash, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
 interface ImageUploadProps {
@@ -16,8 +16,46 @@ export default function ImageUpload({
   onChange,
   onRemove,
 }: ImageUploadProps) {
-  const onUpload = (result: any) => {
-    onChange(result.info.secure_url);
+  const [isUploading, setIsUploading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    
+    try {
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      if (!cloudName) throw new Error('Missing Cloudinary Cloud Name');
+
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'rent_management_preset');
+        
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        
+        if (data.secure_url) {
+          onChange(data.secure_url);
+        }
+      });
+      
+      await Promise.all(uploadPromises);
+
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Đã có lỗi xảy ra khi tải ảnh lên. Vui lòng thử lại.');
+    } finally {
+      setIsUploading(false);
+      if (inputRef.current) {
+        inputRef.current.value = ''; // Reset input
+      }
+    }
   };
 
   return (
@@ -48,30 +86,32 @@ export default function ImageUpload({
           </div>
         ))}
       </div>
-      <CldUploadWidget
-        onSuccess={onUpload}
-        uploadPreset="rent_management_preset" // You will need to create this in Cloudinary
-        options={{
-          multiple: true,
-          cropping: false,
-          maxFiles: 10,
-        }}
-      >
-        {({ open }) => {
-          return (
-            <Button
-              type="button"
-              disabled={false}
-              variant="secondary"
-              onClick={() => open?.()}
-              className="border border-border flex items-center gap-2"
-            >
-              <ImagePlus className="h-4 w-4" />
-              Tải ảnh lên (Hỗ trợ chọn nhiều & cắt ảnh)
-            </Button>
-          );
-        }}
-      </CldUploadWidget>
+      
+      <div className="relative">
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          ref={inputRef}
+          onChange={handleFileChange}
+          disabled={isUploading}
+        />
+        <Button
+          type="button"
+          disabled={isUploading}
+          variant="secondary"
+          onClick={() => inputRef.current?.click()}
+          className="border border-border flex items-center gap-2"
+        >
+          {isUploading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <ImagePlus className="h-4 w-4" />
+          )}
+          {isUploading ? 'Đang tải lên...' : 'Tải ảnh lên'}
+        </Button>
+      </div>
     </div>
   );
 }
