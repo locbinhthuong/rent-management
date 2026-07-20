@@ -31,24 +31,28 @@ export default function LeadsTable({ initialLeads, isAdmin = false }: { initialL
   }, []);
 
   const handleUpdateStatus = async (id: string, status?: string, note?: string) => {
-    setLoadingId(id);
-    try {
-      const body: any = {};
-      if (status) body.status = status;
-      if (note !== undefined) body.note = note;
+    // Optimistic UI update
+    const previousLeads = [...leads];
+    const body: any = {};
+    if (status) body.status = status;
+    if (note !== undefined) body.note = note;
 
+    setLeads(leads.map(l => l._id === id ? { ...l, ...body } : l));
+
+    // Background fetch
+    try {
       const res = await fetch(`/api/leads/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
-      if (res.ok) {
-        setLeads(leads.map(l => l._id === id ? { ...l, ...body } : l));
+      if (!res.ok) {
+        setLeads(previousLeads);
+        alert('Có lỗi xảy ra');
       }
     } catch(err) {
+      setLeads(previousLeads);
       alert('Lỗi hệ thống');
-    } finally {
-      setLoadingId(null);
     }
   };
 

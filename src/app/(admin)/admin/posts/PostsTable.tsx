@@ -14,45 +14,49 @@ export default function PostsTable({ initialPosts }: { initialPosts: any[] }) {
     let confirmMsg = approval_status ? `Bạn có chắc muốn chuyển sang trạng thái ${approval_status}?` : `Bạn có chắc muốn thay đổi trạng thái xác thực?`;
     if (!confirm(confirmMsg)) return;
 
-    setLoadingId(id);
-    try {
-      const bodyData: any = {};
-      if (approval_status) bodyData.approval_status = approval_status;
-      if (rental_status) bodyData.rental_status = rental_status;
-      if (is_verified !== undefined) bodyData.is_verified = is_verified;
+    // Optimistic UI update
+    const previousPosts = [...posts];
+    const bodyData: any = {};
+    if (approval_status) bodyData.approval_status = approval_status;
+    if (rental_status) bodyData.rental_status = rental_status;
+    if (is_verified !== undefined) bodyData.is_verified = is_verified;
 
+    setPosts(posts.map(p => p._id === id ? { ...p, ...bodyData } : p));
+    
+    // Background fetch
+    try {
       const res = await fetch(`/api/ctv/posts/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bodyData),
       });
-      if (res.ok) {
-        setPosts(posts.map(p => p._id === id ? { ...p, ...bodyData } : p));
-      } else {
+      if (!res.ok) {
+        setPosts(previousPosts);
         alert('Có lỗi xảy ra');
       }
     } catch (error) {
+      setPosts(previousPosts);
       alert('Lỗi hệ thống');
-    } finally {
-      setLoadingId(null);
     }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Bạn có chắc chắn muốn XÓA bài đăng này? Mọi dữ liệu Khách hàng liên quan cũng sẽ bị xóa sạch!')) return;
 
-    setLoadingId(id);
+    // Optimistic UI update
+    const previousPosts = [...posts];
+    setPosts(posts.filter(p => p._id !== id));
+
+    // Background fetch
     try {
       const res = await fetch(`/api/ctv/posts/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        setPosts(posts.filter(p => p._id !== id));
-      } else {
+      if (!res.ok) {
+        setPosts(previousPosts);
         alert('Có lỗi xảy ra');
       }
     } catch (error) {
+      setPosts(previousPosts);
       alert('Lỗi hệ thống');
-    } finally {
-      setLoadingId(null);
     }
   };
 

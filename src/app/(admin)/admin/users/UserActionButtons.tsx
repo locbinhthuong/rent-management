@@ -30,7 +30,6 @@ export default function UserActionButtons({ user }: { user: UserData }) {
     // Optimistic Update
     const previousStatus = optimisticStatus;
     setOptimisticStatus(newStatus);
-    setLoading(true);
     
     try {
       const res = await fetch(`/api/admin/users/${user._id}/status`, {
@@ -49,7 +48,6 @@ export default function UserActionButtons({ user }: { user: UserData }) {
       setOptimisticStatus(previousStatus);
       toast.error('Lỗi hệ thống');
     }
-    setLoading(false);
   };
 
   const handleDelete = async () => {
