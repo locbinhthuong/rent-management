@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, PlusCircle, Users, MessageCircle, FileText, User } from 'lucide-react';
 
+import NotificationBell from '@/components/NotificationBell';
+
 export default function CTVSidebar() {
   const pathname = usePathname();
 
@@ -18,13 +20,14 @@ export default function CTVSidebar() {
 
   return (
     <aside className="w-72 bg-white/80 border-r border-slate-200 hidden md:flex flex-col relative z-20 shadow-2xl backdrop-blur-2xl shrink-0 h-screen sticky top-0 text-slate-900">
-      <div className="p-6 border-b border-slate-200">
+      <div className="p-6 border-b border-slate-200 flex justify-between items-center">
         <h1 className="text-2xl font-black flex items-center gap-3 text-slate-900">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
             <Users className="w-5 h-5 text-slate-900" />
           </div>
-          Bảng điều khiển
+          <span className="hidden lg:block">Quản lý</span>
         </h1>
+        <NotificationBell />
       </div>
       <nav className="flex-1 p-4 space-y-2 text-sm font-bold overflow-y-auto custom-scrollbar">
         {navLinks.map((link) => {

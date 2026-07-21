@@ -1,5 +1,6 @@
 import { Bell, User } from 'lucide-react';
 import Image from 'next/image';
+import NotificationBell from '@/components/NotificationBell';
 
 export default function CTVMobileHeader({ title = 'CTV Admin', avatarUrl }: { title?: string, avatarUrl?: string | null }) {
   return (
@@ -14,8 +15,8 @@ export default function CTVMobileHeader({ title = 'CTV Admin', avatarUrl }: { ti
         </div>
         <h2 className="font-bold text-slate-900 text-[15px]">{title}</h2>
       </div>
-      <div className="w-10 h-10 rounded-full flex items-center justify-center text-slate-600 bg-white/80 border border-slate-200 relative">
-        <Bell className="w-5 h-5" />
+      <div className="flex items-center">
+        <NotificationBell />
       </div>
     </header>
   );

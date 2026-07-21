@@ -34,7 +34,7 @@ export async function PUT(req: Request) {
     }
 
     const data = await req.json();
-    const { name, phone, address, avatar, currentPassword, newPassword } = data;
+    const { name, phone, address, avatar, currentPassword, newPassword, email_notifications } = data;
 
     await connectDB();
     const user = await User.findById(session.user.id);
@@ -48,6 +48,7 @@ export async function PUT(req: Request) {
     if (phone !== undefined) user.phone = phone;
     if (address !== undefined) user.address = address;
     if (avatar !== undefined) user.avatar = avatar;
+    if (email_notifications !== undefined) user.email_notifications = email_notifications;
 
     // Handle password change if provided
     if (currentPassword && newPassword) {

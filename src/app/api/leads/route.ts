@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Tài khoản không tồn tại' }, { status: 404 });
     }
 
+    let isNewLead = false;
     let lead = await Lead.findOne({
       post_id: data.post_id,
       ctv_id: data.ctv_id,
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
     });
 
     if (!lead) {
+      isNewLead = true;
       lead = await Lead.create({
         post_id: data.post_id,
         ctv_id: data.ctv_id,
@@ -59,7 +61,35 @@ export async function POST(req: Request) {
       });
     }
 
-    const ctv = await User.findById(data.ctv_id).select('phone name');
+    const ctv = await User.findById(data.ctv_id).select('phone name email email_notifications');
+
+    // Create Notification in DB
+    if (data.message || isNewLead) {
+      const Notification = (await import('@/models/Notification')).default;
+      await Notification.create({
+        user_id: data.ctv_id,
+        title: isNewLead ? 'Yêu cầu tư vấn mới' : 'Tin nhắn mới',
+        content: `Khách hàng ${customer.name} vừa gửi cho bạn một ${isNewLead ? 'yêu cầu tư vấn' : 'tin nhắn'}.`,
+        type: 'Lead',
+        link: `/messages/${lead._id}`
+      });
+
+      // Send Email if enabled
+      if (ctv && ctv.email && ctv.email_notifications !== false) {
+        const { sendEmail } = await import('@/lib/mailer');
+        // Send email asynchronously without blocking the response
+        sendEmail({
+          to: ctv.email,
+          subject: isNewLead ? 'Bạn có khách hàng mới trên LocusHome' : 'Bạn có tin nhắn mới trên LocusHome',
+          html: `<p>Chào <b>${ctv.name}</b>,</p>
+                 <p>Khách hàng <b>${customer.name}</b> vừa liên hệ với bạn trên hệ thống LocusHome.</p>
+                 <p>Lời nhắn: <i>"${data.message || 'Xin chào, mình muốn thuê phòng này!'}"</i></p>
+                 <p>Vui lòng đăng nhập vào trang quản lý của LocusHome để phản hồi lại khách hàng ngay nhé!</p>
+                 <br>
+                 <p><i>Bạn có thể tắt thông báo qua email trong phần Cài đặt Hồ sơ.</i></p>`
+        }).catch(err => console.error('Error sending email:', err));
+      }
+    }
 
     return NextResponse.json({ 
       message: 'Gửi thành công', 

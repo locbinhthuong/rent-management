@@ -20,6 +20,7 @@ export interface IUser extends Document {
   verificationCodeExpires?: Date;
   rating?: number;
   rating_count?: number;
+  email_notifications?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -45,6 +46,7 @@ const UserSchema: Schema = new Schema(
     verificationCodeExpires: { type: Date },
     rating: { type: Number, default: 0 },
     rating_count: { type: Number, default: 0 },
+    email_notifications: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
