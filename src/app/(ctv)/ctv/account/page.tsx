@@ -92,7 +92,7 @@ export default async function CTVAccountPage() {
           
 
 
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
+          <Link href="/ctv/account/notifications" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-700">
                 <Bell className="w-5 h-5" />
@@ -105,7 +105,7 @@ export default async function CTVAccountPage() {
             <ChevronRight className="w-5 h-5 text-slate-500" />
           </Link>
 
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
+          <Link href="/ctv/account/profile" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors border-b border-slate-200">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-700">
                 <Shield className="w-5 h-5" />
@@ -118,7 +118,7 @@ export default async function CTVAccountPage() {
             <ChevronRight className="w-5 h-5 text-slate-500" />
           </Link>
 
-          <Link href="#" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors">
+          <Link href="/ctv/account/help" className="flex items-center justify-between p-4 hover:bg-slate-100/80 transition-colors">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-700">
                 <HelpCircle className="w-5 h-5" />
