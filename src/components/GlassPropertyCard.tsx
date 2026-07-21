@@ -158,19 +158,36 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
                 </div>
               )}
               
-              {/* Electricity Price - Always show */}
-              <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 rounded px-2 py-1 text-amber-700">
-                <span className="font-semibold text-[10px] md:text-[11px]">
-                  Điện: {post.electricity_price ? new Intl.NumberFormat('vi-VN').format(post.electricity_price) + 'đ' : 'Thỏa thuận'}
-                </span>
-              </div>
-              
-              {/* Water Price - Always show */}
-              <div className="flex items-center gap-1 bg-blue-50 border border-blue-100 rounded px-2 py-1 text-blue-700">
-                <span className="font-semibold text-[10px] md:text-[11px]">
-                  Nước: {post.water_price ? new Intl.NumberFormat('vi-VN').format(post.water_price) + 'đ' : 'Thỏa thuận'}
-                </span>
-              </div>
+              {/* Utilities */}
+              {post.electricity_price || post.water_price ? (
+                <>
+                  <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 rounded px-2 py-1 text-amber-700">
+                    <span className="font-semibold text-[10px] md:text-[11px]">
+                      Điện: {post.electricity_price ? new Intl.NumberFormat('vi-VN').format(post.electricity_price) + 'đ' : 'Thỏa thuận'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 bg-blue-50 border border-blue-100 rounded px-2 py-1 text-blue-700">
+                    <span className="font-semibold text-[10px] md:text-[11px]">
+                      Nước: {post.water_price ? new Intl.NumberFormat('vi-VN').format(post.water_price) + 'đ' : 'Thỏa thuận'}
+                    </span>
+                  </div>
+                </>
+              ) : post.utility_costs ? (
+                <div className="flex items-center gap-1 bg-violet-50 border border-violet-100 rounded px-2 py-1 text-violet-700">
+                  <span className="font-semibold text-[10px] md:text-[11px] line-clamp-1">
+                    {post.utility_costs}
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 rounded px-2 py-1 text-amber-700">
+                    <span className="font-semibold text-[10px] md:text-[11px]">Điện: Thỏa thuận</span>
+                  </div>
+                  <div className="flex items-center gap-1 bg-blue-50 border border-blue-100 rounded px-2 py-1 text-blue-700">
+                    <span className="font-semibold text-[10px] md:text-[11px]">Nước: Thỏa thuận</span>
+                  </div>
+                </>
+              )}
             </div>
           </Link>
         </div>
