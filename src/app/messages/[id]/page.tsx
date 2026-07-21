@@ -13,7 +13,8 @@ import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ChatPage({ params }: { params: { id: string } }) {
+export default async function ChatPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await getServerSession(authOptions);
   
   if (!session) {
