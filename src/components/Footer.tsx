@@ -64,13 +64,13 @@ export default function Footer() {
                 <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
                   <Phone className="w-4 h-4 text-emerald-400" />
                 </div>
-                <span className="font-bold text-slate-900 tracking-wide">Hotline: Đang cập nhật</span>
+                <span className="font-bold text-slate-900 tracking-wide">Hotline: 0988.727.604</span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
                   <Mail className="w-4 h-4 text-violet-400" />
                 </div>
-                <span>Email: hotro@hethong.com</span>
+                <span>Email: locushomels@gmail.com</span>
               </li>
             </ul>
           </div>

@@ -116,7 +116,7 @@ export default function AccountPage() {
                         <div className="bg-rose-100 p-2.5 rounded-full text-rose-500"><Mail className="w-5 h-5" /></div>
                         <div className="flex-1 text-left">
                           <p className="text-xs font-semibold text-slate-400">Email doanh nghiệp</p>
-                          <p className="font-bold text-slate-700">contact@thuephong.com</p>
+                          <p className="font-bold text-slate-700">locushomels@gmail.com</p>
                         </div>
                       </div>
                       
@@ -124,7 +124,7 @@ export default function AccountPage() {
                         <div className="bg-emerald-100 p-2.5 rounded-full text-emerald-500"><Phone className="w-5 h-5" /></div>
                         <div className="flex-1 text-left">
                           <p className="text-xs font-semibold text-slate-400">Số điện thoại Hotline</p>
-                          <p className="font-bold text-slate-700">1900 6868</p>
+                          <p className="font-bold text-slate-700">0988.727.604</p>
                         </div>
                       </div>
                       
@@ -132,7 +132,7 @@ export default function AccountPage() {
                         <div className="bg-blue-100 p-2.5 rounded-full text-blue-500"><MessageCircle className="w-5 h-5" /></div>
                         <div className="flex-1 text-left">
                           <p className="text-xs font-semibold text-slate-400">Zalo CSKH 24/7</p>
-                          <p className="font-bold text-slate-700">0901 234 567</p>
+                          <p className="font-bold text-slate-700">0988.727.604</p>
                         </div>
                       </div>
                     </div>

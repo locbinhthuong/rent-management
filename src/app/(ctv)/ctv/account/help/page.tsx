@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, HelpCircle, PhoneCall, MessageSquare } from 'lucide-react';
+import { ArrowLeft, HelpCircle, Phone, MessageCircle } from 'lucide-react';
 
 export default function HelpPage() {
   return (
@@ -22,16 +22,16 @@ export default function HelpPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href="tel:0909090909" className="flex flex-col items-center p-6 border border-slate-200 rounded-2xl hover:border-cyan-500 hover:bg-cyan-50 transition-all group">
-              <PhoneCall className="w-8 h-8 text-slate-400 group-hover:text-cyan-500 mb-3 transition-colors" />
+            <a href="tel:0988727604" className="flex flex-col items-center p-6 border border-slate-200 rounded-2xl hover:border-cyan-500 hover:bg-cyan-50 transition-all group">
+              <Phone className="w-8 h-8 text-cyan-500 mb-3 group-hover:scale-110 transition-transform" />
               <span className="font-bold text-slate-800">Hotline hỗ trợ</span>
-              <span className="text-sm text-slate-500 mt-1">0909.090.909</span>
+              <span className="text-sm text-slate-500 mt-1">0988.727.604</span>
             </a>
             
-            <a href="https://zalo.me" target="_blank" rel="noreferrer" className="flex flex-col items-center p-6 border border-slate-200 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all group">
-              <MessageSquare className="w-8 h-8 text-slate-400 group-hover:text-blue-500 mb-3 transition-colors" />
-              <span className="font-bold text-slate-800">Zalo Hỗ trợ CTV</span>
-              <span className="text-sm text-slate-500 mt-1">Nhắn tin ngay</span>
+            <a href="https://zalo.me/0988727604" target="_blank" rel="noreferrer" className="flex flex-col items-center p-6 border border-slate-200 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all group">
+              <MessageCircle className="w-8 h-8 text-blue-500 mb-3 group-hover:scale-110 transition-transform" />
+              <span className="font-bold text-slate-800">Chat qua Zalo</span>
+              <span className="text-sm text-slate-500 mt-1">Hỗ trợ 24/7</span>
             </a>
           </div>
         </div>
