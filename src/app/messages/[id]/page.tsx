@@ -65,11 +65,11 @@ async function ChatContent({ leadId, userId, role }: { leadId: string, userId: s
 
   // Map messages to flat format
   const messages = rawMessages.map(m => ({
-    id: m._id.toString(),
-    content: m.content,
-    senderId: m.sender_id.toString(),
-    isMine: m.sender_id.toString() === userId,
-    createdAt: m.createdAt.toISOString()
+    id: m._id?.toString() || Math.random().toString(),
+    content: m.content || '',
+    senderId: m.sender_id?.toString() || 'unknown',
+    isMine: m.sender_id?.toString() === userId,
+    createdAt: m.createdAt ? new Date(m.createdAt).toISOString() : new Date().toISOString()
   }));
 
   // Append initial lead message if it exists to give context
@@ -77,9 +77,9 @@ async function ChatContent({ leadId, userId, role }: { leadId: string, userId: s
     messages.unshift({
       id: 'initial',
       content: lead.message,
-      senderId: lead.customer_id ? lead.customer_id._id.toString() : 'guest',
+      senderId: lead.customer_id?._id ? lead.customer_id._id.toString() : 'guest',
       isMine: role === 'Customer',
-      createdAt: lead.createdAt.toISOString()
+      createdAt: lead.createdAt ? new Date(lead.createdAt).toISOString() : new Date().toISOString()
     });
   }
 
