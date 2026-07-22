@@ -81,18 +81,22 @@ export default async function Footer() {
             </ul>
             <div className="flex gap-3 pt-2">
               {contact.zalo && (
-                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-2xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 hover:bg-blue-500 hover:text-white hover:border-blue-400 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300 group">
-                  <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-[0_4px_15px_rgba(59,130,246,0.3)] transition-all duration-300 group">
+                  <span className="font-bold text-xs group-hover:scale-110 transition-transform tracking-tight">Zalo</span>
                 </a>
               )}
               {contact.facebook && (
-                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-2xl bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-600 hover:bg-indigo-500 hover:text-white hover:border-indigo-400 hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300 group">
-                  <Globe className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-[0_4px_15px_rgba(79,70,229,0.3)] transition-all duration-300 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="group-hover:scale-110 transition-transform">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
                 </a>
               )}
               {contact.tiktok && (
-                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-2xl bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all duration-300 group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="group-hover:scale-110 transition-transform">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68l.01.2a6.29 6.29 0 0 0 4.13 5.86 6.3 6.3 0 0 0 7.82-3.13 6.42 6.42 0 0 0 .5-3V8.71a8.3 8.3 0 0 0 3.19.64V5.9a4.85 4.85 0 0 1-1.06-.06z"/>
+                  </svg>
                 </a>
               )}
             </div>
