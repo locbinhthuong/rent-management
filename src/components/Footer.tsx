@@ -58,21 +58,28 @@ export default async function Footer() {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-slate-900 tracking-wide">Liên hệ và theo dõi</h3>
             <ul className="space-y-5 text-sm text-slate-600">
+              {/* Hotline */}
+              {contact.hotline && (
+                <li className="flex items-center gap-4">
+                  <a href={`tel:${contact.hotline.replace(/[^0-9+]/g, '')}`} className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0 hover:bg-emerald-500 hover:text-white group transition-colors">
+                    <Phone className="w-4 h-4 text-emerald-500 group-hover:text-white" />
+                  </a>
+                  <a href={`tel:${contact.hotline.replace(/[^0-9+]/g, '')}`} className="hover:text-emerald-500 transition-colors font-medium">
+                    {contact.hotline}
+                  </a>
+                </li>
+              )}
               {/* Email */}
               <li className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
-                  <Mail className="w-4 h-4 text-violet-400" />
-                </div>
-                <span>{contact.email || 'locushomels@gmail.com'}</span>
+                <a href={`mailto:${contact.email || 'locushomels@gmail.com'}`} className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0 hover:bg-violet-500 hover:text-white group transition-colors">
+                  <Mail className="w-4 h-4 text-violet-500 group-hover:text-white" />
+                </a>
+                <a href={`mailto:${contact.email || 'locushomels@gmail.com'}`} className="hover:text-violet-500 transition-colors">
+                  {contact.email || 'locushomels@gmail.com'}
+                </a>
               </li>
             </ul>
             <div className="flex items-center gap-3 pt-2">
-              {/* Hotline Icon */}
-              {contact.hotline && (
-                <a href={`tel:${contact.hotline.replace(/[^0-9+]/g, '')}`} title={`Gọi Hotline: ${contact.hotline}`} className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 hover:shadow-[0_4px_15px_rgba(16,185,129,0.4)] transition-all duration-300 group">
-                  <Phone className="w-[18px] h-[18px] group-hover:scale-110 transition-transform" />
-                </a>
-              )}
               {/* Zalo */}
               {contact.zalo && (
                 <a href={contact.zalo.startsWith('http') ? contact.zalo : `https://zalo.me/${contact.zalo.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" title="Zalo" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-[0_4px_15px_rgba(59,130,246,0.4)] transition-all duration-300 group">
