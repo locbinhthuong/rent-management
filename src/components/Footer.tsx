@@ -14,7 +14,7 @@ export default function Footer() {
           {/* Về chúng tôi */}
           <div className="space-y-6">
             <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">Hệ Thống Thuê Nhà</span>
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">Locus</span>
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Nền tảng kết nối người cho thuê và người đi thuê phòng trọ. Cung cấp thông tin trực quan, chính xác với giao diện hiện đại và hệ thống quản lý chuyên nghiệp.
@@ -78,9 +78,9 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} <span className="text-slate-700 font-medium">Hệ Thống Thuê Nhà</span>. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} <span className="text-slate-700 font-medium">Locushomee.com</span>. All rights reserved.</p>
           <div className="flex items-center gap-1.5">
-            Thiết kế và phát triển với <span className="text-red-500 animate-pulse">❤️</span>
+            Nền tảng tìm phòng thông minh <span className="text-amber-500 animate-pulse">✨</span>
           </div>
         </div>
       </div>
