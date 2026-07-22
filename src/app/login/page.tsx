@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import LocusLogo from '@/components/LocusLogo';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -242,9 +243,18 @@ export default function LoginPage() {
               </div>
             </form>
           ) : (
-            <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
-            
-            {!isLogin && (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isLogin ? 'login' : 'register'}
+                initial={{ rotateY: 90, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: -90, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="w-full"
+              >
+                <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
+                
+                {!isLogin && (
               <div className="space-y-4">
                 <div className="flex gap-3 mb-2">
                   <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${role === 'Customer' ? 'bg-indigo-600/30 border-indigo-400 text-slate-900 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-black/30 border-slate-200 text-slate-500 hover:bg-slate-200/50'}`}>
@@ -338,6 +348,8 @@ export default function LoginPage() {
               {loading ? 'ĐANG XỬ LÝ...' : (isLogin ? 'ĐĂNG NHẬP' : 'TẠO TÀI KHOẢN')}
             </Button>
           </form>
+          </motion.div>
+            </AnimatePresence>
           )}
         </div>
       </div>
