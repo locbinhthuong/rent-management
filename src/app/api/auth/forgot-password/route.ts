@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import User from '@/models/User';
-import { sendEmail } from '@/lib/mailer';
+
 
 export async function POST(req: Request) {
   try {
@@ -42,7 +42,24 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    await sendEmail({
+    // Send email using nodemailer directly to match register logic
+    const nodemailer = (await import('nodemailer')).default;
+    
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.log(`[MOCK EMAIL] To: ${user.email}, Verification Code: ${otp}`);
+      return NextResponse.json({ message: `(MOCK) Mã xác nhận ${otp} đã được gửi đến email của bạn` }, { status: 200 });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"LocusHome" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: 'Mã xác nhận khôi phục mật khẩu - LocusHome',
       html: emailHtml
