@@ -60,42 +60,40 @@ export default async function Footer() {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-slate-900 tracking-wide">Liên hệ và theo dõi</h3>
             <ul className="space-y-5 text-sm text-slate-600">
-              <li className="flex items-start gap-4">
-                <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
-                  <MapPin className="w-4 h-4 text-indigo-400" />
-                </div>
-                <span className="pt-1">{contact.address || 'Trụ sở chính (Đang cập nhật)'}</span>
-              </li>
-              <li className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
-                  <Phone className="w-4 h-4 text-emerald-400" />
-                </div>
-                <span className="font-bold text-slate-900 tracking-wide">Hotline: {contact.hotline || '0988.727.604'}</span>
-              </li>
+              {/* Email */}
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
                   <Mail className="w-4 h-4 text-violet-400" />
                 </div>
-                <span>Email: {contact.email || 'locushomels@gmail.com'}</span>
+                <span>{contact.email || 'locushomels@gmail.com'}</span>
               </li>
             </ul>
             <div className="flex items-center gap-3 pt-2">
+              {/* Hotline Icon */}
+              {contact.hotline && (
+                <a href={`tel:${contact.hotline.replace(/[^0-9+]/g, '')}`} title={`Gọi Hotline: ${contact.hotline}`} className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 hover:shadow-[0_4px_15px_rgba(16,185,129,0.4)] transition-all duration-300 group">
+                  <Phone className="w-[18px] h-[18px] group-hover:scale-110 transition-transform" />
+                </a>
+              )}
+              {/* Zalo */}
               {contact.zalo && (
-                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-[0_4px_15px_rgba(59,130,246,0.4)] transition-all duration-300 group">
+                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" title="Zalo" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-[0_4px_15px_rgba(59,130,246,0.4)] transition-all duration-300 group">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
                     <path d="M21.731 11.65c0-3.704-3.52-6.705-7.865-6.705-4.343 0-7.864 3.001-7.864 6.705 0 3.702 3.52 6.703 7.864 6.703.953 0 1.867-.146 2.713-.414l3.3.99c.319.1.63-.173.495-.467l-1.103-2.42c1.516-1.066 2.46-2.463 2.46-4.392z"/>
                   </svg>
                 </a>
               )}
+              {/* Facebook */}
               {contact.facebook && (
-                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-[0_4px_15px_rgba(79,70,229,0.4)] transition-all duration-300 group">
+                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" title="Facebook" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-[0_4px_15px_rgba(79,70,229,0.4)] transition-all duration-300 group">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
                     <path d="M16.39 23.61v-9.3h3.12l.47-3.62h-3.59v-2.31c0-1.04.29-1.76 1.79-1.76h1.91V3.38c-.33-.04-1.47-.14-2.79-.14-2.76 0-4.65 1.69-4.65 4.79v2.66H9.52v3.62h3.13v9.3h3.74z"/>
                   </svg>
                 </a>
               )}
+              {/* TikTok */}
               {contact.tiktok && (
-                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all duration-300 group">
+                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" title="TikTok" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all duration-300 group">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
                     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68l.01.2a6.29 6.29 0 0 0 4.13 5.86 6.3 6.3 0 0 0 7.82-3.13 6.42 6.42 0 0 0 .5-3V8.71a8.3 8.3 0 0 0 3.19.64V5.9a4.85 4.85 0 0 1-1.06-.06z"/>
                   </svg>
