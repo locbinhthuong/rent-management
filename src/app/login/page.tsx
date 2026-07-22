@@ -28,6 +28,10 @@ export default function LoginPage() {
   const [verificationCode, setVerificationCode] = useState('');
   const [registeredEmail, setRegisteredEmail] = useState('');
 
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = useState<1 | 2>(1);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+
   const isFormValid = isLogin 
     ? (email.trim() !== '' && password.trim() !== '')
     : (name.trim() !== '' && phone.trim() !== '' && email.trim() !== '' && password.trim() !== '');
@@ -131,6 +135,54 @@ export default function LoginPage() {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      if (forgotPasswordStep === 1) {
+        const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: forgotPasswordEmail }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.message || 'Lỗi gửi email');
+          setLoading(false);
+        } else {
+          setSuccess(data.message);
+          setForgotPasswordStep(2);
+          setLoading(false);
+        }
+      } else {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: forgotPasswordEmail, code: verificationCode, newPassword: password }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.message || 'Lỗi đổi mật khẩu');
+          setLoading(false);
+        } else {
+          setSuccess('Đổi mật khẩu thành công! Vui lòng đăng nhập.');
+          setShowForgotPassword(false);
+          setForgotPasswordStep(1);
+          setIsLogin(true);
+          setPassword('');
+          setVerificationCode('');
+          setLoading(false);
+        }
+      }
+    } catch (err) {
+      setError('Đã xảy ra lỗi hệ thống, vui lòng thử lại sau');
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-8 overflow-hidden">
       {/* Full-screen Background Image */}
@@ -165,7 +217,7 @@ export default function LoginPage() {
             <LocusLogo width={50} height={50} variant="horizontal" className="scale-110" />
           </div>
           <h1 className="text-xl font-extrabold text-slate-900 tracking-tight mt-2">
-            {showVerification ? 'Xác thực Email' : isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
+            {showForgotPassword ? 'Khôi phục mật khẩu' : showVerification ? 'Xác thực Email' : isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
           </h1>
           <p className="text-slate-500 text-sm mt-1.5 font-medium">
             Truy cập nền tảng môi giới hiện đại nhất
@@ -173,7 +225,7 @@ export default function LoginPage() {
         </div>
 
         {/* Tab Toggle */}
-        {!showVerification && (
+        {!showVerification && !showForgotPassword && (
           <div className="flex border-b border-slate-200 bg-black/20">
           <button 
             className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 ${isLogin ? 'text-slate-900 border-b-2 border-indigo-400 bg-slate-200/50' : 'text-slate-900/50 hover:text-slate-700 hover:bg-slate-200/50'}`}
@@ -208,7 +260,85 @@ export default function LoginPage() {
             </div>
           )}
 
-          {showVerification ? (
+          {showForgotPassword ? (
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <p className="text-sm text-slate-600 mb-4 text-center font-medium">
+                {forgotPasswordStep === 1 
+                  ? 'Nhập email của bạn để nhận mã khôi phục mật khẩu.' 
+                  : `Mã khôi phục đã được gửi đến email. Vui lòng nhập mã và mật khẩu mới.`}
+              </p>
+              
+              {forgotPasswordStep === 1 ? (
+                <div>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
+                      <Mail className="w-5 h-5" />
+                    </div>
+                    <input
+                      type="email"
+                      value={forgotPasswordEmail}
+                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                      className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
+                      placeholder="Email đăng ký"
+                      required
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <input
+                        type="text"
+                        value={verificationCode}
+                        onChange={(e) => setVerificationCode(e.target.value)}
+                        className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all tracking-widest font-bold"
+                        placeholder="Mã xác nhận 6 số"
+                        maxLength={6}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-900/40 group-focus-within:text-indigo-300 transition-colors">
+                        <Lock className="w-5 h-5" />
+                      </div>
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
+                        placeholder="Mật khẩu mới"
+                        minLength={6}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className={`w-full py-6 mt-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-slate-300'}`}
+              >
+                {loading ? 'ĐANG XỬ LÝ...' : (forgotPasswordStep === 1 ? 'GỬI MÃ XÁC NHẬN' : 'ĐỔI MẬT KHẨU')}
+              </Button>
+              <div className="text-center mt-4">
+                <button
+                  type="button"
+                  onClick={() => { setShowForgotPassword(false); setForgotPasswordStep(1); setError(''); setSuccess(''); }}
+                  className="text-sm text-indigo-500 hover:underline font-medium"
+                >
+                  Quay lại đăng nhập
+                </button>
+              </div>
+            </form>
+          ) : showVerification ? (
             <form onSubmit={handleVerifyEmail} className="space-y-4">
               <p className="text-sm text-slate-600 mb-4 text-center font-medium">
                 Vui lòng kiểm tra email <strong className="text-indigo-600">{registeredEmail}</strong> và nhập mã xác thực gồm 6 chữ số.
@@ -337,9 +467,13 @@ export default function LoginPage() {
               </div>
               {isLogin && (
                 <div className="flex justify-end mt-3">
-                  <a href="#" className="text-xs font-medium text-indigo-300 hover:text-slate-900 transition-colors hover:underline">
+                  <button 
+                    type="button" 
+                    onClick={() => { setShowForgotPassword(true); setError(''); setSuccess(''); }} 
+                    className="text-xs font-medium text-indigo-300 hover:text-slate-900 transition-colors hover:underline"
+                  >
                     Quên mật khẩu?
-                  </a>
+                  </button>
                 </div>
               )}
             </div>
