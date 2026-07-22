@@ -9,8 +9,10 @@ import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
 const ImageUpload = dynamic(() => import('@/components/ImageUpload'), { ssr: false });
 const MapPicker = dynamic(() => import('@/components/MapPicker'), { ssr: false });
 import CTVMobileHeader from '@/components/ctv/CTVMobileHeader';
+import { useSession } from 'next-auth/react';
 
 export default function CreatePostPage() {
+  const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -138,7 +140,7 @@ export default function CreatePostPage() {
   return (
     <main className="flex-1 bg-slate-50 h-screen overflow-y-auto pb-24 md:pb-12">
       <div className="max-w-3xl mx-auto px-4 mt-6">
-        <CTVMobileHeader />
+        <CTVMobileHeader title={session?.user?.name || 'CTV Admin'} avatarUrl={session?.user?.image} />
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Đăng phòng mới</h2>

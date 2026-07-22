@@ -161,7 +161,7 @@ export default async function CTVPostsPage({ searchParams }: { searchParams: any
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0 bg-slate-50">
         <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto w-full">
-          <CTVMobileHeader />
+          <CTVMobileHeader title={session?.user?.name || 'CTV Admin'} avatarUrl={session?.user?.image} />
           {/* Header */}
           <div>
             <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Quản lý tin đăng</h1>

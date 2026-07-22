@@ -24,7 +24,7 @@ export default async function CTVCustomersPage() {
     <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
       <main className="flex-1 flex flex-col h-full pb-24 md:pb-0">
         <div className="p-4 md:p-6 max-w-5xl mx-auto w-full space-y-6">
-          <CTVMobileHeader />
+          <CTVMobileHeader title={session?.user?.name || 'CTV Admin'} avatarUrl={session?.user?.image} />
           {/* Header */}
           <div>
             <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Yêu cầu Tư vấn</h1>
