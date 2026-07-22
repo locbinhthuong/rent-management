@@ -145,7 +145,6 @@ async function PostsList({ userId, searchParams }: { userId: string, searchParam
           })
         )}
       </div>
-    </div>
   );
 }
 
