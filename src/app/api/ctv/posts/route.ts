@@ -31,6 +31,7 @@ export async function POST(req: Request) {
       district: data.district,
       price: Number(data.price),
       property_type: data.property_type,
+      area_sqm: data.area_sqm ? Number(data.area_sqm) : undefined,
       electricity_price: data.electricity_price ? Number(data.electricity_price) : undefined,
       water_price: data.water_price ? Number(data.water_price) : undefined,
       service_price: data.service_price ? Number(data.service_price) : undefined,

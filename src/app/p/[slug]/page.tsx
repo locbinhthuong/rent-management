@@ -237,15 +237,27 @@ async function PostContent({ slug }: { slug: string }) {
                     </div>
                   </div>
                 )}
+
+                {post.property_type && (
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 border border-violet-500/20 group-hover:bg-violet-500/20 transition-colors">
+                      <Home className="w-6 h-6 text-violet-400" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-1">Loại phòng</div>
+                      <div className="text-slate-600 leading-relaxed">{post.property_type}</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Tiện ích có sẵn */}
-            {post.amenities && post.amenities.length > 0 && (
-              <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden mt-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6 font-space flex items-center gap-3">
-                  <Bolt className="w-6 h-6 text-cyan-500" /> Tiện ích có sẵn
-                </h2>
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden mt-8">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6 font-space flex items-center gap-3">
+                <Bolt className="w-6 h-6 text-cyan-500" /> Tiện ích có sẵn
+              </h2>
+              {post.amenities && post.amenities.length > 0 ? (
                 <div className="flex flex-wrap gap-3">
                   {post.amenities.map((amenity: string, idx: number) => (
                     <span key={idx} className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-medium flex items-center gap-2">
@@ -254,8 +266,10 @@ async function PostContent({ slug }: { slug: string }) {
                     </span>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <p className="text-slate-500 italic">Chưa cập nhật tiện ích.</p>
+              )}
+            </div>
 
             {/* Mô tả */}
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">

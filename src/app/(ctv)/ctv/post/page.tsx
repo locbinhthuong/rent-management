@@ -42,6 +42,7 @@ export default function CreatePostPage() {
     city: 'Hồ Chí Minh',
     price: '',
     property_type: '',
+    area_sqm: '',
     electricity_price: '',
     water_price: '',
     service_price: '',
@@ -52,6 +53,7 @@ export default function CreatePostPage() {
     location: null as [number, number] | null,
     district: '',
     amenities: [] as string[],
+    custom_amenities: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -77,6 +79,14 @@ export default function CreatePostPage() {
 
     try {
       const payload: any = { ...formData };
+      
+      // Xử lý tiện ích tự nhập
+      if (formData.custom_amenities.trim()) {
+        const customList = formData.custom_amenities.split(',').map(item => item.trim()).filter(item => item !== '');
+        payload.amenities = [...payload.amenities, ...customList];
+      }
+      delete payload.custom_amenities;
+
       if (formData.location) {
         payload.location = {
           type: 'Point',
@@ -246,7 +256,7 @@ export default function CreatePostPage() {
                   <p className="text-xs text-slate-600 mt-2">Bấm vào bản đồ để chọn tọa độ chính xác của phòng trọ. Việc này giúp khách hàng tìm kiếm dễ dàng hơn.</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-cyan-400" /> Giá / Tháng *
@@ -263,7 +273,7 @@ export default function CreatePostPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
-                      <Home className="w-4 h-4 text-cyan-400" /> Loại nhà trọ
+                      <Home className="w-4 h-4 text-cyan-400" /> Loại phòng
                     </label>
                     <select
                       name="property_type"
@@ -277,13 +287,26 @@ export default function CreatePostPage() {
                       {categories.length === 0 && <option value="">Đang tải loại phòng...</option>}
                     </select>
                   </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+                      <Maximize className="w-4 h-4 text-cyan-400" /> Diện tích (m²)
+                    </label>
+                    <input
+                      type="number"
+                      name="area_sqm"
+                      value={formData.area_sqm}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
+                      placeholder="VD: 25"
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <Bolt className="w-4 h-4 text-cyan-400" /> Tiện ích có sẵn
                   </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                     {amenities.map((amenity: any) => (
                       <label key={amenity._id} className="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-slate-50 transition">
                         <input 
@@ -302,7 +325,15 @@ export default function CreatePostPage() {
                       </label>
                     ))}
                   </div>
-                  {amenities.length === 0 && <p className="text-xs text-slate-500">Đang tải tiện ích...</p>}
+                  {amenities.length === 0 && <p className="text-xs text-slate-500 mb-3">Đang tải tiện ích...</p>}
+                  <input
+                    type="text"
+                    name="custom_amenities"
+                    value={formData.custom_amenities}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
+                    placeholder="Tiện ích khác (cách nhau bằng dấu phẩy, VD: Bếp điện, Quạt trần)"
+                  />
                 </div>
 
                 <div>
