@@ -14,7 +14,7 @@ import { Loader2 } from 'lucide-react';
 
 async function UsersDataWrapper() {
   await connectDB();
-  const customers = await User.find({ role: 'User' }).sort({ createdAt: -1 }).lean();
+  const customers = await User.find({ role: 'Customer' }).sort({ createdAt: -1 }).lean();
 
   return (
     <div className="overflow-x-auto">
