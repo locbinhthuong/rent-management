@@ -28,6 +28,10 @@ export default function LoginPage() {
   const [verificationCode, setVerificationCode] = useState('');
   const [registeredEmail, setRegisteredEmail] = useState('');
 
+  const isFormValid = isLogin 
+    ? (email.trim() !== '' && password.trim() !== '')
+    : (name.trim() !== '' && phone.trim() !== '' && email.trim() !== '' && password.trim() !== '');
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -340,13 +344,25 @@ export default function LoginPage() {
               )}
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-6 mt-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-slate-300'}`}
-            >
-              {loading ? 'ĐANG XỬ LÝ...' : (isLogin ? 'ĐĂNG NHẬP' : 'TẠO TÀI KHOẢN')}
-            </Button>
+            <AnimatePresence>
+              {isFormValid && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-6 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${loading ? 'bg-indigo-600/50' : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-[1.02] border border-slate-300'}`}
+                  >
+                    {loading ? 'ĐANG XỬ LÝ...' : (isLogin ? 'ĐĂNG NHẬP' : 'TẠO TÀI KHOẢN')}
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </form>
           </motion.div>
             </AnimatePresence>
