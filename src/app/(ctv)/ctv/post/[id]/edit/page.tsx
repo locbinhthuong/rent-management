@@ -26,6 +26,7 @@ export default function EditPostPage() {
     district: '',
     price: '',
     property_type: '',
+    area_sqm: '',
     electricity_price: '',
     water_price: '',
     service_price: '',
@@ -33,6 +34,8 @@ export default function EditPostPage() {
     target_audience: '',
     images: [] as string[],
     description: '',
+    amenities: [] as string[],
+    custom_amenities: '',
   });
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export default function EditPostPage() {
     ])
     .then(([configData, postData]) => {
       if (configData?.config?.propertyTypes) {
-        setCategories(configData.config.propertyTypes);
+        setConfig({ propertyTypes: configData.config.propertyTypes });
       }
       if (postData.post) {
         setFormData({
@@ -57,6 +60,7 @@ export default function EditPostPage() {
           district: postData.post.district || '',
           price: postData.post.price || '',
           property_type: postData.post.property_type || '',
+          area_sqm: postData.post.area_sqm || '',
           electricity_price: postData.post.electricity_price || '',
           water_price: postData.post.water_price || '',
           service_price: postData.post.service_price || '',
@@ -64,6 +68,8 @@ export default function EditPostPage() {
           target_audience: postData.post.target_audience || '',
           images: postData.post.images || [],
           description: postData.post.description || '',
+          amenities: postData.post.amenities || [],
+          custom_amenities: postData.post.amenities ? postData.post.amenities.join(', ') : '',
         });
       }
     })
@@ -93,10 +99,20 @@ export default function EditPostPage() {
     setError('');
 
     try {
+      const payload: any = { ...formData };
+      
+      if (formData.custom_amenities && formData.custom_amenities.trim()) {
+        const customList = formData.custom_amenities.split(',').map(item => item.trim()).filter(item => item !== '');
+        payload.amenities = customList;
+      } else {
+        payload.amenities = [];
+      }
+      delete payload.custom_amenities;
+
       const res = await fetch(`/api/posts/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -235,7 +251,7 @@ export default function EditPostPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-emerald-400" /> Giá / Tháng *
@@ -251,7 +267,7 @@ export default function EditPostPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
-                      <Home className="w-4 h-4 text-emerald-400" /> Loại nhà trọ
+                      <Home className="w-4 h-4 text-emerald-400" /> Loại phòng
                     </label>
                     <select
                       name="property_type"
@@ -267,6 +283,33 @@ export default function EditPostPage() {
                       )}
                     </select>
                   </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+                      <Maximize className="w-4 h-4 text-emerald-400" /> Diện tích (m²)
+                    </label>
+                    <input
+                      type="number"
+                      name="area_sqm"
+                      value={formData.area_sqm}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
+                      placeholder="VD: 25 (Không bắt buộc)"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <Bolt className="w-4 h-4 text-emerald-400" /> Tiện ích có sẵn
+                  </label>
+                  <input
+                    type="text"
+                    name="custom_amenities"
+                    value={formData.custom_amenities}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
+                    placeholder="Nhập các tiện ích, cách nhau bằng dấu phẩy (VD: Tủ lạnh, Máy lạnh, Giường...)"
+                  />
                 </div>
 
                 <div>
