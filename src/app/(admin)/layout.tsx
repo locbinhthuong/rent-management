@@ -10,10 +10,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
        <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
        
        <AdminSidebar />
-       <div className="flex-1 pb-16 md:pb-0 relative z-10 h-screen overflow-hidden flex flex-col">
+       <AdminMobileNav />
+       <div className="flex-1 pt-16 md:pt-0 relative z-10 h-screen overflow-hidden flex flex-col">
          {children}
        </div>
-       <AdminMobileNav />
     </div>
   );
 }

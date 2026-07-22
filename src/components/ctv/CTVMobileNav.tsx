@@ -1,11 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, MessageSquare, User, Crown } from 'lucide-react';
+import { LayoutDashboard, FileText, MessageSquare, User, Crown, Menu, X, Users } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function CTVMobileNav() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
     { href: '/ctv', label: 'Tổng quan', icon: LayoutDashboard, exact: true },
@@ -17,29 +20,52 @@ export default function CTVMobileNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200 z-[100] pb-[env(safe-area-inset-bottom)]">
-      <div className="flex justify-around items-center h-16 px-2">
-        {navLinks.map((link) => {
-          const isActive = link.exact 
-            ? pathname === link.href 
-            : pathname.startsWith(link.href);
-          const Icon = link.icon;
-          return (
-            <Link 
-              key={link.href}
-              href={link.href} 
-              className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all ${
-                isActive ? 'text-orange-400' : 'text-slate-600 hover:text-slate-800'
-              }`}
-            >
-              <div className={`p-2 rounded-full ${isActive ? 'bg-orange-400 text-slate-900 shadow-lg shadow-orange-400/20' : 'bg-transparent text-slate-600'}`}>
-                <Icon className={`w-5 h-5`} />
-              </div>
-              <span className="text-[10px] font-medium leading-none">{link.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
+    <>
+      <nav className="md:hidden fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-200 z-[100] h-16 flex items-center justify-between px-4">
+        <div className="font-black text-lg text-slate-900 flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+            <Users className="w-4 h-4 text-white" />
+          </div>
+          Cộng Tác Viên
+        </div>
+        <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-slate-700 bg-slate-100 rounded-lg">
+          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </nav>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed top-16 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-200 z-[90] overflow-hidden shadow-xl"
+          >
+            <div className="flex flex-col py-4 px-4 space-y-2 max-h-[80vh] overflow-y-auto">
+              {navLinks.map((link) => {
+                const isActive = link.exact 
+                  ? pathname === link.href 
+                  : pathname.startsWith(link.href);
+                const Icon = link.icon;
+                return (
+                  <Link 
+                    key={link.href}
+                    href={link.href} 
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                      isActive ? 'bg-cyan-500/10 text-cyan-600 font-bold' : 'text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Icon className={`w-5 h-5`} />
+                    <span className="text-sm">{link.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
