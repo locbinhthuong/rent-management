@@ -8,16 +8,19 @@ interface LocusLogoProps {
 }
 
 export default function LocusLogo({ className = "", width = 55, height = 55, variant = 'vertical' }: LocusLogoProps & { variant?: 'vertical' | 'horizontal' }) {
+  const parsedWidth = parseFloat(width as string) || 55;
+  const parsedHeight = parseFloat(height as string) || 55;
+
   const Icon = (
     <div 
       className="relative flex items-center justify-center shrink-0" 
-      style={{ width: Number(width) || 55, height: Number(height) || 55 }}
+      style={{ width: parsedWidth, height: parsedHeight }}
     >
       <Image 
         src="/logo.png" 
         alt="2026 LOCUS" 
         fill
-        sizes={`${Number(width) || 55}px`}
+        sizes={`${parsedWidth}px`}
         className="object-contain scale-[1.6] origin-center"
       />
     </div>
