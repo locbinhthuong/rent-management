@@ -5,44 +5,33 @@ interface LocusLogoProps {
   className?: string;
   width?: number | string;
   height?: number | string;
+  variant?: 'vertical' | 'horizontal'; // Kept for backward compatibility
 }
 
-export default function LocusLogo({ className = "", width = 55, height = 55, variant = 'vertical' }: LocusLogoProps & { variant?: 'vertical' | 'horizontal' }) {
-  const parsedWidth = parseFloat(width as string) || 55;
-  const parsedHeight = parseFloat(height as string) || 55;
+export default function LocusLogo({ className = "", width, height }: LocusLogoProps) {
+  // Parse the passed height. 
+  // If it's a huge value from old splash screens (like 250), cap it to a reasonable size for a horizontal logo (e.g. 70).
+  let parsedHeight = parseFloat(height as string) || 45;
+  if (parsedHeight > 80) {
+    parsedHeight = 70;
+  }
+  
+  // Calculate width proportionally (approx 3.5:1 ratio for horizontal logos)
+  const parsedWidth = parsedHeight * 3.5;
 
-  const Icon = (
+  return (
     <div 
-      className="relative flex items-center justify-center shrink-0" 
+      className={`relative flex items-center justify-center shrink-0 ${className}`} 
       style={{ width: parsedWidth, height: parsedHeight }}
     >
       <Image 
         src="/logo_locushome.png" 
-        alt="2026 LOCUS" 
+        alt="LocusHome Logo" 
         fill
         sizes={`${parsedWidth}px`}
-        className="object-contain scale-[2.2] origin-center"
+        className="object-contain"
+        priority
       />
-    </div>
-  );
-
-  if (variant === 'horizontal') {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {Icon}
-        <span className="font-sans font-black text-slate-900 text-lg md:text-xl tracking-tight leading-none uppercase">
-          LOCUS<span className="text-cyan-500">HOME</span>
-        </span>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`flex flex-col items-center justify-center gap-2 ${className}`}>
-      {Icon}
-      <span className="font-sans font-black text-slate-900 text-2xl tracking-tight leading-none uppercase">
-        LOCUS<span className="text-cyan-500">HOME</span>
-      </span>
     </div>
   );
 }
