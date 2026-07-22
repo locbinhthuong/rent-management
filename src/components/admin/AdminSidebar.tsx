@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, FileText, Settings, MessageCircle } from 'lucide-react';
+import { Home, Users, FileText, Settings, MessageCircle, LifeBuoy } from 'lucide-react';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
@@ -13,6 +13,7 @@ export default function AdminSidebar() {
     { href: '/admin/users', label: 'Quản lý CTV', icon: Users, exact: false },
     { href: '/admin/customers', label: 'Quản lý Khách hàng', icon: Users, exact: false },
     { href: '/admin/leads', label: 'Quản lý Tin nhắn', icon: MessageCircle, exact: false },
+    { href: '/admin/support', label: 'Yêu cầu hỗ trợ', icon: LifeBuoy, exact: false },
     { href: '/admin/settings', label: 'Cấu hình Web', icon: Settings, exact: false },
   ];
 
