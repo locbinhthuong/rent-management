@@ -14,13 +14,12 @@ export default function PostImageGallery({ images }: { images: string[] }) {
     setMounted(true);
   }, []);
 
-  // Handle ESC key to close fullscreen
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === \'Escape\') setIsFullscreen(false);
+      if (e.key === 'Escape') setIsFullscreen(false);
     };
-    if (isFullscreen) window.addEventListener(\'keydown\', handleKeyDown);
-    return () => window.removeEventListener(\'keydown\', handleKeyDown);
+    if (isFullscreen) window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isFullscreen]);
 
   if (!images || images.length === 0) {
@@ -74,8 +73,7 @@ export default function PostImageGallery({ images }: { images: string[] }) {
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-md">
             {images.map((_, idx) => (
               <div 
-                key={idx} 
-                className={`h-2 rounded-full transition-all ${idx === currentIndex ? \'w-4 bg-cyan-400\' : \'w-2 bg-white/50\'}`}
+                className={`h-2 rounded-full transition-all ${idx === currentIndex ? 'w-4 bg-cyan-400' : 'w-2 bg-white/50'}`}
               />
             ))}
           </div>
@@ -142,8 +140,7 @@ export default function PostImageGallery({ images }: { images: string[] }) {
           {images.map((img, idx) => (
             <button
               key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className={`relative h-20 w-24 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${idx === currentIndex ? \'border-cyan-400 opacity-100\' : \'border-transparent opacity-60 hover:opacity-100\'}`}
+              className={`relative h-20 w-24 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-cyan-400 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
             >
               <Image src={img} alt={`Thumb ${idx + 1}`} fill className="object-cover" sizes="100px" />
             </button>
