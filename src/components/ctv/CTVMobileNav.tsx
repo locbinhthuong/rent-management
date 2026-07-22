@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, MessageSquare, User } from 'lucide-react';
+import { LayoutDashboard, FileText, MessageSquare, User, Crown } from 'lucide-react';
 
 export default function CTVMobileNav() {
   const pathname = usePathname();
@@ -10,6 +10,7 @@ export default function CTVMobileNav() {
   const navLinks = [
     { href: '/ctv', label: 'Tổng quan', icon: LayoutDashboard, exact: true },
     { href: '/ctv/posts', label: 'Tin đăng', icon: FileText, exact: false },
+    { href: '/bang-gia', label: 'Dịch vụ', icon: Crown, exact: false },
     { href: '/ctv/customers', label: 'Tư vấn', icon: MessageSquare, exact: false },
     { href: '/ctv/contracts', label: 'Hợp đồng', icon: FileText, exact: false },
     { href: '/ctv/account', label: 'Hồ sơ', icon: User, exact: false },

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, PlusCircle, Users, MessageCircle, FileText, User } from 'lucide-react';
+import { Home, PlusCircle, Users, MessageCircle, FileText, User, Crown, ExternalLink } from 'lucide-react';
 
 import NotificationBell from '@/components/NotificationBell';
 
@@ -13,9 +13,11 @@ export default function CTVSidebar() {
     { href: '/ctv', label: 'Tổng quan', icon: Home, exact: true },
     { href: '/ctv/posts', label: 'Quản lý tin đăng', icon: FileText, exact: true },
     { href: '/ctv/post', label: 'Đăng phòng mới', icon: PlusCircle, exact: true },
+    { href: '/bang-gia', label: 'Mua dịch vụ', icon: Crown, exact: false },
     { href: '/ctv/customers', label: 'Khách liên hệ', icon: MessageCircle, exact: false },
     { href: '/ctv/contracts', label: 'Hợp đồng thuê', icon: FileText, exact: false },
     { href: '/ctv/account', label: 'Hồ sơ CTV', icon: User, exact: false },
+    { href: '/', label: 'Trang chủ Khách', icon: ExternalLink, exact: true },
   ];
 
   return (
