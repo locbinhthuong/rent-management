@@ -14,7 +14,7 @@ export default function CTVMobileNav() {
     { href: '/ctv', label: 'Tổng quan', icon: Home, exact: true },
     { href: '/ctv/posts', label: 'Quản lý tin đăng', icon: FileText, exact: true },
     { href: '/ctv/post', label: 'Đăng phòng mới', icon: PlusCircle, exact: true },
-    { href: '/bang-gia', label: 'Mua dịch vụ', icon: Crown, exact: false },
+    { href: '/ctv/bang-gia', label: 'Mua dịch vụ', icon: Crown, exact: false },
     { href: '/ctv/customers', label: 'Khách liên hệ', icon: MessageCircle, exact: false },
     { href: '/ctv/contracts', label: 'Hợp đồng thuê', icon: FileText, exact: false },
     { href: '/ctv/account', label: 'Hồ sơ CTV', icon: User, exact: false },
