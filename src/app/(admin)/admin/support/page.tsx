@@ -72,8 +72,8 @@ export default function AdminSupportPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <table className="w-full text-left border-collapse">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+        <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200 text-sm font-semibold text-slate-600">
               <th className="p-4">Khách hàng</th>
