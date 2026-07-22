@@ -4,7 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
 import SupportRequest from '@/models/SupportRequest';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'Admin') {
@@ -13,6 +13,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
     await connectDB();
     const { status } = await req.json();
+    const params = await context.params;
 
     const supportReq = await SupportRequest.findByIdAndUpdate(
       params.id,
@@ -31,12 +32,14 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'Admin') {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
+
+    const params = await context.params;
 
     await connectDB();
     const supportReq = await SupportRequest.findByIdAndDelete(params.id);

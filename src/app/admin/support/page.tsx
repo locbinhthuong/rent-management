@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Mail, Phone, Clock, User, Trash2, CheckCircle, Circle, RefreshCw } from 'lucide-react';
+import { Mail, Phone, Clock, User, Trash2, CheckCircle, Circle, RefreshCw, MessageCircle } from 'lucide-react';
 
 export default function AdminSupportPage() {
   const [requests, setRequests] = useState<any[]>([]);
@@ -176,6 +176,31 @@ export default function AdminSupportPage() {
                         <p className="text-sm font-medium text-slate-500">Email</p>
                         <p className="font-bold text-slate-900">{req.email || 'Không có'}</p>
                       </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-2">
+                      <a 
+                        href={`tel:${req.phone}`}
+                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-blue-50 text-blue-600 rounded-xl font-medium hover:bg-blue-100 transition-colors"
+                      >
+                        <Phone className="w-4 h-4" /> Gọi điện
+                      </a>
+                      <a 
+                        href={`https://zalo.me/${req.phone}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20"
+                      >
+                        <MessageCircle className="w-4 h-4" /> Chat Zalo
+                      </a>
+                      {req.email && (
+                        <a 
+                          href={`mailto:${req.email}`}
+                          className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors"
+                        >
+                          <Mail className="w-4 h-4" /> Gửi Email
+                        </a>
+                      )}
                     </div>
 
                     <div>
