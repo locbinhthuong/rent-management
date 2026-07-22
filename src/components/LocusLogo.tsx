@@ -9,13 +9,18 @@ interface LocusLogoProps {
 
 export default function LocusLogo({ className = "", width = 55, height = 55, variant = 'vertical' }: LocusLogoProps & { variant?: 'vertical' | 'horizontal' }) {
   const Icon = (
-    <Image 
-      src="/logo.png" 
-      alt="2026 LOCUS" 
-      width={Number(width) || 55} 
-      height={Number(height) || 55} 
-      className="shrink-0 object-contain"
-    />
+    <div 
+      className="relative flex items-center justify-center shrink-0" 
+      style={{ width: Number(width) || 55, height: Number(height) || 55 }}
+    >
+      <Image 
+        src="/logo.png" 
+        alt="2026 LOCUS" 
+        fill
+        sizes={`${Number(width) || 55}px`}
+        className="object-contain scale-[1.6] origin-center"
+      />
+    </div>
   );
 
   if (variant === 'horizontal') {
