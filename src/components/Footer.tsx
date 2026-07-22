@@ -34,10 +34,10 @@ export default function Footer() {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-slate-900 tracking-wide">Về chúng tôi</h3>
             <ul className="space-y-4 text-sm">
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Trang chủ</Link></li>
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Giới thiệu</Link></li>
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Quy định sử dụng</Link></li>
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Chính sách bảo mật</Link></li>
+              <li><Link href="/" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Trang chủ</Link></li>
+              <li><Link href="/gioi-thieu" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Giới thiệu</Link></li>
+              <li><Link href="/quy-dinh" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Quy định sử dụng</Link></li>
+              <li><Link href="/bao-mat" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Chính sách bảo mật</Link></li>
             </ul>
           </div>
 
@@ -45,9 +45,9 @@ export default function Footer() {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-slate-900 tracking-wide">Hỗ trợ khách hàng</h3>
             <ul className="space-y-4 text-sm">
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Hướng dẫn đăng tin</Link></li>
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Bảng giá dịch vụ</Link></li>
-              <li><Link href="#" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Liên hệ hỗ trợ</Link></li>
+              <li><Link href="/huong-dan" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Hướng dẫn đăng tin</Link></li>
+              <li><Link href="/bang-gia" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Bảng giá dịch vụ</Link></li>
+              <li><Link href="/lien-he" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Liên hệ hỗ trợ</Link></li>
             </ul>
           </div>
 
