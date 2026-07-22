@@ -11,7 +11,8 @@ export default function AdminSidebar() {
     { href: '/admin', label: 'Tổng quan', icon: Home, exact: true },
     { href: '/admin/posts', label: 'Duyệt bài đăng', icon: FileText, exact: false },
     { href: '/admin/users', label: 'Quản lý CTV', icon: Users, exact: false },
-    { href: '/admin/leads', label: 'Quản lý Khách hàng', icon: MessageCircle, exact: false },
+    { href: '/admin/customers', label: 'Quản lý Khách hàng', icon: Users, exact: false },
+    { href: '/admin/leads', label: 'Quản lý Tin nhắn', icon: MessageCircle, exact: false },
     { href: '/admin/settings', label: 'Cấu hình Web', icon: Settings, exact: false },
   ];
 
