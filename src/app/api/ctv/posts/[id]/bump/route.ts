@@ -18,35 +18,31 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const resolvedParams = await params;
     const postId = resolvedParams.id;
 
-    // Check user wallet
+    // Check user package
     const user = await User.findById(session.user.id);
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    if ((user.wallet_balance || 0) < BUMP_FEE) {
-      return NextResponse.json({ message: `Số dư không đủ. Phí đẩy tin là ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(BUMP_FEE)}` }, { status: 400 });
+    const userPackage = user.package || 'Basic';
+    if (userPackage === 'Basic') {
+      return NextResponse.json({ message: 'Gói Cơ bản không hỗ trợ đẩy tin. Vui lòng nâng cấp gói Pro hoặc VIP!' }, { status: 403 });
     }
 
-    // Verify post belongs to this CTV and is Active
+    // Verify post belongs to this CTV
     const post = await Post.findById(postId);
     if (!post || post.ctv_id.toString() !== session.user.id) {
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    if (post.status !== 'Active') {
-      return NextResponse.json({ message: 'Chỉ có thể đẩy các tin đang hoạt động' }, { status: 400 });
-    }
-
-    // Deduct fee and update post
-    user.wallet_balance -= BUMP_FEE;
-    await user.save();
-
+    // Cập nhật thời gian đẩy tin
     post.bumped_at = new Date();
-    post.is_vip = true; // Có thể set VIP nếu muốn, hoặc chỉ cập nhật bumped_at
+    if (userPackage === 'VIP') {
+      post.is_vip = true;
+    }
     await post.save();
 
-    return NextResponse.json({ message: 'Đẩy tin thành công', balance: user.wallet_balance }, { status: 200 });
+    return NextResponse.json({ message: 'Đẩy tin thành công!' }, { status: 200 });
   } catch (error: any) {
     console.error('Bump post error:', error);
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });

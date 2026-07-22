@@ -7,7 +7,7 @@ import Post from '@/models/Post';
 import User from '@/models/User';
 import { revalidatePath } from 'next/cache';
 
-const BUMP_FEE = 10000;
+// No BUMP_FEE anymore
 
 export async function bumpPostAction(postId: string): Promise<{ success: boolean; message: string }> {
   try {
@@ -18,14 +18,15 @@ export async function bumpPostAction(postId: string): Promise<{ success: boolean
 
     await connectDB();
     
-    // Tìm CTV và kiểm tra số dư
+    // Check user package
     const ctv = await User.findById(session.user.id);
     if (!ctv) {
       return { success: false, message: 'Người dùng không tồn tại' };
     }
 
-    if (ctv.wallet_balance < BUMP_FEE) {
-      return { success: false, message: 'Số dư không đủ. Vui lòng nạp thêm tiền.' };
+    const userPackage = ctv.package || 'Basic';
+    if (userPackage === 'Basic') {
+      return { success: false, message: 'Gói Cơ bản không hỗ trợ đẩy tin. Vui lòng nâng cấp gói Pro hoặc VIP!' };
     }
 
     // Cập nhật post
@@ -34,17 +35,16 @@ export async function bumpPostAction(postId: string): Promise<{ success: boolean
       return { success: false, message: 'Bài đăng không tồn tại' };
     }
 
-    if (post.status !== 'Active') {
-      return { success: false, message: 'Chỉ có thể đẩy bài đăng đang hiển thị' };
+    if (post.approval_status !== 'Approved' || post.rental_status !== 'Available') {
+      return { success: false, message: 'Chỉ có thể đẩy bài đăng đang xuất bản' };
     }
 
-    // Trừ tiền và cập nhật post
-    ctv.wallet_balance -= BUMP_FEE;
-    await ctv.save();
-
-    post.is_vip = true;
-    post.vip_expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // VIP 7 ngày
-    // Làm mới updatedAt để bài nổi lên đầu
+    post.bumped_at = new Date();
+    if (userPackage === 'VIP') {
+      post.is_vip = true;
+    }
+    
+    // Làm mới updatedAt để bài nổi lên đầu (dự phòng)
     post.updatedAt = new Date();
     await post.save();
 

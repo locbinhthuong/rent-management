@@ -3,7 +3,7 @@
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, ShieldCheck, Home, Bath, Maximize, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, ShieldCheck, Home, Bath, Maximize, ChevronLeft, ChevronRight, Crown, Flame } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 interface GlassPropertyCardProps {
@@ -68,9 +68,11 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
       <motion.div
         whileHover={{ scale: 1.02 }}
         className={`relative rounded-2xl overflow-hidden backdrop-blur-xl bg-white/40 border transition-all duration-300 ${
-          isActive 
-            ? 'border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.5)]' 
-            : 'border-emerald-400/60 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]'
+          post.is_vip 
+            ? 'border-amber-400 border-2 shadow-[0_0_40px_rgba(251,191,36,0.3)] ring-1 ring-amber-300'
+            : isActive 
+              ? 'border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.5)]' 
+              : 'border-emerald-400/60 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]'
         }`}
       >
         <div className="block h-full w-full">
@@ -114,8 +116,20 @@ export default function GlassPropertyCard({ post, onMouseEnter, onMouseLeave, is
             )}
 
             {/* Badges */}
-            <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-900 tracking-wide uppercase shadow-sm z-20 pointer-events-none">
-              {post.property_type || 'PHÒNG TRỌ'}
+            <div className="absolute top-3 left-3 flex flex-col gap-2 z-20 pointer-events-none">
+              {post.is_vip && (
+                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-wide uppercase shadow-md flex items-center gap-1 border border-amber-300">
+                  <Crown className="w-3.5 h-3.5" /> VIP
+                </div>
+              )}
+              {post.bumped_at && !post.is_vip && (
+                <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-wide uppercase shadow-md flex items-center gap-1 border border-orange-400">
+                  <Flame className="w-3.5 h-3.5" /> HOT
+                </div>
+              )}
+              <div className="bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-900 tracking-wide uppercase shadow-sm">
+                {post.property_type || 'PHÒNG TRỌ'}
+              </div>
             </div>
             
             {post.is_verified && (

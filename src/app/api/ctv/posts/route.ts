@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
 import Post from '@/models/Post';
+import User from '@/models/User';
 import { postService } from '@/services/post.service';
 
 export async function POST(req: Request) {
@@ -15,6 +16,26 @@ export async function POST(req: Request) {
 
     await connectDB();
     const data = await req.json();
+
+    // Check Package limits for CTV
+    let isVip = false;
+    if (session.user.role === 'CTV') {
+      const user = await User.findById(session.user.id);
+      const userPackage = user?.package || 'Basic';
+      
+      // If basic, enforce limit of 5 posts
+      if (userPackage === 'Basic') {
+        const postCount = await Post.countDocuments({ ctv_id: session.user.id });
+        if (postCount >= 5) {
+          return NextResponse.json({ message: 'Bạn đã hết lượt đăng miễn phí (tối đa 5 bài). Vui lòng nâng cấp gói để đăng thêm!' }, { status: 403 });
+        }
+      }
+
+      // Check VIP status
+      if (userPackage === 'VIP') {
+        isVip = true;
+      }
+    }
 
     // Bắt buộc một số trường
     if (!data.title || !data.description || !data.price || !data.address) {
@@ -41,6 +62,7 @@ export async function POST(req: Request) {
       amenities: data.amenities || [],
       approval_status: 'Pending', // Mặc định phải chờ Admin duyệt
       rental_status: 'Available',
+      is_vip: isVip,
     };
 
     if (data.location && Array.isArray(data.location.coordinates)) {

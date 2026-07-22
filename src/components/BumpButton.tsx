@@ -10,7 +10,7 @@ export default function BumpButton({ postId, isVip }: { postId: string, isVip?: 
   const [isPending, startTransition] = useTransition();
 
   const handleBump = async () => {
-    if (!confirm('Bạn có chắc chắn muốn đẩy tin này với phí 10,000 VNĐ không?')) return;
+    if (!confirm('Xác nhận đẩy tin này lên đầu danh sách?')) return;
     
     startTransition(async () => {
       const res = await bumpPostAction(postId);
@@ -28,10 +28,10 @@ export default function BumpButton({ postId, isVip }: { postId: string, isVip?: 
       disabled={isPending}
       variant={isVip ? 'outline' : 'default'}
       className={`ml-3 rounded-lg text-xs font-bold flex items-center gap-1 transition ${isVip ? 'bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200' : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'}`}
-      title="Đẩy tin lên đầu (Phí 10K)"
+      title="Đẩy tin lên đầu"
     >
       {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUpCircle className="w-4 h-4" />}
-      {isPending ? 'Đang xử lý...' : (isVip ? 'Gia hạn VIP' : 'Đẩy tin (10K)')}
+      {isPending ? 'Đang xử lý...' : 'Đẩy tin'}
     </Button>
   );
 }
