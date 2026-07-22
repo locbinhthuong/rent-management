@@ -6,11 +6,13 @@ import User from '@/models/User';
 import Transaction from '@/models/Transaction';
 import { PayOS } from '@payos/node';
 
-const payos = new PayOS(
-  process.env.PAYOS_CLIENT_ID || '',
-  process.env.PAYOS_API_KEY || '',
-  process.env.PAYOS_CHECKSUM_KEY || ''
-);
+const getPayOS = () => {
+  return new PayOS(
+    process.env.PAYOS_CLIENT_ID || 'dummy',
+    process.env.PAYOS_API_KEY || 'dummy',
+    process.env.PAYOS_CHECKSUM_KEY || 'dummy'
+  );
+};
 
 export async function POST(req: Request) {
   try {
@@ -55,6 +57,7 @@ export async function POST(req: Request) {
       cancelUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/bang-gia`,
     };
 
+    const payos = getPayOS();
     const paymentLinkRes = await payos.createPaymentLink(body);
 
     return NextResponse.json({ checkoutUrl: paymentLinkRes.checkoutUrl }, { status: 200 });
