@@ -79,22 +79,24 @@ export default async function Footer() {
                 <span>Email: {contact.email || 'locushomels@gmail.com'}</span>
               </li>
             </ul>
-            <div className="flex gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-2">
               {contact.zalo && (
-                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-[0_4px_15px_rgba(59,130,246,0.3)] transition-all duration-300 group">
-                  <span className="font-bold text-xs group-hover:scale-110 transition-transform tracking-tight">Zalo</span>
+                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-[0_4px_15px_rgba(59,130,246,0.4)] transition-all duration-300 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
+                    <path d="M21.731 11.65c0-3.704-3.52-6.705-7.865-6.705-4.343 0-7.864 3.001-7.864 6.705 0 3.702 3.52 6.703 7.864 6.703.953 0 1.867-.146 2.713-.414l3.3.99c.319.1.63-.173.495-.467l-1.103-2.42c1.516-1.066 2.46-2.463 2.46-4.392z"/>
+                  </svg>
                 </a>
               )}
               {contact.facebook && (
-                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-[0_4px_15px_rgba(79,70,229,0.3)] transition-all duration-300 group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="group-hover:scale-110 transition-transform">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-[0_4px_15px_rgba(79,70,229,0.4)] transition-all duration-300 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
+                    <path d="M16.39 23.61v-9.3h3.12l.47-3.62h-3.59v-2.31c0-1.04.29-1.76 1.79-1.76h1.91V3.38c-.33-.04-1.47-.14-2.79-.14-2.76 0-4.65 1.69-4.65 4.79v2.66H9.52v3.62h3.13v9.3h3.74z"/>
                   </svg>
                 </a>
               )}
               {contact.tiktok && (
-                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="group-hover:scale-110 transition-transform">
+                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all duration-300 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
                     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68l.01.2a6.29 6.29 0 0 0 4.13 5.86 6.3 6.3 0 0 0 7.82-3.13 6.42 6.42 0 0 0 .5-3V8.71a8.3 8.3 0 0 0 3.19.64V5.9a4.85 4.85 0 0 1-1.06-.06z"/>
                   </svg>
                 </a>
