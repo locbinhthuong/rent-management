@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, MessageSquare, User, Crown, Menu, X, Users } from 'lucide-react';
+import { Home, FileText, PlusCircle, Crown, MessageCircle, User, ExternalLink, Menu, X, Users } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function CTVMobileNav() {
@@ -11,12 +11,14 @@ export default function CTVMobileNav() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { href: '/ctv', label: 'Tổng quan', icon: LayoutDashboard, exact: true },
-    { href: '/ctv/posts', label: 'Tin đăng', icon: FileText, exact: false },
-    { href: '/bang-gia', label: 'Dịch vụ', icon: Crown, exact: false },
-    { href: '/ctv/customers', label: 'Tư vấn', icon: MessageSquare, exact: false },
-    { href: '/ctv/contracts', label: 'Hợp đồng', icon: FileText, exact: false },
-    { href: '/ctv/account', label: 'Hồ sơ', icon: User, exact: false },
+    { href: '/ctv', label: 'Tổng quan', icon: Home, exact: true },
+    { href: '/ctv/posts', label: 'Quản lý tin đăng', icon: FileText, exact: true },
+    { href: '/ctv/post', label: 'Đăng phòng mới', icon: PlusCircle, exact: true },
+    { href: '/bang-gia', label: 'Mua dịch vụ', icon: Crown, exact: false },
+    { href: '/ctv/customers', label: 'Khách liên hệ', icon: MessageCircle, exact: false },
+    { href: '/ctv/contracts', label: 'Hợp đồng thuê', icon: FileText, exact: false },
+    { href: '/ctv/account', label: 'Hồ sơ CTV', icon: User, exact: false },
+    { href: '/', label: 'Trang chủ Khách', icon: ExternalLink, exact: true },
   ];
 
   return (

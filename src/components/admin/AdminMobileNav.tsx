@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, FileText, Settings, MessageCircle, Menu, X, ShieldAlert } from 'lucide-react';
+import { Home, Users, FileText, Settings, MessageCircle, LifeBuoy, Menu, X, ShieldAlert } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function AdminMobileNav() {
@@ -12,10 +12,12 @@ export default function AdminMobileNav() {
 
   const navLinks = [
     { href: '/admin', label: 'Tổng quan', icon: Home, exact: true },
-    { href: '/admin/posts', label: 'Bài đăng', icon: FileText, exact: false },
-    { href: '/admin/users', label: 'CTV', icon: Users, exact: false },
-    { href: '/admin/leads', label: 'Khách', icon: MessageCircle, exact: false },
-    { href: '/admin/settings', label: 'Cài đặt', icon: Settings, exact: false },
+    { href: '/admin/posts', label: 'Duyệt bài đăng', icon: FileText, exact: false },
+    { href: '/admin/users', label: 'Quản lý CTV', icon: Users, exact: false },
+    { href: '/admin/customers', label: 'Quản lý Khách hàng', icon: Users, exact: false },
+    { href: '/admin/leads', label: 'Quản lý Tin nhắn', icon: MessageCircle, exact: false },
+    { href: '/admin/support', label: 'Yêu cầu hỗ trợ', icon: LifeBuoy, exact: false },
+    { href: '/admin/settings', label: 'Cấu hình Web', icon: Settings, exact: false },
   ];
 
   return (
