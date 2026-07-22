@@ -14,10 +14,11 @@ export default function Footer() {
           {/* Về chúng tôi */}
           <div className="space-y-6">
             <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">Locus</span>
+              <img src="/logo.png" alt="Locushome Logo" className="w-8 h-8 object-contain rounded-full" />
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">Locushome</span>
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Nền tảng kết nối người cho thuê và người đi thuê phòng trọ. Cung cấp thông tin trực quan, chính xác với giao diện hiện đại và hệ thống quản lý chuyên nghiệp.
+              <strong>Hệ thống Tìm Phòng Trọ Thông Minh</strong> – Nền tảng kết nối người thuê và chủ trọ <strong>miễn phí</strong>, giúp tìm kiếm phòng trọ <strong>nhanh chóng, thông minh, uy tín và chuyên nghiệp</strong>, mang đến giải pháp tìm nơi ở an toàn, tiện lợi và hiệu quả.
             </p>
             <div className="flex gap-3 pt-2">
               <a href="#" className="w-12 h-12 rounded-2xl bg-slate-200/50 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-indigo-500 hover:text-slate-900 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] transition-all duration-300 group">
