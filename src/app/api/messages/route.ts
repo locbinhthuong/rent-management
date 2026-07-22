@@ -58,6 +58,31 @@ export async function POST(req: Request) {
 
     await lead.save();
 
+    // Gửi thông báo cho các bên liên quan
+    const Notification = (await import('@/models/Notification')).default;
+    
+    if (role === 'Customer') {
+      // Báo cho CTV
+      await Notification.create({
+        user_id: lead.ctv_id,
+        title: 'Tin nhắn mới từ khách hàng',
+        content: `Bạn có tin nhắn mới từ khách hàng liên quan đến bài đăng phòng.`,
+        type: 'Lead',
+        link: `/admin/leads` // Admin or CTV can access leads
+      });
+    } else if (role === 'CTV' || role === 'Admin') {
+      // Báo cho khách hàng nếu có
+      if (lead.customer_id) {
+        await Notification.create({
+          user_id: lead.customer_id,
+          title: 'Có tin nhắn mới từ chủ phòng',
+          content: `Chủ phòng vừa trả lời tin nhắn của bạn.`,
+          type: 'Lead',
+          link: `/messages/${lead._id}`
+        });
+      }
+    }
+
     return NextResponse.json({ message: newMessage }, { status: 201 });
 
   } catch (error: any) {

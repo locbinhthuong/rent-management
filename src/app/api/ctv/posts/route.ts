@@ -50,6 +50,23 @@ export async function POST(req: Request) {
     // Tạo Post mới thông qua Service
     const newPost = await postService.createPost(postPayload);
 
+    // Thông báo cho tất cả Admin
+    if (session.user.role === 'CTV') {
+      const User = (await import('@/models/User')).default;
+      const Notification = (await import('@/models/Notification')).default;
+      const admins = await User.find({ role: 'Admin' });
+      if (admins.length > 0) {
+        const notifications = admins.map(admin => ({
+          user_id: admin._id,
+          title: 'Bài đăng mới cần duyệt',
+          content: `Cộng tác viên ${session.user.name || 'ẩn danh'} vừa gửi yêu cầu đăng phòng mới.`,
+          type: 'Post',
+          link: `/admin/posts`
+        }));
+        await Notification.insertMany(notifications);
+      }
+    }
+
     return NextResponse.json({ message: 'Tạo bài đăng thành công', post: newPost }, { status: 201 });
   } catch (error: any) {
     console.error('Create post error:', error);
