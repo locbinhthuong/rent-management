@@ -61,7 +61,7 @@ export default function AdminSupportPage() {
   }
 
   return (
-    <div>
+    <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Yêu cầu hỗ trợ</h1>
@@ -244,6 +244,6 @@ export default function AdminSupportPage() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }
