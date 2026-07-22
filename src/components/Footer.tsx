@@ -103,7 +103,7 @@ export default async function Footer() {
         </div>
 
         <div className="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} <span className="text-slate-700 font-medium">Locushomee.com</span>. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} <span className="text-slate-700 font-medium">LOCUS</span>. All rights reserved.</p>
           <div className="flex items-center gap-1.5">
             Nền tảng tìm phòng thông minh <span className="text-amber-500 animate-pulse">✨</span>
           </div>

@@ -31,7 +31,7 @@ export default function LocusLogo({ className = "", width = 55, height = 55, var
       <div className={`flex items-center gap-2 ${className}`}>
         {Icon}
         <span className="font-sans font-black text-slate-900 text-lg md:text-xl tracking-tight leading-none uppercase">
-          2026 <span className="text-cyan-500">LOCUS</span>
+          LOCUS<span className="text-cyan-500">HOME</span>
         </span>
       </div>
     );
@@ -41,7 +41,7 @@ export default function LocusLogo({ className = "", width = 55, height = 55, var
     <div className={`flex flex-col items-center justify-center gap-2 ${className}`}>
       {Icon}
       <span className="font-sans font-black text-slate-900 text-2xl tracking-tight leading-none uppercase">
-        2026 <span className="text-cyan-500">LOCUS</span>
+        LOCUS<span className="text-cyan-500">HOME</span>
       </span>
     </div>
   );
