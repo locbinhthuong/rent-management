@@ -7,6 +7,7 @@ import { signIn, getSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import LocusLogo from '@/components/LocusLogo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -151,17 +152,17 @@ export default function LoginPage() {
       <div className="relative z-10 max-w-[420px] w-full rounded-3xl overflow-hidden backdrop-blur-xl bg-slate-200 border border-slate-300 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
         
         {/* Header Section */}
-        <div className="p-8 text-center border-b border-slate-200 relative overflow-hidden">
+        <div className="p-8 pb-6 text-center border-b border-slate-200 relative overflow-hidden flex flex-col items-center">
           {/* Glow Effect */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-indigo-500/50 rounded-full blur-[50px] -z-10" />
           
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-slate-300">
-            <ShieldCheck className="w-8 h-8 text-slate-900" />
+          <div className="mb-4">
+            <LocusLogo width={50} height={50} variant="horizontal" className="scale-110" />
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight mt-2">
             {showVerification ? 'Xác thực Email' : isLogin ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}
           </h1>
-          <p className="text-slate-500 text-sm mt-2 font-medium">
+          <p className="text-slate-500 text-sm mt-1.5 font-medium">
             Truy cập nền tảng môi giới hiện đại nhất
           </p>
         </div>
