@@ -18,16 +18,15 @@ export const dynamic = 'force-dynamic';
 
 function PostsSkeleton() {
   return (
-    <div className="p-4 space-y-6 max-w-5xl mx-auto w-full animate-pulse">
-      <CTVMobileHeader />
-      <div className="h-20 bg-slate-100 rounded-2xl"></div>
-      <div className="h-64 bg-slate-100 rounded-2xl"></div>
-      <div className="h-64 bg-slate-100 rounded-2xl"></div>
+    <div className="space-y-4 animate-pulse">
+      <div className="h-64 bg-slate-200/50 rounded-2xl"></div>
+      <div className="h-64 bg-slate-200/50 rounded-2xl"></div>
+      <div className="h-64 bg-slate-200/50 rounded-2xl"></div>
     </div>
   );
 }
 
-async function CTVPostsContent({ userId, searchParams }: { userId: string, searchParams: any }) {
+async function PostsList({ userId, searchParams }: { userId: string, searchParams: any }) {
   await connectDB();
   
   const resolvedParams = await searchParams;
@@ -65,25 +64,6 @@ async function CTVPostsContent({ userId, searchParams }: { userId: string, searc
   }, {});
 
   return (
-    <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto w-full">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Quản lý tin đăng</h1>
-        <p className="text-slate-600 text-sm mt-1">Xem, chỉnh sửa và cập nhật trạng thái các phòng bạn đã đăng.</p>
-      </div>
-
-      <Link 
-        href="/ctv/post"
-        className="w-full bg-blue-600 hover:bg-blue-500 text-slate-900 py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-blue-600/20"
-      >
-        <Plus className="w-5 h-5" />
-        Đăng tin mới
-      </Link>
-
-      {/* Filter and Search Container */}
-      <CTVPostsFilter />
-
-      {/* Posts List */}
       <div className="space-y-4">
         {posts.length === 0 ? (
           <div className="p-8 text-center flex flex-col items-center justify-center gap-4 bg-white/80 rounded-2xl border border-slate-200">
@@ -181,9 +161,29 @@ export default async function CTVPostsPage({ searchParams }: { searchParams: any
 
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0 bg-slate-50">
-        <Suspense key={suspenseKey} fallback={<PostsSkeleton />}>
-          <CTVPostsContent userId={session.user.id} searchParams={searchParams} />
-        </Suspense>
+        <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto w-full">
+          <CTVMobileHeader />
+          {/* Header */}
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 font-space tracking-wide">Quản lý tin đăng</h1>
+            <p className="text-slate-600 text-sm mt-1">Xem, chỉnh sửa và cập nhật trạng thái các phòng bạn đã đăng.</p>
+          </div>
+
+          <Link 
+            href="/ctv/post"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-blue-600/20"
+          >
+            <Plus className="w-5 h-5" />
+            Đăng tin mới
+          </Link>
+
+          {/* Filter and Search Container */}
+          <CTVPostsFilter />
+
+          <Suspense key={suspenseKey} fallback={<PostsSkeleton />}>
+            <PostsList userId={session.user.id} searchParams={searchParams} />
+          </Suspense>
+        </div>
       </main>
   );
 }
