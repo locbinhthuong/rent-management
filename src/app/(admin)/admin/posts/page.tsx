@@ -65,12 +65,15 @@ async function PostsDataWrapper({ searchParams }: { searchParams: { [key: string
   return <PostsTable initialPosts={serializedPosts} />;
 }
 
-export default async function AdminPostsPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+export default async function AdminPostsPage({ searchParams }: { searchParams: { [key: string]: string | undefined } | Promise<{ [key: string]: string | undefined }> }) {
   const session = await getServerSession(authOptions);
   
   if (!session || session.user.role !== 'Admin') {
     redirect('/login');
   }
+
+  const resolvedParams = await searchParams;
+  const suspenseKey = JSON.stringify(resolvedParams || {});
 
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
@@ -88,7 +91,7 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: {
               </h3>
             </div>
             
-            <Suspense fallback={
+            <Suspense key={suspenseKey} fallback={
               <div className="flex justify-center items-center p-12">
                 <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
                 <span className="ml-3 text-slate-500 font-medium">Đang tải dữ liệu...</span>

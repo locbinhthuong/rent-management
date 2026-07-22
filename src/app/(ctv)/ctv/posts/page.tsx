@@ -176,9 +176,12 @@ export default async function CTVPostsPage({ searchParams }: { searchParams: any
     redirect('/login');
   }
 
+  const resolvedParams = await searchParams;
+  const suspenseKey = JSON.stringify(resolvedParams || {});
+
   return (
       <main className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10 pb-24 md:pb-0 bg-slate-50">
-        <Suspense fallback={<PostsSkeleton />}>
+        <Suspense key={suspenseKey} fallback={<PostsSkeleton />}>
           <CTVPostsContent userId={session.user.id} searchParams={searchParams} />
         </Suspense>
       </main>
