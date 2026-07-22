@@ -83,9 +83,7 @@ export default async function Footer() {
               {/* Zalo */}
               {contact.zalo && (
                 <a href={contact.zalo.startsWith('http') ? contact.zalo : `https://zalo.me/${contact.zalo.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" title="Zalo" className="w-10 h-10 rounded-full bg-[#0068FF] border border-[#0068FF] flex items-center justify-center text-white hover:bg-[#005AE0] hover:shadow-[0_4px_15px_rgba(0,104,255,0.4)] transition-all duration-300 group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
-                    <path d="M21.731 11.65c0-3.704-3.52-6.705-7.865-6.705-4.343 0-7.864 3.001-7.864 6.705 0 3.702 3.52 6.703 7.864 6.703.953 0 1.867-.146 2.713-.414l3.3.99c.319.1.63-.173.495-.467l-1.103-2.42c1.516-1.066 2.46-2.463 2.46-4.392z"/>
-                  </svg>
+                  <span className="font-bold text-[13px] tracking-tight group-hover:scale-110 transition-transform">Zalo</span>
                 </a>
               )}
               {/* Facebook */}
