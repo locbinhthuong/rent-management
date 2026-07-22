@@ -21,7 +21,7 @@ export default function LocusLogo({ className = "", width = 55, height = 55, var
         alt="2026 LOCUS" 
         fill
         sizes={`${parsedWidth}px`}
-        className="object-contain scale-[1.6] origin-center"
+        className="object-contain scale-[2.2] origin-center"
       />
     </div>
   );
