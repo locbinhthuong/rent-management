@@ -30,25 +30,26 @@ function PostsSkeleton() {
 async function CTVPostsContent({ userId, searchParams }: { userId: string, searchParams: any }) {
   await connectDB();
   
+  const resolvedParams = await searchParams;
   let query: any = { ctv_id: userId };
   
-  if (searchParams?.status && searchParams.status !== 'All') {
-    if (searchParams.status === 'Active') {
+  if (resolvedParams?.status && resolvedParams.status !== 'All') {
+    if (resolvedParams.status === 'Active') {
       query.approval_status = 'Approved';
       query.rental_status = 'Available';
     }
-    else if (searchParams.status === 'Pending') query.approval_status = 'Pending';
-    else if (searchParams.status === 'Expired') query.approval_status = 'Rejected';
+    else if (resolvedParams.status === 'Pending') query.approval_status = 'Pending';
+    else if (resolvedParams.status === 'Expired') query.approval_status = 'Rejected';
   }
   
-  if (searchParams?.q) {
+  if (resolvedParams?.q) {
     query.$or = [
-      { title: { $regex: searchParams.q, $options: 'i' } },
-      { address: { $regex: searchParams.q, $options: 'i' } },
-      { description: { $regex: searchParams.q, $options: 'i' } },
-      { district: { $regex: searchParams.q, $options: 'i' } },
-      { city: { $regex: searchParams.q, $options: 'i' } },
-      { ward: { $regex: searchParams.q, $options: 'i' } }
+      { title: { $regex: resolvedParams.q, $options: 'i' } },
+      { address: { $regex: resolvedParams.q, $options: 'i' } },
+      { description: { $regex: resolvedParams.q, $options: 'i' } },
+      { district: { $regex: resolvedParams.q, $options: 'i' } },
+      { city: { $regex: resolvedParams.q, $options: 'i' } },
+      { ward: { $regex: resolvedParams.q, $options: 'i' } }
     ];
   }
 

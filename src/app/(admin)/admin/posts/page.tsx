@@ -14,35 +14,35 @@ export const dynamic = 'force-dynamic';
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
 
-async function PostsDataWrapper({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+async function PostsDataWrapper({ searchParams }: { searchParams: { [key: string]: string | undefined } | Promise<{ [key: string]: string | undefined }> }) {
   await connectDB();
   User.init();
   
+  const resolvedParams = await searchParams;
   const query: any = {};
-  if (searchParams?.q) {
+  
+  if (resolvedParams?.q) {
     query.$or = [
-      { title: { $regex: searchParams.q, $options: 'i' } },
-      { address: { $regex: searchParams.q, $options: 'i' } },
-      { description: { $regex: searchParams.q, $options: 'i' } },
-      { district: { $regex: searchParams.q, $options: 'i' } },
-      { city: { $regex: searchParams.q, $options: 'i' } },
-      { ward: { $regex: searchParams.q, $options: 'i' } }
+      { title: { $regex: resolvedParams.q, $options: 'i' } },
+      { address: { $regex: resolvedParams.q, $options: 'i' } },
+      { description: { $regex: resolvedParams.q, $options: 'i' } },
+      { phone: { $regex: resolvedParams.q, $options: 'i' } }
     ];
   }
-  if (searchParams?.room_type) {
-    query.property_type = searchParams.room_type;
+  if (resolvedParams?.room_type) {
+    query.property_type = resolvedParams.room_type;
   }
-  if (searchParams?.district) {
+  if (resolvedParams?.district) {
     query.$or = query.$or || [];
     query.$or.push(
-      { district: searchParams.district },
-      { address: { $regex: searchParams.district, $options: 'i' } }
+      { district: resolvedParams.district },
+      { address: { $regex: resolvedParams.district, $options: 'i' } }
     );
   }
-  if (searchParams?.priceRange) {
-    if (searchParams.priceRange === 'under_2m') query.price = { $lt: 2000000 };
-    if (searchParams.priceRange === '2m_to_4m') query.price = { $gte: 2000000, $lte: 4000000 };
-    if (searchParams.priceRange === 'over_4m') query.price = { $gt: 4000000 };
+  if (resolvedParams?.priceRange) {
+    if (resolvedParams.priceRange === 'under_2m') query.price = { $lt: 2000000 };
+    if (resolvedParams.priceRange === '2m_to_4m') query.price = { $gte: 2000000, $lte: 4000000 };
+    if (resolvedParams.priceRange === 'over_4m') query.price = { $gt: 4000000 };
   }
 
   // Fetch Posts
