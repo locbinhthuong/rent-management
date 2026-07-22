@@ -23,7 +23,7 @@ export default function MainHeader({ user }: { user: any }) {
 
   const supportLinks = [
     { name: 'Hướng dẫn đăng tin', href: '/huong-dan' },
-    { name: 'Bảng giá dịch vụ', href: '/bang-gia' },
+    // { name: 'Bảng giá dịch vụ', href: '/bang-gia' },
     { name: 'Liên hệ hỗ trợ', href: '/lien-he' },
   ];
 

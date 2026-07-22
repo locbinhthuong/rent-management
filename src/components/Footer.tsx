@@ -49,7 +49,7 @@ export default async function Footer() {
             <h3 className="text-lg font-bold text-slate-900 tracking-wide">Hỗ trợ khách hàng</h3>
             <ul className="space-y-4 text-sm">
               <li><Link href="/huong-dan" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Hướng dẫn đăng tin</Link></li>
-              <li><Link href="/bang-gia" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Bảng giá dịch vụ</Link></li>
+              {/* <li><Link href="/bang-gia" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Bảng giá dịch vụ</Link></li> */}
               <li><Link href="/lien-he" className="text-slate-600 hover:text-indigo-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" /> Liên hệ hỗ trợ</Link></li>
             </ul>
           </div>
