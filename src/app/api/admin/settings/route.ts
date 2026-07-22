@@ -15,7 +15,15 @@ export async function GET() {
       config = await SystemConfig.create({
         announcement: { text: '', isActive: false },
         propertyTypes: ['Phòng trọ', 'Chung cư mini', 'Nhà nguyên căn', 'Mặt bằng'],
-        locations: []
+        locations: [],
+        contact: {
+          hotline: '0988.727.604',
+          zalo: 'https://zalo.me/0988727604',
+          facebook: 'https://facebook.com/',
+          tiktok: 'https://tiktok.com/',
+          email: 'locushomels@gmail.com',
+          address: 'Trụ sở chính (Đang cập nhật)'
+        }
       });
     }
 
@@ -51,6 +59,7 @@ export async function PUT(req: NextRequest) {
     if (data.announcement !== undefined) config.announcement = data.announcement;
     if (data.propertyTypes !== undefined) config.propertyTypes = data.propertyTypes;
     if (data.locations !== undefined) config.locations = data.locations;
+    if (data.contact !== undefined) config.contact = data.contact;
 
     await config.save();
 

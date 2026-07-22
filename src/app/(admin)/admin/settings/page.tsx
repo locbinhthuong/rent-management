@@ -14,6 +14,14 @@ export default function SettingsPage() {
   const [locations, setLocations] = useState<string[]>([]);
   const [newPropertyType, setNewPropertyType] = useState('');
   const [newLocation, setNewLocation] = useState('');
+  const [contact, setContact] = useState({
+    hotline: '',
+    zalo: '',
+    facebook: '',
+    tiktok: '',
+    email: '',
+    address: ''
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ['system-config'],
@@ -30,6 +38,9 @@ export default function SettingsPage() {
       setAnnouncementActive(data.config.announcement.isActive);
       setPropertyTypes(data.config.propertyTypes || []);
       setLocations(data.config.locations || []);
+      if (data.config.contact) {
+        setContact(data.config.contact);
+      }
     }
   }, [data]);
 
@@ -54,6 +65,7 @@ export default function SettingsPage() {
       announcement: { text: announcementText, isActive: announcementActive },
       propertyTypes,
       locations,
+      contact
     });
   };
 
@@ -198,6 +210,78 @@ export default function SettingsPage() {
                 </div>
               )}
             </div>
+
+            {/* Liên hệ và Theo dõi */}
+            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 lg:col-span-2">
+              <div className="flex items-center gap-3 mb-4 text-indigo-400 font-bold text-lg">
+                <MessageCircle className="w-5 h-5" /> Cấu hình Liên hệ & Theo dõi
+              </div>
+              <p className="text-sm text-slate-600 mb-6">Thông tin này sẽ hiển thị ở cuối trang web (Footer).</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">Trụ sở chính</label>
+                  <input 
+                    type="text" 
+                    value={contact.address}
+                    onChange={(e) => setContact({...contact, address: e.target.value})}
+                    placeholder="VD: 123 Đường ABC, Quận 1..."
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-indigo-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">Hotline</label>
+                  <input 
+                    type="text" 
+                    value={contact.hotline}
+                    onChange={(e) => setContact({...contact, hotline: e.target.value})}
+                    placeholder="VD: 0988.727.604"
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-indigo-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">Email</label>
+                  <input 
+                    type="email" 
+                    value={contact.email}
+                    onChange={(e) => setContact({...contact, email: e.target.value})}
+                    placeholder="VD: locushomels@gmail.com"
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-indigo-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">Zalo (Link hoặc Số)</label>
+                  <input 
+                    type="text" 
+                    value={contact.zalo}
+                    onChange={(e) => setContact({...contact, zalo: e.target.value})}
+                    placeholder="VD: https://zalo.me/0988727604"
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-indigo-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">Facebook (Link)</label>
+                  <input 
+                    type="text" 
+                    value={contact.facebook}
+                    onChange={(e) => setContact({...contact, facebook: e.target.value})}
+                    placeholder="VD: https://facebook.com/..."
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-indigo-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-800 mb-2">TikTok (Link)</label>
+                  <input 
+                    type="text" 
+                    value={contact.tiktok}
+                    onChange={(e) => setContact({...contact, tiktok: e.target.value})}
+                    placeholder="VD: https://tiktok.com/@..."
+                    className="w-full px-4 py-2 bg-white border border-slate-300 text-slate-900 rounded-lg outline-none focus:border-indigo-500/50"
+                  />
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </main>

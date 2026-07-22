@@ -1,7 +1,17 @@
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
+import connectDB from '@/lib/db';
+import SystemConfig from '@/models/SystemConfig';
 
-export default function LienHePage() {
+export default async function LienHePage() {
+  await connectDB();
+  const config = await SystemConfig.findOne().lean();
+  const contact = config?.contact || {
+    hotline: '0988.727.604',
+    email: 'locushomels@gmail.com',
+    address: 'Trụ sở chính (Đang cập nhật)'
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 pt-8 pb-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -62,7 +72,7 @@ export default function LienHePage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-white mb-1">Văn phòng chính</h3>
-                      <p className="text-indigo-200 text-sm leading-relaxed">123 Đường Số 1, Quận 1<br/>TP. Hồ Chí Minh (Đang cập nhật)</p>
+                      <p className="text-indigo-200 text-sm leading-relaxed">{contact.address || '123 Đường Số 1, Quận 1\nTP. Hồ Chí Minh (Đang cập nhật)'}</p>
                     </div>
                   </div>
 
@@ -72,7 +82,7 @@ export default function LienHePage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-white mb-1">Hotline hỗ trợ</h3>
-                      <p className="text-indigo-200 font-medium">0988.727.604</p>
+                      <p className="text-indigo-200 font-medium">{contact.hotline || '0988.727.604'}</p>
                     </div>
                   </div>
 
@@ -82,7 +92,7 @@ export default function LienHePage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-white mb-1">Email</h3>
-                      <p className="text-indigo-200">locushomels@gmail.com</p>
+                      <p className="text-indigo-200">{contact.email || 'locushomels@gmail.com'}</p>
                     </div>
                   </div>
 

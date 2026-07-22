@@ -1,7 +1,20 @@
 import Link from 'next/link';
 import { Phone, Mail, MapPin, ShieldCheck, Globe, MessageCircle } from 'lucide-react';
+import connectDB from '@/lib/db';
+import SystemConfig from '@/models/SystemConfig';
 
-export default function Footer() {
+export default async function Footer() {
+  await connectDB();
+  const config = await SystemConfig.findOne().lean();
+  const contact = config?.contact || {
+    hotline: '0988.727.604',
+    zalo: 'https://zalo.me/0988727604',
+    facebook: 'https://facebook.com/',
+    tiktok: 'https://tiktok.com/',
+    email: 'locushomels@gmail.com',
+    address: 'Trụ sở chính (Đang cập nhật)'
+  };
+
   return (
     <footer className="relative mt-auto overflow-hidden bg-slate-50 text-slate-700 border-t border-slate-200">
       {/* Background Glows */}
@@ -21,12 +34,21 @@ export default function Footer() {
               <strong>Hệ thống Tìm Phòng Trọ Thông Minh</strong> – Nền tảng kết nối người thuê và chủ trọ <strong>miễn phí</strong>, giúp tìm kiếm phòng trọ <strong>nhanh chóng, thông minh, uy tín và chuyên nghiệp</strong>, mang đến giải pháp tìm nơi ở an toàn, tiện lợi và hiệu quả.
             </p>
             <div className="flex gap-3 pt-2">
-              <a href="#" className="w-12 h-12 rounded-2xl bg-slate-200/50 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-indigo-500 hover:text-slate-900 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] transition-all duration-300 group">
-                <Globe className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              </a>
-              <a href="#" className="w-12 h-12 rounded-2xl bg-slate-200/50 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-pink-500 hover:text-slate-900 hover:border-pink-400 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all duration-300 group">
-                <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              </a>
+              {contact.zalo && (
+                <a href={contact.zalo} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-2xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 hover:bg-blue-500 hover:text-white hover:border-blue-400 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300 group">
+                  <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </a>
+              )}
+              {contact.facebook && (
+                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-2xl bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-600 hover:bg-indigo-500 hover:text-white hover:border-indigo-400 hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300 group">
+                  <Globe className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </a>
+              )}
+              {contact.tiktok && (
+                <a href={contact.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-2xl bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-black hover:text-white hover:border-black hover:shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all duration-300 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                </a>
+              )}
             </div>
           </div>
 
@@ -59,19 +81,19 @@ export default function Footer() {
                 <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
                   <MapPin className="w-4 h-4 text-indigo-400" />
                 </div>
-                <span className="pt-1">Trụ sở chính (Đang cập nhật)</span>
+                <span className="pt-1">{contact.address || 'Trụ sở chính (Đang cập nhật)'}</span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
                   <Phone className="w-4 h-4 text-emerald-400" />
                 </div>
-                <span className="font-bold text-slate-900 tracking-wide">Hotline: 0988.727.604</span>
+                <span className="font-bold text-slate-900 tracking-wide">Hotline: {contact.hotline || '0988.727.604'}</span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
                   <Mail className="w-4 h-4 text-violet-400" />
                 </div>
-                <span>Email: locushomels@gmail.com</span>
+                <span>Email: {contact.email || 'locushomels@gmail.com'}</span>
               </li>
             </ul>
           </div>
