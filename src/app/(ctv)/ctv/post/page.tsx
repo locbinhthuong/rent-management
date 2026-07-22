@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft } from 'lucide-react';
+import { MapPin, DollarSign, Home, Bolt, FileText, Users, Image as ImageIcon, Send, ArrowLeft, Maximize } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { getAllProvinces, getDistrictsByProvince } from '@/lib/data/provinces';
