@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Phone, Mail, MapPin, ShieldCheck, Globe, MessageCircle } from 'lucide-react';
 import connectDB from '@/lib/db';
 import SystemConfig from '@/models/SystemConfig';
+import LocusLogo from './LocusLogo';
 
 export default async function Footer() {
   await connectDB();
@@ -26,10 +27,7 @@ export default async function Footer() {
           
           {/* Về chúng tôi */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <img src="/logo.png" alt="Locushome Logo" className="w-8 h-8 object-contain rounded-full" />
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-space">Locushome</span>
-            </h3>
+            <LocusLogo width={45} height={45} variant="horizontal" className="-ml-1.5" />
             <p className="text-sm text-slate-600 leading-relaxed">
               <strong>Hệ thống Tìm Phòng Trọ Thông Minh</strong> – Nền tảng kết nối người thuê và chủ trọ <strong>miễn phí</strong>, giúp tìm kiếm phòng trọ <strong>nhanh chóng, thông minh, uy tín và chuyên nghiệp</strong>, mang đến giải pháp tìm nơi ở an toàn, tiện lợi và hiệu quả.
             </p>
