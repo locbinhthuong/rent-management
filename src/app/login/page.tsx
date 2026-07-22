@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, ShieldCheck, User, Phone, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, ShieldCheck, User, Phone, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { signIn, getSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,6 +31,8 @@ export default function LoginPage() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordStep, setForgotPasswordStep] = useState<1 | 2>(1);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+
+  const [showPasswordVisible, setShowPasswordVisible] = useState(false);
 
   const isFormValid = isLogin 
     ? (email.trim() !== '' && password.trim() !== '')
@@ -329,14 +331,21 @@ export default function LoginPage() {
                         <Lock className="w-5 h-5" />
                       </div>
                       <input
-                        type="password"
+                        type={showPasswordVisible ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
+                        className="w-full pl-11 pr-12 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
                         placeholder="Mật khẩu mới"
                         minLength={6}
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswordVisible(!showPasswordVisible)}
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-900/40 hover:text-indigo-500 transition-colors"
+                      >
+                        {showPasswordVisible ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -494,13 +503,20 @@ export default function LoginPage() {
                   <Lock className="w-5 h-5" />
                 </div>
                 <input
-                  type="password"
+                  type={showPasswordVisible ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
+                  className="w-full pl-11 pr-12 py-3 bg-black/30 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-slate-900 placeholder-white/30 backdrop-blur-sm transition-all"
                   placeholder="Mật khẩu"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordVisible(!showPasswordVisible)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-900/40 hover:text-indigo-500 transition-colors"
+                >
+                  {showPasswordVisible ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
               {isLogin && (
                 <div className="flex justify-end mt-3">
