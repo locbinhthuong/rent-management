@@ -20,7 +20,7 @@ export default async function AdminLeadsPage() {
   }
 
   return (
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-24 md:pb-0">
+      <main className="flex-1 flex flex-col overflow-y-auto pb-10 md:pb-0">
         <header className="bg-white/80 backdrop-blur-xl p-4 md:p-5 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
           <h2 className="text-lg md:text-xl font-bold text-slate-900">Quản lý Tin nhắn (Khách - CTV)</h2>
         </header>

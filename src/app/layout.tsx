@@ -8,6 +8,7 @@ import NextTopLoader from 'nextjs-toploader';
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import SplashScreen from "@/components/SplashScreen";
+import HideOnAdminCTV from "@/components/HideOnAdminCTV";
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -47,8 +48,10 @@ export default function RootLayout({
             <div className="flex-1 flex flex-col pb-[68px] md:pb-0">
               {children}
             </div>
-            <MobileBottomNav />
-            <Footer />
+            <HideOnAdminCTV>
+              <MobileBottomNav />
+              <Footer />
+            </HideOnAdminCTV>
           </ReactQueryProvider>
         </AuthProvider>
         <Toaster />
