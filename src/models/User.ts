@@ -21,6 +21,8 @@ export interface IUser extends Document {
   rating?: number;
   rating_count?: number;
   email_notifications?: boolean;
+  package?: 'Basic' | 'Pro' | 'VIP';
+  packageExpiresAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -47,6 +49,8 @@ const UserSchema: Schema = new Schema(
     rating: { type: Number, default: 0 },
     rating_count: { type: Number, default: 0 },
     email_notifications: { type: Boolean, default: true },
+    package: { type: String, enum: ['Basic', 'Pro', 'VIP'], default: 'Basic' },
+    packageExpiresAt: { type: Date },
   },
   { timestamps: true }
 );

@@ -11,6 +11,7 @@
   "dependencies": {
     "@base-ui/react": "^1.4.1",
     "@hookform/resolvers": "^5.2.2",
+    "@payos/node": "^2.0.5",
     "@tanstack/react-query": "^5.100.9",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",

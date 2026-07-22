@@ -1,7 +1,43 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Check, Sparkles, Zap, Gem } from 'lucide-react';
+import { ArrowLeft, Check, Sparkles, Zap, Gem, Loader2 } from 'lucide-react';
 
 export default function BangGiaPage() {
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  const handleSubscribe = async (plan: string) => {
+    if (plan === 'Cơ Bản (Miễn phí)') return;
+    
+    setLoadingPlan(plan);
+    try {
+      const res = await fetch('/api/ctv/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: plan === 'Gói Pro' ? 'Pro' : 'VIP' })
+      });
+
+      const data = await res.json();
+      if (res.status === 401) {
+        alert('Bạn cần đăng nhập tài khoản Cộng Tác Viên để mua gói!');
+        window.location.href = '/login';
+        return;
+      }
+      
+      if (!res.ok) throw new Error(data.message || 'Có lỗi xảy ra');
+      
+      // Redirect to PayOS checkout
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      }
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
   const plans = [
     {
       name: "Cơ Bản (Miễn phí)",
@@ -18,6 +54,7 @@ export default function BangGiaPage() {
       color: "bg-slate-50",
       borderColor: "border-slate-200",
       btnColor: "bg-slate-800 hover:bg-slate-900",
+      isFree: true
     },
     {
       name: "Gói Pro",
@@ -101,8 +138,12 @@ export default function BangGiaPage() {
                 ))}
               </ul>
               
-              <button className={`w-full py-3 px-6 rounded-xl text-white font-bold transition-colors shadow-md ${plan.btnColor}`}>
-                Chọn gói này
+              <button 
+                onClick={() => handleSubscribe(plan.name)}
+                disabled={loadingPlan === plan.name}
+                className={`w-full py-3 px-6 rounded-xl text-white font-bold transition-colors shadow-md flex items-center justify-center gap-2 ${plan.btnColor}`}
+              >
+                {loadingPlan === plan.name ? <Loader2 className="w-5 h-5 animate-spin" /> : plan.isFree ? 'Gói hiện tại' : 'Chọn gói này'}
               </button>
             </div>
           ))}
