@@ -135,6 +135,27 @@ export default function LoginPage() {
     }
   };
 
+  const handleResendCode = async (emailToResend: string, type: 'forgot-password' | 'verify-email') => {
+    setError('');
+    setSuccess('');
+    
+    try {
+      const res = await fetch('/api/auth/resend-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailToResend, type }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || 'Lỗi gửi lại mã');
+      } else {
+        setSuccess('Đã gửi lại mã thành công!');
+      }
+    } catch (err) {
+      setError('Đã xảy ra lỗi hệ thống khi gửi lại mã');
+    }
+  };
+
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -328,7 +349,16 @@ export default function LoginPage() {
               >
                 {loading ? 'ĐANG XỬ LÝ...' : (forgotPasswordStep === 1 ? 'GỬI MÃ XÁC NHẬN' : 'ĐỔI MẬT KHẨU')}
               </Button>
-              <div className="text-center mt-4">
+              <div className="flex flex-col items-center justify-center gap-3 mt-4">
+                {forgotPasswordStep === 2 && (
+                  <button
+                    type="button"
+                    onClick={() => handleResendCode(forgotPasswordEmail, 'forgot-password')}
+                    className="text-sm text-slate-500 hover:text-indigo-600 hover:underline font-medium transition-colors"
+                  >
+                    Chưa nhận được mã? Gửi lại
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => { setShowForgotPassword(false); setForgotPasswordStep(1); setError(''); setSuccess(''); }}
@@ -366,7 +396,14 @@ export default function LoginPage() {
               >
                 {loading ? 'ĐANG XỬ LÝ...' : 'XÁC NHẬN EMAIL'}
               </Button>
-              <div className="text-center mt-4">
+              <div className="flex flex-col items-center justify-center gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => handleResendCode(registeredEmail, 'verify-email')}
+                  className="text-sm text-slate-500 hover:text-indigo-600 hover:underline font-medium transition-colors"
+                >
+                  Chưa nhận được mã? Gửi lại
+                </button>
                 <button
                   type="button"
                   onClick={() => setShowVerification(false)}
