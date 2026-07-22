@@ -46,7 +46,7 @@ export default function MapSearchClient({ posts, pagination }: { posts: any[], p
         </div>
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 lg:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory custom-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
           {displayPosts.map((post) => (
-            <div key={post._id} className="w-[85vw] sm:w-[280px] md:w-auto md:min-w-0 snap-start shrink-0">
+            <div key={post._id} className="w-[46vw] sm:w-[250px] md:w-auto md:min-w-0 snap-start shrink-0">
               <GlassPropertyCard 
                 post={post} 
                 isActive={false}
