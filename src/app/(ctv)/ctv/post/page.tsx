@@ -256,7 +256,7 @@ export default function CreatePostPage() {
                   <p className="text-xs text-slate-600 mt-2">Bấm vào bản đồ để chọn tọa độ chính xác của phòng trọ. Việc này giúp khách hàng tìm kiếm dễ dàng hơn.</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-cyan-400" /> Giá / Tháng *
@@ -287,7 +287,7 @@ export default function CreatePostPage() {
                       {categories.length === 0 && <option value="">Đang tải loại phòng...</option>}
                     </select>
                   </div>
-                  <div>
+                  <div className="sm:col-span-2">
                     <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                       <Maximize className="w-4 h-4 text-cyan-400" /> Diện tích (m²)
                     </label>
@@ -297,7 +297,7 @@ export default function CreatePostPage() {
                       value={formData.area_sqm}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
-                      placeholder="VD: 25"
+                      placeholder="VD: 25 (Không bắt buộc)"
                     />
                   </div>
                 </div>
@@ -306,33 +306,13 @@ export default function CreatePostPage() {
                   <label className="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
                     <Bolt className="w-4 h-4 text-cyan-400" /> Tiện ích có sẵn
                   </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
-                    {amenities.map((amenity: any) => (
-                      <label key={amenity._id} className="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-slate-50 transition">
-                        <input 
-                          type="checkbox" 
-                          className="w-4 h-4 text-cyan-500 rounded border-slate-300 focus:ring-cyan-500"
-                          checked={formData.amenities.includes(amenity.name)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setFormData(prev => ({ ...prev, amenities: [...prev.amenities, amenity.name] }));
-                            } else {
-                              setFormData(prev => ({ ...prev, amenities: prev.amenities.filter(a => a !== amenity.name) }));
-                            }
-                          }}
-                        />
-                        <span className="text-sm font-medium text-slate-700">{amenity.name}</span>
-                      </label>
-                    ))}
-                  </div>
-                  {amenities.length === 0 && <p className="text-xs text-slate-500 mb-3">Đang tải tiện ích...</p>}
                   <input
                     type="text"
                     name="custom_amenities"
                     value={formData.custom_amenities}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none text-slate-900 font-medium placeholder:text-slate-500"
-                    placeholder="Tiện ích khác (cách nhau bằng dấu phẩy, VD: Bếp điện, Quạt trần)"
+                    placeholder="Nhập các tiện ích, cách nhau bằng dấu phẩy (VD: Tủ lạnh, Máy lạnh, Giường...)"
                   />
                 </div>
 
