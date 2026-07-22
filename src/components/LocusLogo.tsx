@@ -17,7 +17,7 @@ export default function LocusLogo({ className = "", width = 55, height = 55, var
       style={{ width: parsedWidth, height: parsedHeight }}
     >
       <Image 
-        src="/logo.png" 
+        src="/logo_locushome.png" 
         alt="2026 LOCUS" 
         fill
         sizes={`${parsedWidth}px`}
